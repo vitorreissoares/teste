@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personalismo Eleitoral 2026 | Relatório de Monitoramento</title>
+<meta name="description" content="Dashboard de monitoramento das estratégias de comunicação política dos candidatos à Presidência da República nas mídias sociais.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+<style>
+:root{
+  --primary:#245b8f;
+  --primary-dark:#193f63;
+  --accent:#5c8db8;
+  --text:#26333d;
+  --muted:#6f7c86;
+  --bg:#f4f6f8;
+  --surface:#fff;
+  --border:#dfe5ea;
+  --shadow:0 3px 14px rgba(25,45,60,.07);
+  --shadow-hover:0 10px 28px rgba(25,45,60,.11);
+  --individual:#8b5cf6;
+  --collective:#2f80ed;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.55}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+.header{
+  background:linear-gradient(145deg,#fff 0%,#f7fafc 100%);
+  border-bottom:1px solid var(--border);
+  padding:34px 20px 30px;
+  position:relative;
+}
+.header-inner{max-width:1080px;margin:auto;display:grid;grid-template-columns:150px 1fr auto;gap:28px;align-items:center}
+.project-photo{
+  width:150px;height:150px;border-radius:16px;border:1px dashed #aebbc5;
+  background:#eef2f5;display:flex;align-items:center;justify-content:center;
+  color:#87949d;font-size:.78rem;text-align:center;padding:15px;
+}
+.project-photo img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+.eyebrow{font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--primary);font-weight:800;margin:0 0 8px}
+h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#17232c}
+.project-description{max-width:760px;color:var(--muted);margin:0;font-size:.96rem}
+.socials{display:flex;gap:9px;align-self:start}
+.socials a{width:39px;height:39px;border:1px solid var(--border);background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--primary);transition:.2s}
+.socials a:hover{transform:translateY(-2px);box-shadow:var(--shadow);background:var(--primary);color:#fff}
+.container{max-width:1080px;margin:auto;padding:24px 16px 46px}
+.section-label{text-align:center;text-transform:uppercase;letter-spacing:.12em;color:#8a969e;font-size:.72rem;font-weight:800;margin:4px 0 16px}
+.candidate-carousel{display:grid;grid-template-columns:42px 1fr 42px;gap:10px;align-items:center;margin-bottom:28px}
+.carousel-btn{width:42px;height:42px;border:1px solid var(--border);border-radius:50%;background:#fff;color:var(--primary);cursor:pointer}
+.carousel-btn:hover{background:var(--primary);color:#fff}
+.viewport{overflow:hidden;padding:6px 2px 12px}
+.track{display:flex;gap:16px;transition:transform .4s ease}
+.candidate-card{
+  flex:0 0 calc((100% - 32px)/3);background:#fff;border:1px solid var(--border);
+  border-radius:14px;padding:18px;box-shadow:var(--shadow);cursor:pointer;
+  transition:.25s;min-height:208px;
+}
+.candidate-card:hover,.candidate-card.active{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:#b9c9d6}
+.candidate-top{display:flex;gap:13px;align-items:center}
+.candidate-photo{
+  width:66px;height:66px;flex:0 0 66px;border-radius:50%;object-fit:cover;
+  border:3px solid #e8eef3;background:#e9eef2;
+}
+.candidate-name{margin:0;font-size:1rem;font-weight:800}
+.candidate-party{margin:2px 0 0;color:var(--primary);font-size:.77rem;font-weight:700}
+.candidate-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.meta-box{background:#f7f9fa;border-radius:8px;padding:8px 9px}
+.meta-box span{display:block;font-size:.64rem;color:#84919a;text-transform:uppercase;letter-spacing:.05em}
+.meta-box strong{font-size:.84rem}
+.candidate-info{margin-top:12px;color:var(--muted);font-size:.75rem;line-height:1.45}
+.dots{text-align:center;margin-top:-8px}
+.dot{width:7px;height:7px;border:0;border-radius:50%;background:#cbd4db;margin:0 3px;cursor:pointer}
+.dot.active{width:22px;border-radius:5px;background:var(--primary)}
+.project-section{
+  background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px;
+}
+.section-head{display:flex;justify-content:space-between;align-items:center;padding:17px 19px;cursor:pointer}
+.section-head:hover{background:#fafcfd}
+.section-title{font-size:.96rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:9px}
+.section-icon{transition:.2s;color:#87939c}
+.section-head.active .section-icon{transform:rotate(180deg)}
+.section-content{display:none;border-top:1px solid var(--border);padding:18px}
+.section-content.open{display:block}
+.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.method-card{background:#f7f9fa;border:1px solid var(--border);border-radius:10px;padding:16px}
+.method-card h3{font-size:.88rem;margin:0 0 7px;color:#293842}
+.method-card p{font-size:.79rem;color:var(--muted);margin:0}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chart-card{border:1px solid var(--border);border-radius:10px;background:#fff;padding:15px;min-height:340px}
+.chart-card.wide{grid-column:1/-1}
+.chart-title{font-size:.85rem;font-weight:800;margin:0 0 3px}
+.chart-note{font-size:.7rem;color:var(--muted);margin:0 0 12px}
+.chart-wrap{height:255px;position:relative}
+.chart-container{
+  height:255px;
+  position:relative;
+  width:100%;
+}
+.result-number{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:7px;background:#eaf1f6;color:var(--primary);font-size:.7rem;font-weight:800}
+.legend-note{font-size:.72rem;color:var(--muted);margin-top:8px}
+.data-placeholder{
+  border:1px dashed #b9c5cd;background:#f8fafb;border-radius:9px;padding:13px;
+  color:#71808a;font-size:.75rem;margin-top:10px
+}
+.footer{border-top:1px solid var(--border);background:#fff;padding:20px;text-align:center;color:#859099;font-size:.72rem}
+@media(max-width:850px){
+  .header-inner{grid-template-columns:100px 1fr}
+  .project-photo{width:100px;height:100px}
+  .socials{grid-column:2;align-self:auto}
+  .candidate-card{flex-basis:calc((100% - 16px)/2)}
+}
+@media(max-width:600px){
+  .header-inner{grid-template-columns:1fr;text-align:center}
+  .project-photo{margin:auto;width:115px;height:115px}
+  .socials{grid-column:auto;justify-content:center}
+  .project-description{font-size:.85rem}
+  .candidate-carousel{grid-template-columns:30px 1fr 30px;gap:5px}
+  .carousel-btn{width:30px;height:30px;font-size:.72rem}
+  .candidate-card{flex-basis:100%}
+  .method-grid,.chart-grid{grid-template-columns:1fr}
+  .chart-card.wide{grid-column:auto}
+  .chart-wrap{height:235px}
+}
+</style>
+</head>
+
+<body>
+<header class="header">
+  <div class="header-inner">
+    <div class="project-photo" aria-label="Espaço reservado para foto do projeto">
+      <span>FOTO DO<br>PROJETO</span>
+      <!-- Substitua o bloco acima por:
+      <img src="foto-projeto.jpg" alt="Foto do projeto">
+      -->
+    </div>
+    <div>
+      <p class="eyebrow">Monitoramento eleitoral · Brasil · 2026</p>
+      <h1>Personalismo Eleitoral e Programas de Governo nas Mídias Sociais</h1>
+      <p class="project-description">
+        Dashboard para acompanhar como candidaturas à Presidência da República utilizam o Instagram
+        para mobilizar apelos individuais e coletivos, atributos pessoais, propostas programáticas
+        e repertórios discursivos e imagéticos durante a campanha.
+      </p>
+    </div>
+    <nav class="socials" aria-label="Mídias sociais do projeto">
+      <!-- Substitua os # pelos links oficiais do projeto -->
+      <a href="#" target="_blank" rel="noopener" title="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" target="_blank" rel="noopener" title="X / Twitter"><i class="fab fa-x-twitter"></i></a>
+      <a href="#" target="_blank" rel="noopener" title="YouTube"><i class="fab fa-youtube"></i></a>
+      <a href="#" target="_blank" rel="noopener" title="Site do projeto"><i class="fas fa-globe"></i></a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+  <p class="section-label">Candidaturas acompanhadas</p>
+  <section class="candidate-carousel" aria-label="Carrossel de candidatos">
+    <button class="carousel-btn" id="candidatePrev" aria-label="Candidato anterior"><i class="fas fa-chevron-left"></i></button>
+    <div class="viewport">
+      <div class="track" id="candidateTrack">
+
+        <!-- DUPLIQUE ESTE CARD PARA CADA CANDIDATO. NÃO INSIRA NOMES SEM OS DADOS DA PLANILHA. -->
+        <article class="candidate-card">
+          <div class="candidate-top">
+            <img class="candidate-photo" src="foto-candidato-01.jpg" alt="Foto do candidato 1">
+            <div>
+              <h2 class="candidate-name">Candidato 01</h2>
+              <p class="candidate-party">Partido · UF</p>
+            </div>
+          </div>
+          <div class="candidate-meta">
+            <div class="meta-box"><span>Intenção de voto</span><strong>— %</strong></div>
+            <div class="meta-box"><span>Seguidores IG</span><strong>—</strong></div>
+          </div>
+          <p class="candidate-info">Foto, nome, partido, intenção de voto e seguidores. Os valores devem ser alimentados a partir da base de monitoramento.</p>
+        </article>
+
+        <article class="candidate-card">
+          <div class="candidate-top">
+            <img class="candidate-photo" src="foto-candidato-02.jpg" alt="Foto do candidato 2">
+            <div>
+              <h2 class="candidate-name">Candidato 02</h2>
+              <p class="candidate-party">Partido · UF</p>
+            </div>
+          </div>
+          <div class="candidate-meta">
+            <div class="meta-box"><span>Intenção de voto</span><strong>— %</strong></div>
+            <div class="meta-box"><span>Seguidores IG</span><strong>—</strong></div>
+          </div>
+          <p class="candidate-info">Critério de inclusão: candidaturas que alcancem 2% ou mais de intenção de voto no período definido.</p>
+        </article>
+
+        <article class="candidate-card">
+          <div class="candidate-top">
+            <img class="candidate-photo" src="foto-candidato-03.jpg" alt="Foto do candidato 3">
+            <div>
+              <h2 class="candidate-name">Candidato 03</h2>
+              <p class="candidate-party">Partido · UF</p>
+            </div>
+          </div>
+          <div class="candidate-meta">
+            <div class="meta-box"><span>Intenção de voto</span><strong>— %</strong></div>
+            <div class="meta-box"><span>Seguidores IG</span><strong>—</strong></div>
+          </div>
+          <p class="candidate-info">Os cartões podem receber links individuais para os perfis oficiais e para a ficha metodológica de cada candidatura.</p>
+        </article>
+
+      </div>
+    </div>
+    <button class="carousel-btn" id="candidateNext" aria-label="Próximo candidato"><i class="fas fa-chevron-right"></i></button>
+  </section>
+  <div class="dots" id="candidateDots"></div>
+
+  <!-- METODOLOGIA -->
+  <section class="project-section">
+    <div class="section-head" data-target="metodologia">
+      <span class="section-title"><i class="fas fa-microscope"></i> Pesquisa e metodologia</span>
+      <i class="fas fa-chevron-down section-icon"></i>
+    </div>
+    <div class="section-content" id="metodologia">
+      <div class="method-grid">
+        <div class="method-card">
+          <h3>Problema de pesquisa</h3>
+          <p>Investigar em que medida as candidaturas utilizam as mídias sociais para apresentar programas de governo em comparação à ênfase conferida aos atributos pessoais.</p>
+        </div>
+        <div class="method-card">
+          <h3>Base empírica</h3>
+          <p>Postagens dos candidatos à Presidência da República no Brasil, realizadas em seus perfis oficiais no Instagram.</p>
+        </div>
+        <div class="method-card">
+          <h3>Critério de seleção</h3>
+          <p>Candidatos que alcancem 2% ou mais de intenção de voto nas pesquisas eleitorais oficiais para o período de análise.</p>
+        </div>
+        <div class="method-card">
+          <h3>Codificação</h3>
+          <p>Análise de conteúdo orientada por categorias emergentes da literatura: apelos individuais e coletivos, com subcategorias discursivas e imagéticas.</p>
+        </div>
+        <div class="method-card">
+          <h3>Subcategorias</h3>
+          <p>Perfil técnico, ruralidade, representação do “homem forte”, família e estilo de vida, incluindo patriotismo, religião, segurança, trabalho, agro, família e outros repertórios.</p>
+        </div>
+        <div class="method-card">
+          <h3>Formato e etapa computacional</h3>
+          <p>Imagens, vídeos e conteúdos produzidos por IA são registrados. A codificação humana constitui a base para posterior treinamento de modelos de aprendizagem de máquina supervisionada.</p>
+        </div>
+      </div>
+      <div class="data-placeholder"><strong>Fonte dos dados:</strong> planilha de monitoramento do projeto. Ajuste a coluna de data antes de alimentar os gráficos temporais.</div>
+    </div>
+  </section>
+
+  <!-- RESULTADO 3 -->
+  <section class="project-section">
+    <div class="section-head" data-target="resultado3">
+      <span class="section-title">
+        <span class="result-number">01</span>
+        Apelos personalistas × programáticos
+      </span>
+      <i class="fas fa-chevron-down section-icon"></i>
+    </div>
+    <div class="section-content" id="resultado3">
+      <div class="chart-card wide">
+        <div class="card-header">
+          <h3 class="chart-title">
+            Comportamento das categorias ao longo do tempo
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="chart-container">
+            <canvas id="graficoApelosTempo"></canvas>
+          </div>
+          <p class="chart-note">
+            O gráfico apresenta a evolução dos conteúdos classificados como
+            personalistas e programáticos para cada candidatura.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADO 4 -->
+  <section class="project-section">
+    <div class="section-head" data-target="resultado4">
+      <span class="section-title"><span class="result-number">02</span> Composição dos apelos por candidato</span>
+      <i class="fas fa-chevron-down section-icon"></i>
+    </div>
+    <div class="section-content" id="resultado4">
+      <div class="chart-grid">
+        <div class="chart-card"><h3 class="chart-title">Candidato 01</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut1"></canvas></div></div>
+        <div class="chart-card"><h3 class="chart-title">Candidato 02</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut2"></canvas></div></div>
+        <div class="chart-card"><h3 class="chart-title">Candidato 03</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut3"></canvas></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADO 5 -->
+  <section class="project-section">
+    <div class="section-head" data-target="resultado5">
+      <span class="section-title"><span class="result-number">03</span> Subcategorias por candidato</span>
+      <i class="fas fa-chevron-down section-icon"></i>
+    </div>
+    <div class="section-content" id="resultado5">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Características e repertórios discursivos e imagéticos</h3>
+        <p class="chart-note">Perfil técnico, ruralidade, “homem forte”, família, patriotismo, religião, segurança, trabalho, agro e demais categorias do protocolo.</p>
+        <div class="chart-wrap"><canvas id="subcategoryBar"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADO 6 -->
+  <section class="project-section">
+    <div class="section-head" data-target="resultado6">
+      <span class="section-title"><span class="result-number">04</span> Curtidas por categoria</span>
+      <i class="fas fa-chevron-down section-icon"></i>
+    </div>
+    <div class="section-content" id="resultado6">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Dispersão: curtidas × categoria</h3>
+        <p class="chart-note">Cada ponto representa uma publicação; utilize a categoria individual/coletiva como agrupamento.</p>
+        <div class="chart-wrap"><canvas id="likesScatter"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADO 7 -->
+  <section class="project-section">
+    <div class="section-head" data-target="resultado7">
+      <span class="section-title"><span class="result-number">05</span> Comentários por categoria</span>
+      <i class="fas fa-chevron-down section-icon"></i>
+    </div>
+    <div class="section-content" id="resultado7">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Dispersão: comentários × categoria</h3>
+        <p class="chart-note">Cada ponto representa uma publicação; utilize a categoria individual/coletiva como agrupamento.</p>
+        <div class="chart-wrap"><canvas id="commentsScatter"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADO 8 -->
+  <section class="project-section">
+    <div class="section-head" data-target="resultado8">
+      <span class="section-title"><span class="result-number">06</span> Formatos das postagens</span>
+      <i class="fas fa-chevron-down section-icon"></i>
+    </div>
+    <div class="section-content" id="resultado8">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Formatos mais adotados</h3>
+        <p class="chart-note">Imagens, vídeos e conteúdos produzidos por IA, conforme a classificação da base.</p>
+        <div class="chart-wrap"><canvas id="formatBar"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <strong>Personalismo Eleitoral 2026</strong> · Dashboard de pesquisa ·
+  Os gráficos deste arquivo são modelos visuais e devem ser alimentados com a planilha de monitoramento.
+</footer>
+
+<script>
+/* ==========================================================
+   DADOS — SUBSTITUA APENAS ESTA SEÇÃO QUANDO A PLANILHA ESTIVER PRONTA
+   ========================================================== */
+const DATA = {
+  candidates: ["Candidato 01","Candidato 02","Candidato 03"],
+  candidateAppeals:[
+    {individual:0,collective:0},
+    {individual:0,collective:0},
+    {individual:0,collective:0}
+  ],
+  subcategories:{
+    labels:["Perfil técnico","Ruralidade","Homem forte","Família","Patriotismo","Religião","Segurança","Trabalho","Agro","Outros"],
+    datasets:[
+      {label:"Candidato 01",data:[0,0,0,0,0,0,0,0,0,0]},
+      {label:"Candidato 02",data:[0,0,0,0,0,0,0,0,0,0]},
+      {label:"Candidato 03",data:[0,0,0,0,0,0,0,0,0,0]}
+    ]
+  },
+  likes:[
+    {x:0,y:0,label:"Individual"},
+    {x:0,y:0,label:"Coletivo"}
+  ],
+  comments:[
+    {x:0,y:0,label:"Individual"},
+    {x:0,y:0,label:"Coletivo"}
+  ],
+  formats:{
+    labels:["Imagem","Vídeo","IA"],
+    values:[0,0,0]
+  }
+};
+
+const palette = ["#245b8f","#8b5cf6","#2f80ed","#6c7a86","#b26b3c","#4f8a70"];
+
+Chart.defaults.font.family = "Inter, system-ui, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = "#66737d";
+
+function baseLine(canvas, labels, datasets){
+  return new Chart(canvas,{type:"line",data:{labels,datasets:datasets.map((d,i)=>({
+    ...d,borderColor:palette[i],backgroundColor:palette[i],tension:.28,pointRadius:3,fill:false
+  }))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{y:{beginAtZero:true}}}});
+}
+
+function bar(canvas,labels,values,label=""){
+  return new Chart(canvas,{type:"bar",data:{labels,datasets:[{label,data:values,backgroundColor:"#5c8db8",borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:!!label}},scales:{y:{beginAtZero:true}}}});
+}
+
+/* Guardar referências dos gráficos para redimensionamento automático */
+const chartInstances = {};
+
+/* ==========================================================
+   GRÁFICO — APELOS PERSONALISTAS × PROGRAMÁTICOS
+   Dados carregados automaticamente de monitoramento.csv
+   ========================================================== */
+
+async function carregarMonitoramento() {
+  try {
+    const resposta = await fetch("monitoramento.csv");
+
+    if (!resposta.ok) {
+      throw new Error(`Não foi possível carregar monitoramento.csv (Status: ${resposta.status})`);
+    }
+
+    const texto = await resposta.text();
+    if (!texto.trim()) {
+      throw new Error("O arquivo monitoramento.csv está vazio.");
+    }
+
+    // Identifica se o separador é ponto e vírgula ou vírgula
+    const separador = texto.includes(";") ? ";" : ",";
+
+    const linhas = texto
+      .trim()
+      .split(/\r?\n/)
+      .map(linha => linha.split(separador).map(cell => cell.replace(/^["']|["']$/g, '').trim()));
+
+    if (linhas.length < 2) {
+      throw new Error("O CSV precisa conter um cabeçalho e pelo menos uma linha de dados.");
+    }
+
+    const cabecalho = linhas.shift().map(campo => campo.toLowerCase());
+
+    const indiceCandidato = cabecalho.indexOf("candidato");
+    const indiceCategoria = cabecalho.indexOf("categoria");
+    const indiceData = cabecalho.indexOf("data");
+
+    if (indiceCandidato === -1 || indiceCategoria === -1) {
+      throw new Error('O CSV precisa possuir as colunas "candidato" e "categoria".');
+    }
+
+    const dados = linhas
+      .filter(linha => linha.length > 1 && linha[indiceCandidato])
+      .map(linha => ({
+        candidato: linha[indiceCandidato],
+        categoria: (linha[indiceCategoria] || "").toLowerCase(),
+        data: indiceData !== -1 ? linha[indiceData] : null
+      }));
+
+    /* ------------------------------------------------------
+       IDENTIFICA OS CANDIDATOS E DATAS
+       ------------------------------------------------------ */
+    const candidatos = [...new Set(dados.map(d => d.candidato).filter(Boolean))];
+    const datas = [...new Set(dados.map(d => d.data).filter(Boolean))];
+
+    if (datas.length > 0) {
+      datas.sort((a, b) => {
+        const parseDate = (str) => {
+          if (!str) return new Date(0);
+          if (str.includes("/")) {
+            const parts = str.split("/");
+            if (parts.length === 3) return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+          }
+          return new Date(str);
+        };
+        return parseDate(a) - parseDate(b);
+      });
+    }
+
+    /* ------------------------------------------------------
+       CRIA OS DATASETS
+       ------------------------------------------------------ */
+    const datasets = [];
+
+    candidatos.forEach((candidato, indice) => {
+      const dadosCandidato = dados.filter(d => d.candidato === candidato);
+      const valoresPersonalistas = [];
+      const valoresProgramaticos = [];
+
+      datas.forEach(data => {
+        const publicacoes = dadosCandidato.filter(d => d.data === data);
+        const total = publicacoes.length;
+
+        const personalistas = publicacoes.filter(d => d.categoria.includes("personal")).length;
+        const programaticos = publicacoes.filter(d => d.categoria.includes("program")).length;
+
+        valoresPersonalistas.push(total ? (personalistas / total) * 100 : 0);
+        valoresProgramaticos.push(total ? (programaticos / total) * 100 : 0);
+      });
+
+      const color = palette[indice % palette.length];
+
+      datasets.push({
+        label: `${candidato} — Personalista`,
+        data: valoresPersonalistas,
+        borderColor: color,
+        backgroundColor: color,
+        tension: 0.28,
+        pointRadius: 3,
+        borderWidth: 2
+      });
+
+      datasets.push({
+        label: `${candidato} — Programático`,
+        data: valoresProgramaticos,
+        borderColor: color,
+        backgroundColor: color,
+        borderDash: [6, 4],
+        tension: 0.28,
+        pointRadius: 3,
+        borderWidth: 2
+      });
+    });
+
+    /* ------------------------------------------------------
+       CRIA O GRÁFICO
+       ------------------------------------------------------ */
+    const canvas = document.getElementById("graficoApelosTempo");
+    if (!canvas) return;
+
+    if (chartInstances["graficoApelosTempo"]) {
+      chartInstances["graficoApelosTempo"].destroy();
+    }
+
+    chartInstances["graficoApelosTempo"] = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels: datas,
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: "index",
+          intersect: false
+        },
+        plugins: {
+          legend: { position: "bottom" },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { title: { display: true, text: "Data" } },
+          y: {
+            beginAtZero: true,
+            max: 100,
+            title: { display: true, text: "Percentual de publicações" },
+            ticks: {
+              callback: function(value) { return value + "%"; }
+            }
+          }
+        }
+      }
+    });
+
+  } catch (erro) {
+    console.error("Erro ao carregar monitoramento.csv:", erro);
+    const container = document.getElementById("graficoApelosTempo")?.parentElement;
+    if (container && window.location.protocol === "file:") {
+      const msg = document.createElement("div");
+      msg.style.cssText = "color:#d9534f; font-size:0.8rem; margin-top:10px; text-align:center; padding:10px; background:#fdf7f7; border:1px solid #d9534f; border-radius:8px;";
+      msg.innerHTML = "⚠️ <strong>Atenção:</strong> Como você está abrindo o arquivo direto no navegador (protocolo <code>file://</code>), a leitura do arquivo <code>monitoramento.csv</code> é bloqueada por segurança.<br>Utilize a extensão <strong>Live Server</strong> no VS Code ou execute <code>python -m http.server</code> na pasta do projeto.";
+      container.appendChild(msg);
+    }
+  }
+}
+
+carregarMonitoramento();
+
+/* Inicializa os outros gráficos e guarda na lista de instâncias */
+DATA.candidateAppeals.forEach((d,i)=>{
+  const id="donut"+(i+1);
+  const el=document.getElementById(id);
+  if(!el)return;
+  chartInstances[id] = new Chart(el,{
+    type:"doughnut",
+    data:{labels:["Individuais","Coletivos"],datasets:[{data:[d.individual,d.collective],backgroundColor:["#8b5cf6","#2f80ed"],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:"68%",plugins:{legend:{position:"bottom"}}}
+  });
+});
+
+const subcatEl = document.getElementById("subcategoryBar");
+if(subcatEl) {
+  chartInstances["subcategoryBar"] = new Chart(subcatEl,{
+    type:"bar",
+    data:{labels:DATA.subcategories.labels,datasets:DATA.subcategories.datasets.map((d,i)=>({...d,backgroundColor:palette[i],borderRadius:4}))},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{y:{beginAtZero:true}}}
+  });
+}
+
+function scatter(canvas,points, id){
+  if (!canvas) return;
+  chartInstances[id] = new Chart(canvas,{
+    type:"scatter",
+    data:{datasets:[
+      {label:"Individual",data:points.filter(p=>p.label==="Individual"),backgroundColor:"#8b5cf6",pointRadius:5},
+      {label:"Coletivo",data:points.filter(p=>p.label==="Coletivo"),backgroundColor:"#2f80ed",pointRadius:5}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{x:{title:{display:true,text:"Índice/posição da categoria"}},y:{beginAtZero:true,title:{display:true,text:"Engajamento"}}}}
+  });
+}
+scatter(document.getElementById("likesScatter"),DATA.likes, "likesScatter");
+scatter(document.getElementById("commentsScatter"),DATA.comments, "commentsScatter");
+
+const formatEl = document.getElementById("formatBar");
+if(formatEl) {
+  chartInstances["formatBar"] = bar(formatEl,DATA.formats.labels,DATA.formats.values,"Publicações");
+}
+
+/* ==========================================================
+   GAVETAS EXPANSÍVEIS - COM REDIMENSIONAMENTO DO CHART.JS
+   ========================================================== */
+document.querySelectorAll(".section-head").forEach(head=>{
+  head.addEventListener("click",()=>{
+    const target=document.getElementById(head.dataset.target);
+    const open=target.classList.toggle("open");
+    head.classList.toggle("active",open);
+    
+    if (open) {
+      // Quando a gaveta abre, força o Chart.js a recalcular a largura/altura dos gráficos
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+        Object.values(chartInstances).forEach(chart => {
+          if (chart && typeof chart.resize === 'function') {
+            chart.resize();
+          }
+        });
+      }, 50);
+    }
+  });
+});
+
+/* ==========================================================
+   CARROSSEL DE CANDIDATOS
+   ========================================================== */
+const track=document.getElementById("candidateTrack");
+const cards=[...document.querySelectorAll(".candidate-card")];
+const prev=document.getElementById("candidatePrev");
+const next=document.getElementById("candidateNext");
+const dots=document.getElementById("candidateDots");
+let position=0;
+
+function perView(){return innerWidth<=600?1:innerWidth<=850?2:3}
+function maxPos(){return Math.max(0,cards.length-perView())}
+function updateCarousel(){
+  position=Math.min(position,maxPos());
+  const gap=16;
+  const cardWidth=cards[0]?.getBoundingClientRect().width||0;
+  track.style.transform=`translateX(-${position*(cardWidth+gap)}px)`;
+  prev.disabled=position===0;
+  next.disabled=position===maxPos();
+  dots.innerHTML="";
+  for(let i=0;i<=maxPos();i++){
+    const b=document.createElement("button");
+    b.className="dot"+(i===position?" active":"");
+    b.setAttribute("aria-label","Ir para posição "+(i+1));
+    b.onclick=()=>{position=i;updateCarousel()};
+    dots.appendChild(b);
+  }
+}
+prev.onclick=()=>{position--;updateCarousel()};
+next.onclick=()=>{position++;updateCarousel()};
+addEventListener("resize",updateCarousel);
+updateCarousel();
+
+/* Abre a primeira gaveta para orientar o visitante. */
+document.querySelector(".section-head")?.click();
+</script>
+</body>
+</html>
