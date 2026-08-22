@@ -39,10 +39,27 @@ button{font:inherit}
   position:relative;
 }
 .header-inner{max-width:1080px;margin:auto;display:grid;grid-template-columns:150px 1fr auto;gap:28px;align-items:center}
-.project-photo{
-  width:150px;height:150px;border-radius:16px;border:1px dashed #aebbc5;
-  background:#eef2f5;display:flex;align-items:center;justify-content:center;
-  color:#87949d;font-size:.78rem;text-align:center;padding:15px;
+.project-photo {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.project-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 .project-photo img{width:100%;height:100%;object-fit:cover;border-radius:12px}
 .eyebrow{font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--primary);font-weight:800;margin:0 0 8px}
@@ -186,15 +203,16 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
 <header class="header">
   <div class="header-inner">
     <div class="project-photo" aria-label="Espaço reservado para foto do projeto">
-      <span>FOTO DO<br>PROJETO</span>
+      <img 
+    src="politica-logo.jpg" 
+    alt="Foto do projeto Personalismo e Mídias Sociais"
+  >
     </div>
     <div>
-      <p class="eyebrow">Monitoramento eleitoral · Brasil · 2026</p>
-      <h1>Personalismo Eleitoral e Programas de Governo nas Mídias Sociais</h1>
+      <p class="eyebrow">Política nas Redes · 2026</p>
+      <h1>Personalismo e Mídias Sociais</h1>
       <p class="project-description">
-        Dashboard para acompanhar como candidaturas à Presidência da República utilizam o Instagram
-        para mobilizar apelos individuais e coletivos, atributos pessoais, propostas programáticas
-        e repertórios discursivos e imagéticos durante a campanha.
+        21 de agosto de 2026
       </p>
     </div>
     <nav class="socials" aria-label="Mídias sociais do projeto">
@@ -216,47 +234,92 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
 
         <article class="candidate-card">
           <div class="candidate-top">
-            <img class="candidate-photo" src="foto-candidato-01.jpg" alt="Foto de Lula">
+            <img class="candidate-photo" src="lula.jpg" alt="Foto de Lula">
             <div>
-              <h2 class="candidate-name">Lula</h2>
-              <p class="candidate-party">PT · BR</p>
+              <h2 class="candidate-name">Lula da Silva</h2>
+              <p class="candidate-party">PT · 13</p>
             </div>
           </div>
           <div class="candidate-meta">
-            <div class="meta-box"><span>Intenção de voto</span><strong>— %</strong></div>
-            <div class="meta-box"><span>Seguidores IG</span><strong>—</strong></div>
+            <div class="meta-box"><span>Intenção de voto</span><strong>38%</strong></div>
+            <div class="meta-box"><span>Seguidores IG</span><strong>14.9M</strong></div>
           </div>
-          <p class="candidate-info">Clique para filtrar o gráfico da Gaveta 01 para este candidato.</p>
+          <p class="candidate-info">Clique para ver mais.</p>
         </article>
 
         <article class="candidate-card">
           <div class="candidate-top">
-            <img class="candidate-photo" src="foto-candidato-02.jpg" alt="Foto de Flávio">
+            <img class="candidate-photo" src="flavio.jpg" alt="Foto de Flávio">
             <div>
-              <h2 class="candidate-name">Flávio</h2>
-              <p class="candidate-party">PL · RJ</p>
+              <h2 class="candidate-name">Flávio Bolsonaro</h2>
+              <p class="candidate-party">PL · 22</p>
             </div>
           </div>
           <div class="candidate-meta">
-            <div class="meta-box"><span>Intenção de voto</span><strong>— %</strong></div>
-            <div class="meta-box"><span>Seguidores IG</span><strong>—</strong></div>
+            <div class="meta-box"><span>Intenção de voto</span><strong>31%</strong></div>
+            <div class="meta-box"><span>Seguidores IG</span><strong>11.3M</strong></div>
           </div>
-          <p class="candidate-info">Clique para filtrar o gráfico da Gaveta 01 para este candidato.</p>
+          <p class="candidate-info">Clique para ver mais.</p>
         </article>
 
         <article class="candidate-card">
           <div class="candidate-top">
-            <img class="candidate-photo" src="foto-candidato-03.jpg" alt="Foto do candidato 3">
+            <img class="candidate-photo" src="caiado.jpg" alt="Foto do candidato 3">
             <div>
-              <h2 class="candidate-name">Candidato 03</h2>
-              <p class="candidate-party">Partido · UF</p>
+              <h2 class="candidate-name">Ronaldo Caiado</h2>
+              <p class="candidate-party">PSD · 55</p>
             </div>
           </div>
           <div class="candidate-meta">
-            <div class="meta-box"><span>Intenção de voto</span><strong>— %</strong></div>
-            <div class="meta-box"><span>Seguidores IG</span><strong>—</strong></div>
+            <div class="meta-box"><span>Intenção de voto</span><strong>4%</strong></div>
+            <div class="meta-box"><span>Seguidores IG</span><strong>2.2M</strong></div>
           </div>
-          <p class="candidate-info">Clique para filtrar o gráfico da Gaveta 01 para este candidato.</p>
+          <p class="candidate-info">Clique para ver mais.</p>
+        </article>
+
+        <article class="candidate-card">
+          <div class="candidate-top">
+            <img class="candidate-photo" src="renan.jpg" alt="Foto do candidato 4">
+            <div>
+              <h2 class="candidate-name">Renan Santos</h2>
+              <p class="candidate-party">Missão · 14</p>
+            </div>
+          </div>
+          <div class="candidate-meta">
+            <div class="meta-box"><span>Intenção de voto</span><strong>4%</strong></div>
+            <div class="meta-box"><span>Seguidores IG</span><strong>2.4M</strong></div>
+          </div>
+          <p class="candidate-info">Clique para ver mais.</p>
+        </article>
+
+        <article class="candidate-card">
+          <div class="candidate-top">
+            <img class="candidate-photo" src="cury.jpg" alt="Foto do candidato 5">
+            <div>
+              <h2 class="candidate-name">Augusto Cury</h2>
+              <p class="candidate-party">Avante · 70</p>
+            </div>
+          </div>
+          <div class="candidate-meta">
+            <div class="meta-box"><span>Intenção de voto</span><strong>2%</strong></div>
+            <div class="meta-box"><span>Seguidores IG</span><strong>8.3M</strong></div>
+          </div>
+          <p class="candidate-info">Clique para ver mais.</p>
+        </article>
+
+        <article class="candidate-card">
+          <div class="candidate-top">
+            <img class="candidate-photo" src="zema.jpg" alt="Foto do candidato 6">
+            <div>
+              <h2 class="candidate-name">Romeu Zema</h2>
+              <p class="candidate-party">Novo · 30</p>
+            </div>
+          </div>
+          <div class="candidate-meta">
+            <div class="meta-box"><span>Intenção de voto</span><strong>2%</strong></div>
+            <div class="meta-box"><span>Seguidores IG</span><strong>3.5M</strong></div>
+          </div>
+          <p class="candidate-info">Clique para ver mais.</p>
         </article>
 
       </div>
@@ -268,7 +331,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
   <!-- METODOLOGIA -->
   <section class="project-section">
     <div class="section-head" data-target="metodologia">
-      <span class="section-title"><i class="fas fa-microscope"></i> Pesquisa e metodologia</span>
+      <span class="section-title"><i class="fas fa-microscope"></i> Sobre a Pesquisa</span>
       <i class="fas fa-chevron-down section-icon"></i>
     </div>
     <div class="section-content" id="metodologia">
@@ -278,7 +341,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
           <p>Investigar em que medida as candidaturas utilizam as mídias sociais para apresentar programas de governo em comparação à ênfase conferida aos atributos pessoais.</p>
         </div>
         <div class="method-card">
-          <h3>Base empírica</h3>
+          <h3>Dados</h3>
           <p>Postagens dos candidatos à Presidência da República no Brasil, realizadas em seus perfis oficiais no Instagram.</p>
         </div>
         <div class="method-card">
@@ -286,19 +349,19 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
           <p>Candidatos que alcancem 2% ou mais de intenção de voto nas pesquisas eleitorais oficiais para o período de análise.</p>
         </div>
         <div class="method-card">
-          <h3>Codificação</h3>
-          <p>Análise de conteúdo orientada por categorias emergentes da literatura: apelos individuais e coletivos, com subcategorias discursivas e imagéticas.</p>
+          <h3>Categorização</h3>
+          <p>Análise de conteúdo orientada por categorias emergentes da literatura: apelos individuais e coletivos, com subcategorias discursivas e imagéticas. A codificação humana constitui a base para posterior treinamento de modelos de aprendizagem de máquina.</p>
         </div>
         <div class="method-card">
           <h3>Subcategorias</h3>
-          <p>Perfil técnico, ruralidade, representação do “homem forte”, família e estilo de vida, incluindo patriotismo, religião, segurança, trabalho, agro, família e outros repertórios.</p>
+          <p>Emergentes da Análise de Conteúdo e sustentadas pela literatura.</p>
         </div>
         <div class="method-card">
-          <h3>Formato e etapa computacional</h3>
-          <p>Imagens, vídeos e conteúdos produzidos por IA são registrados. A codificação humana constitui a base para posterior treinamento de modelos de aprendizagem de máquina supervisionada.</p>
+          <h3>Formatos</h3>
+          <p>Imagens, vídeos e conteúdos produzidos por IA são registrados.</p>
         </div>
       </div>
-      <div class="data-placeholder"><strong>Fonte dos dados:</strong> planilha de monitoramento do projeto. Ajuste a coluna de data antes de alimentar os gráficos temporais.</div>
+      <div class="data-placeholder"><strong>Fonte dos dados:</strong> Perfis oficiais dos candidatos no Instagram.</div>
     </div>
   </section>
 
@@ -307,7 +370,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
     <div class="section-head" data-target="resultado3">
       <span class="section-title">
         <span class="result-number">01</span>
-        Apelos personalistas × programáticos
+        Conteúdo programático x conteúdo personalista
       </span>
       <i class="fas fa-chevron-down section-icon"></i>
     </div>
@@ -315,13 +378,13 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
       <div class="chart-card wide">
         <div class="card-header">
           <h3 class="chart-title">
-            Comportamento das categorias ao longo do tempo (Frequência / Ocorrências)
+            Distribuição das categorias
           </h3>
         </div>
         <div class="card-body">
           <!-- BARRA DE FILTRO POR CANDIDATO -->
           <div class="candidate-filter-bar">
-            <span class="filter-label"><i class="fas fa-filter"></i> Filtrar candidato:</span>
+            <span class="filter-label"><i class="fas fa-filter"></i> Selecionar candidatos:</span>
             <div id="candidateFilterButtons" class="filter-buttons">
               <!-- Botões gerados via JS -->
             </div>
@@ -331,7 +394,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
             <canvas id="graficoApelosTempo"></canvas>
           </div>
           <p class="chart-note" style="margin-top:10px;">
-            O gráfico apresenta a evolução (em <strong>número de vezes/ocorrências</strong>) dos conteúdos classificados como personalistas e programáticos para cada candidatura.
+            Clique no nome dos candidatos e nas categorias para ver os resultados.
           </p>
         </div>
       </div>
@@ -341,7 +404,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
   <!-- RESULTADO 4 -->
   <section class="project-section">
     <div class="section-head" data-target="resultado4">
-      <span class="section-title"><span class="result-number">02</span> Composição dos apelos por candidato</span>
+      <span class="section-title"><span class="result-number">02</span> Categorias por candidato</span>
       <i class="fas fa-chevron-down section-icon"></i>
     </div>
     <div class="section-content" id="resultado4">
@@ -349,6 +412,9 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
         <div class="chart-card"><h3 class="chart-title">Candidato 01</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut1"></canvas></div></div>
         <div class="chart-card"><h3 class="chart-title">Candidato 02</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut2"></canvas></div></div>
         <div class="chart-card"><h3 class="chart-title">Candidato 03</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut3"></canvas></div></div>
+        <div class="chart-card"><h3 class="chart-title">Candidato 04</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut4"></canvas></div></div>
+        <div class="chart-card"><h3 class="chart-title">Candidato 05</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut5"></canvas></div></div>
+        <div class="chart-card"><h3 class="chart-title">Candidato 06</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut6"></canvas></div></div>
       </div>
     </div>
   </section>
@@ -455,6 +521,14 @@ const DATA = {
 
 const palette = ["#245b8f","#8b5cf6","#2f80ed","#6c7a86","#b26b3c","#4f8a70"];
 
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.substring(1, 3), 16);
+  const g = parseInt(hex.substring(3, 5), 16);
+  const b = parseInt(hex.substring(5, 7), 16);
+
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 Chart.defaults.font.family = "Inter, system-ui, sans-serif";
 Chart.defaults.font.size = 11;
 Chart.defaults.color = "#66737d";
@@ -479,95 +553,170 @@ function criarGraficoApelosTempo(labels, datasets) {
   }
 
   chartInstances["graficoApelosTempo"] = new Chart(canvas, {
-    type: "line",
-    data: {
-      labels: labels,
-      datasets: datasets
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        mode: "index",
-        intersect: false
-      },
-      plugins: {
-        legend: {
-          position: "bottom",
-          onClick: function(e, legendItem, legend) {
-            const ci = legend.chart;
-            const clickedIndex = legendItem.datasetIndex;
-            const clickedDataset = ci.data.datasets[clickedIndex];
-            const candName = clickedDataset.candidateName;
 
-            // Ao clicar na legenda do candidato, alterna AMBAS as variáveis (Personalista + Programático)
-            if (candName) {
-              let visibleState = false;
-              ci.data.datasets.forEach((ds, i) => {
-                if (ds.candidateName === candName && ci.isDatasetVisible(i)) {
-                  visibleState = true;
-                }
-              });
+  type: "bar",
 
-              ci.data.datasets.forEach((ds, i) => {
-                if (ds.candidateName === candName) {
-                  ci.setDatasetVisibility(i, !visibleState);
-                }
-              });
-              ci.update();
-            } else {
-              Chart.defaults.plugins.legend.onClick.call(this, e, legendItem, legend);
-            }
-          }
+  data: {
+    labels: labels,
+    datasets: datasets
+  },
+    
+
+  options: {
+
+    responsive: true,
+    maintainAspectRatio: false,
+
+    plugins: {
+
+      legend: {
+
+  position: "bottom",
+
+  labels: {
+
+    usePointStyle: true,
+
+    generateLabels: function(chart) {
+
+      return [
+
+        {
+          text: "Conteúdo programático",
+          fillStyle: "#555555",
+          strokeStyle: "#555555",
+          pointStyle: "circle",
+
+          // informação usada pelo nosso clique
+          tipoConteudo: "Programático"
         },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return `${context.dataset.label}: ${context.parsed.y} ocorrência(s)`;
-            }
-          }
+
+        {
+          text: "Conteúdo personalista",
+          fillStyle: "#bbbbbb",
+          strokeStyle: "#bbbbbb",
+          pointStyle: "circle",
+
+          // informação usada pelo nosso clique
+          tipoConteudo: "Personalista"
         }
-      },
-      scales: {
-        x: { title: { display: true, text: "Data" } },
-        y: {
-          beginAtZero: true,
-          title: { display: true, text: "Número de ocorrências (frequência)" },
-          ticks: {
-            precision: 0,
-            stepSize: 1,
-            callback: function(value) { return Number.isInteger(value) ? value : ""; }
-          }
-        }
-      }
+
+      ];
+
     }
-  });
+
+  },
+
+  onClick: function(e, legendItem, legend) {
+
+    const chart = legend.chart;
+
+    const tipo = legendItem.tipoConteudo;
+
+    if (!tipo) return;
+
+    // Verifica se esse tipo está atualmente visível
+    let estaVisivel = false;
+
+    chart.data.datasets.forEach((ds, i) => {
+
+      if (ds.tipoConteudo === tipo) {
+
+        if (chart.isDatasetVisible(i)) {
+          estaVisivel = true;
+        }
+
+      }
+
+    });
+
+    // Alterna todas as séries daquele tipo
+    chart.data.datasets.forEach((ds, i) => {
+
+      if (ds.tipoConteudo === tipo) {
+
+        chart.setDatasetVisibility(i, !estaVisivel);
+
+      }
+
+    });
+
+    chart.update();
+
+  }
+
+},
+
+      tooltip: {
+
+        callbacks: {
+
+          label: function(context) {
+
+            return `${context.dataset.label}: ${context.parsed.y} ocorrência(s)`;
+
+          }
+
+        }
+
+      }
+
+    },
+
+    scales: {
+
+      x: {
+        stacked: true
+      },
+
+      y: {
+
+        stacked: true,
+
+        beginAtZero: true,
+
+        ticks: {
+          precision: 0,
+          stepSize: 1
+        }
+
+      }
+
+    }
+
+  }
+
+});
+
+  
 }
 
 /* ------------------------------------------------------
    FILTRAR GRÁFICO DA GAVETA 01 POR CANDIDATO
    ------------------------------------------------------ */
-function filtrarCandidatoGrafico01(nomeCandidato) {
+function filtrarCandidatoGrafico01(nomeCandidato, mostrar) {
+
   const chart = chartInstances["graficoApelosTempo"];
+
   if (!chart) return;
 
-  const busca = nomeCandidato.toLowerCase().trim();
-
   chart.data.datasets.forEach((ds, i) => {
-    const dsCand = (ds.candidateName || ds.label || "").toLowerCase();
-    // Exibe ambas as variáveis se for o candidato selecionado
-    if (dsCand.includes(busca)) {
-      chart.setDatasetVisibility(i, true);
-    } else {
-      chart.setDatasetVisibility(i, false);
+
+    if (ds.candidateName === nomeCandidato) {
+
+      chart.setDatasetVisibility(i, mostrar);
+
     }
+
   });
 
   chart.update();
 }
 
 function exibirTodosCandidatosGrafico01() {
+
   const chart = chartInstances["graficoApelosTempo"];
+
   if (!chart) return;
 
   chart.data.datasets.forEach((ds, i) => {
@@ -575,6 +724,11 @@ function exibirTodosCandidatosGrafico01() {
   });
 
   chart.update();
+
+  // Marca todos os botões como ativos
+  document
+    .querySelectorAll(".candidate-filter-btn")
+    .forEach(btn => btn.classList.add("active"));
 }
 
 function renderCandidateFilterButtons(candidatos) {
@@ -583,16 +737,7 @@ function renderCandidateFilterButtons(candidatos) {
 
   filterContainer.innerHTML = "";
 
-  // Botão "Todos"
-  const btnTodos = document.createElement("button");
-  btnTodos.className = "candidate-filter-btn active";
-  btnTodos.textContent = "Todos";
-  btnTodos.onclick = () => {
-    document.querySelectorAll(".candidate-filter-btn").forEach(b => b.classList.remove("active"));
-    btnTodos.classList.add("active");
-    exibirTodosCandidatosGrafico01();
-  };
-  filterContainer.appendChild(btnTodos);
+  
 
   const lista = candidatos.length > 0 ? candidatos : ["Lula", "Flávio"];
 
@@ -601,10 +746,14 @@ function renderCandidateFilterButtons(candidatos) {
     btn.className = "candidate-filter-btn";
     btn.textContent = cand;
     btn.onclick = () => {
-      document.querySelectorAll(".candidate-filter-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      filtrarCandidatoGrafico01(cand);
-    };
+
+  const mostrar = !btn.classList.contains("active");
+
+  btn.classList.toggle("active", mostrar);
+
+  filtrarCandidatoGrafico01(cand, mostrar);
+
+};
     filterContainer.appendChild(btn);
   });
 }
@@ -727,51 +876,77 @@ async function carregarMonitoramento() {
       });
     }
 
+    // Cor das variáveis dos candidatos
+    const coresCandidatos = {
+  "Lula": {
+    programatico: "#b91c1c",
+    personalista: "#fca5a5"
+  },
+
+  "Flavio": {
+    programatico: "#15803d",
+    personalista: "#86efac"
+  }
+};
+
+
     const datasets = [];
 
-    candidatos.forEach((candidato, indice) => {
-      const dadosCandidato = dados.filter(d => d.candidato === candidato);
-      const valoresPersonalistas = [];
-      const valoresProgramaticos = [];
+candidatos.forEach((candidato, indice) => {
+  const dadosCandidato = dados.filter(d => d.candidato === candidato);
+  const valoresPersonalistas = [];
+  const valoresProgramaticos = [];
 
-      datas.forEach(data => {
-        const publicacoes = dadosCandidato.filter(d => d.data === data);
+  datas.forEach(data => {
+    const publicacoes = dadosCandidato.filter(d => d.data === data);
 
-        // Contagem ABSOLUTA de ocorrências/frequência
-        const personalistas = publicacoes.filter(d => d.categoria.includes("personal")).length;
-        const programaticos = publicacoes.filter(d => d.categoria.includes("program")).length;
+    // Contagem ABSOLUTA de ocorrências/frequência
+    const personalistas = publicacoes
+      .filter(d => d.categoria.includes("personal"))
+      .length;
 
-        valoresPersonalistas.push(personalistas);
-        valoresProgramaticos.push(programaticos);
-      });
+    const programaticos = publicacoes
+      .filter(d => d.categoria.includes("program"))
+      .length;
 
-      const color = palette[indice % palette.length];
+    valoresPersonalistas.push(personalistas);
+    valoresProgramaticos.push(programaticos);
+  });
 
-      // Linha contínua: Personalista
-      datasets.push({
-        label: `${candidato} — Personalista`,
-        candidateName: candidato,
-        data: valoresPersonalistas,
-        borderColor: color,
-        backgroundColor: color,
-        tension: 0.28,
-        pointRadius: 3,
-        borderWidth: 2
-      });
+  const cores = coresCandidatos[candidato] || {
+  programatico: palette[indice % palette.length],
+  personalista: hexToRgba(palette[indice % palette.length], 0.35)
+};
 
-      // Linha tracejada: Programático
-      datasets.push({
-        label: `${candidato} — Programático`,
-        candidateName: candidato,
-        data: valoresProgramaticos,
-        borderColor: color,
-        backgroundColor: color,
-        borderDash: [6, 4],
-        tension: 0.28,
-        pointRadius: 3,
-        borderWidth: 2
-      });
-    });
+  // Personalista — cor mais clara
+  // Personalista — cor clara
+datasets.push({
+  label: `${candidato} — Personalista`,
+  candidateName: candidato,
+  tipoConteudo: "Personalista",
+  data: valoresPersonalistas,
+
+  hidden: true,
+
+  backgroundColor: cores.personalista,
+  borderColor: cores.personalista,
+  borderWidth: 1
+});
+
+// Programático — cor escura
+datasets.push({
+  label: `${candidato} — Programático`,
+  candidateName: candidato,
+  tipoConteudo: "Programático",
+  data: valoresProgramaticos,
+
+  hidden: true,
+
+  backgroundColor: cores.programatico,
+  borderColor: cores.programatico,
+  borderWidth: 1
+});
+});
 
     criarGraficoApelosTempo(datas, datasets);
     renderCandidateFilterButtons(candidatos);
