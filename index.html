@@ -105,6 +105,55 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
   position:relative;
   width:100%;
 }
+
+/* ESTILOS DO FILTRO DE CANDIDATOS NA GAVETA 01 */
+.candidate-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  background: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.filter-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.filter-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.candidate-filter-btn {
+  padding: 5px 13px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.candidate-filter-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #f0f4f8;
+}
+.candidate-filter-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 6px rgba(36,91,143,0.25);
+}
+
 .result-number{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:7px;background:#eaf1f6;color:var(--primary);font-size:.7rem;font-weight:800}
 .legend-note{font-size:.72rem;color:var(--muted);margin-top:8px}
 .data-placeholder{
@@ -138,19 +187,17 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
   <div class="header-inner">
     <div class="project-photo" aria-label="Espaço reservado para foto do projeto">
       <span>FOTO DO<br>PROJETO</span>
-      <!-- Substitua o bloco acima por:
-      <img src="foto-projeto.jpg" alt="Foto do projeto">
-      -->
     </div>
     <div>
-      <p class="eyebrow">Política nas Redes · Brasil · 2026</p>
-      <h1>Título do GT</h1>
+      <p class="eyebrow">Monitoramento eleitoral · Brasil · 2026</p>
+      <h1>Personalismo Eleitoral e Programas de Governo nas Mídias Sociais</h1>
       <p class="project-description">
-        Resuminho do objetivo.
+        Dashboard para acompanhar como candidaturas à Presidência da República utilizam o Instagram
+        para mobilizar apelos individuais e coletivos, atributos pessoais, propostas programáticas
+        e repertórios discursivos e imagéticos durante a campanha.
       </p>
     </div>
     <nav class="socials" aria-label="Mídias sociais do projeto">
-      <!-- Substitua os # pelos links oficiais do projeto -->
       <a href="#" target="_blank" rel="noopener" title="Instagram"><i class="fab fa-instagram"></i></a>
       <a href="#" target="_blank" rel="noopener" title="X / Twitter"><i class="fab fa-x-twitter"></i></a>
       <a href="#" target="_blank" rel="noopener" title="YouTube"><i class="fab fa-youtube"></i></a>
@@ -167,35 +214,34 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
     <div class="viewport">
       <div class="track" id="candidateTrack">
 
-        <!-- DUPLIQUE ESTE CARD PARA CADA CANDIDATO. NÃO INSIRA NOMES SEM OS DADOS DA PLANILHA. -->
         <article class="candidate-card">
           <div class="candidate-top">
-            <img class="candidate-photo" src="foto-candidato-01.jpg" alt="Foto do candidato 1">
+            <img class="candidate-photo" src="foto-candidato-01.jpg" alt="Foto de Lula">
             <div>
-              <h2 class="candidate-name">Candidato 01</h2>
-              <p class="candidate-party">Partido · UF</p>
+              <h2 class="candidate-name">Lula</h2>
+              <p class="candidate-party">PT · BR</p>
             </div>
           </div>
           <div class="candidate-meta">
             <div class="meta-box"><span>Intenção de voto</span><strong>— %</strong></div>
             <div class="meta-box"><span>Seguidores IG</span><strong>—</strong></div>
           </div>
-          <p class="candidate-info">Foto, nome, partido, intenção de voto e seguidores. Os valores devem ser alimentados a partir da base de monitoramento.</p>
+          <p class="candidate-info">Clique para filtrar o gráfico da Gaveta 01 para este candidato.</p>
         </article>
 
         <article class="candidate-card">
           <div class="candidate-top">
-            <img class="candidate-photo" src="foto-candidato-02.jpg" alt="Foto do candidato 2">
+            <img class="candidate-photo" src="foto-candidato-02.jpg" alt="Foto de Flávio">
             <div>
-              <h2 class="candidate-name">Candidato 02</h2>
-              <p class="candidate-party">Partido · UF</p>
+              <h2 class="candidate-name">Flávio</h2>
+              <p class="candidate-party">PL · RJ</p>
             </div>
           </div>
           <div class="candidate-meta">
             <div class="meta-box"><span>Intenção de voto</span><strong>— %</strong></div>
             <div class="meta-box"><span>Seguidores IG</span><strong>—</strong></div>
           </div>
-          <p class="candidate-info">Critério de inclusão: candidaturas que alcancem 2% ou mais de intenção de voto no período definido.</p>
+          <p class="candidate-info">Clique para filtrar o gráfico da Gaveta 01 para este candidato.</p>
         </article>
 
         <article class="candidate-card">
@@ -210,7 +256,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
             <div class="meta-box"><span>Intenção de voto</span><strong>— %</strong></div>
             <div class="meta-box"><span>Seguidores IG</span><strong>—</strong></div>
           </div>
-          <p class="candidate-info">Os cartões podem receber links individuais para os perfis oficiais e para a ficha metodológica de cada candidatura.</p>
+          <p class="candidate-info">Clique para filtrar o gráfico da Gaveta 01 para este candidato.</p>
         </article>
 
       </div>
@@ -222,7 +268,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
   <!-- METODOLOGIA -->
   <section class="project-section">
     <div class="section-head" data-target="metodologia">
-      <span class="section-title"><i class="fas fa-microscope"></i> Sobre a Pesquisa</span>
+      <span class="section-title"><i class="fas fa-microscope"></i> Pesquisa e metodologia</span>
       <i class="fas fa-chevron-down section-icon"></i>
     </div>
     <div class="section-content" id="metodologia">
@@ -256,7 +302,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
     </div>
   </section>
 
-  <!-- RESULTADO 3 -->
+  <!-- RESULTADO 3 (GAVETA 01) -->
   <section class="project-section">
     <div class="section-head" data-target="resultado3">
       <span class="section-title">
@@ -269,16 +315,23 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
       <div class="chart-card wide">
         <div class="card-header">
           <h3 class="chart-title">
-            Comportamento das categorias ao longo do tempo
+            Comportamento das categorias ao longo do tempo (Frequência / Ocorrências)
           </h3>
         </div>
         <div class="card-body">
+          <!-- BARRA DE FILTRO POR CANDIDATO -->
+          <div class="candidate-filter-bar">
+            <span class="filter-label"><i class="fas fa-filter"></i> Filtrar candidato:</span>
+            <div id="candidateFilterButtons" class="filter-buttons">
+              <!-- Botões gerados via JS -->
+            </div>
+          </div>
+
           <div class="chart-container">
             <canvas id="graficoApelosTempo"></canvas>
           </div>
-          <p class="chart-note">
-            O gráfico apresenta a evolução dos conteúdos classificados como
-            personalistas e programáticos para cada candidatura.
+          <p class="chart-note" style="margin-top:10px;">
+            O gráfico apresenta a evolução (em <strong>número de vezes/ocorrências</strong>) dos conteúdos classificados como personalistas e programáticos para cada candidatura.
           </p>
         </div>
       </div>
@@ -369,7 +422,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
 
 <script>
 /* ==========================================================
-   DADOS — SUBSTITUA APENAS ESTA SEÇÃO QUANDO A PLANILHA ESTIVER PRONTA
+   DADOS MOCK — OUTROS GRÁFICOS
    ========================================================== */
 const DATA = {
   candidates: ["Candidato 01","Candidato 02","Candidato 03"],
@@ -406,24 +459,215 @@ Chart.defaults.font.family = "Inter, system-ui, sans-serif";
 Chart.defaults.font.size = 11;
 Chart.defaults.color = "#66737d";
 
-function baseLine(canvas, labels, datasets){
-  return new Chart(canvas,{type:"line",data:{labels,datasets:datasets.map((d,i)=>({
-    ...d,borderColor:palette[i],backgroundColor:palette[i],tension:.28,pointRadius:3,fill:false
-  }))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{y:{beginAtZero:true}}}});
-}
-
 function bar(canvas,labels,values,label=""){
   return new Chart(canvas,{type:"bar",data:{labels,datasets:[{label,data:values,backgroundColor:"#5c8db8",borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:!!label}},scales:{y:{beginAtZero:true}}}});
 }
 
-/* Guardar referências dos gráficos para redimensionamento automático */
+/* Guardar referências dos gráficos para redimensionamento automático e controle */
 const chartInstances = {};
 
 /* ==========================================================
-   GRÁFICO — APELOS PERSONALISTAS × PROGRAMÁTICOS
-   Dados carregados automaticamente de monitoramento.csv
+   GRÁFICO GAVETA 01 — APELOS PERSONALISTAS × PROGRAMÁTICOS
    ========================================================== */
 
+function criarGraficoApelosTempo(labels, datasets) {
+  const canvas = document.getElementById("graficoApelosTempo");
+  if (!canvas) return;
+
+  if (chartInstances["graficoApelosTempo"]) {
+    chartInstances["graficoApelosTempo"].destroy();
+  }
+
+  chartInstances["graficoApelosTempo"] = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "index",
+        intersect: false
+      },
+      plugins: {
+        legend: {
+          position: "bottom",
+          onClick: function(e, legendItem, legend) {
+            const ci = legend.chart;
+            const clickedIndex = legendItem.datasetIndex;
+            const clickedDataset = ci.data.datasets[clickedIndex];
+            const candName = clickedDataset.candidateName;
+
+            // Ao clicar na legenda do candidato, alterna AMBAS as variáveis (Personalista + Programático)
+            if (candName) {
+              let visibleState = false;
+              ci.data.datasets.forEach((ds, i) => {
+                if (ds.candidateName === candName && ci.isDatasetVisible(i)) {
+                  visibleState = true;
+                }
+              });
+
+              ci.data.datasets.forEach((ds, i) => {
+                if (ds.candidateName === candName) {
+                  ci.setDatasetVisibility(i, !visibleState);
+                }
+              });
+              ci.update();
+            } else {
+              Chart.defaults.plugins.legend.onClick.call(this, e, legendItem, legend);
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.dataset.label}: ${context.parsed.y} ocorrência(s)`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { title: { display: true, text: "Data" } },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: "Número de ocorrências (frequência)" },
+          ticks: {
+            precision: 0,
+            stepSize: 1,
+            callback: function(value) { return Number.isInteger(value) ? value : ""; }
+          }
+        }
+      }
+    }
+  });
+}
+
+/* ------------------------------------------------------
+   FILTRAR GRÁFICO DA GAVETA 01 POR CANDIDATO
+   ------------------------------------------------------ */
+function filtrarCandidatoGrafico01(nomeCandidato) {
+  const chart = chartInstances["graficoApelosTempo"];
+  if (!chart) return;
+
+  const busca = nomeCandidato.toLowerCase().trim();
+
+  chart.data.datasets.forEach((ds, i) => {
+    const dsCand = (ds.candidateName || ds.label || "").toLowerCase();
+    // Exibe ambas as variáveis se for o candidato selecionado
+    if (dsCand.includes(busca)) {
+      chart.setDatasetVisibility(i, true);
+    } else {
+      chart.setDatasetVisibility(i, false);
+    }
+  });
+
+  chart.update();
+}
+
+function exibirTodosCandidatosGrafico01() {
+  const chart = chartInstances["graficoApelosTempo"];
+  if (!chart) return;
+
+  chart.data.datasets.forEach((ds, i) => {
+    chart.setDatasetVisibility(i, true);
+  });
+
+  chart.update();
+}
+
+function renderCandidateFilterButtons(candidatos) {
+  const filterContainer = document.getElementById("candidateFilterButtons");
+  if (!filterContainer) return;
+
+  filterContainer.innerHTML = "";
+
+  // Botão "Todos"
+  const btnTodos = document.createElement("button");
+  btnTodos.className = "candidate-filter-btn active";
+  btnTodos.textContent = "Todos";
+  btnTodos.onclick = () => {
+    document.querySelectorAll(".candidate-filter-btn").forEach(b => b.classList.remove("active"));
+    btnTodos.classList.add("active");
+    exibirTodosCandidatosGrafico01();
+  };
+  filterContainer.appendChild(btnTodos);
+
+  const lista = candidatos.length > 0 ? candidatos : ["Lula", "Flávio"];
+
+  lista.forEach(cand => {
+    const btn = document.createElement("button");
+    btn.className = "candidate-filter-btn";
+    btn.textContent = cand;
+    btn.onclick = () => {
+      document.querySelectorAll(".candidate-filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      filtrarCandidatoGrafico01(cand);
+    };
+    filterContainer.appendChild(btn);
+  });
+}
+
+/* ------------------------------------------------------
+   DADOS DE DEMO / FALLBACK QUANDO CSV NÃO ESTIVER PRESENTE
+   ------------------------------------------------------ */
+function carregarDadosDemo() {
+  const datasDemo = ["01/08", "05/08", "10/08", "15/08", "20/08"];
+  const candidatosDemo = ["Lula", "Flávio"];
+
+  const datasetsDemo = [
+    {
+      label: "Lula — Personalista",
+      candidateName: "Lula",
+      data: [12, 18, 15, 22, 25],
+      borderColor: "#245b8f",
+      backgroundColor: "#245b8f",
+      tension: 0.28,
+      pointRadius: 3,
+      borderWidth: 2
+    },
+    {
+      label: "Lula — Programático",
+      candidateName: "Lula",
+      data: [8, 12, 14, 19, 21],
+      borderColor: "#245b8f",
+      backgroundColor: "#245b8f",
+      borderDash: [6, 4],
+      tension: 0.28,
+      pointRadius: 3,
+      borderWidth: 2
+    },
+    {
+      label: "Flávio — Personalista",
+      candidateName: "Flávio",
+      data: [15, 10, 20, 16, 28],
+      borderColor: "#8b5cf6",
+      backgroundColor: "#8b5cf6",
+      tension: 0.28,
+      pointRadius: 3,
+      borderWidth: 2
+    },
+    {
+      label: "Flávio — Programático",
+      candidateName: "Flávio",
+      data: [5, 9, 11, 12, 15],
+      borderColor: "#8b5cf6",
+      backgroundColor: "#8b5cf6",
+      borderDash: [6, 4],
+      tension: 0.28,
+      pointRadius: 3,
+      borderWidth: 2
+    }
+  ];
+
+  criarGraficoApelosTempo(datasDemo, datasetsDemo);
+  renderCandidateFilterButtons(candidatosDemo);
+}
+
+/* ------------------------------------------------------
+   CARREGAMENTO AUTOMÁTICO DO CSV
+   ------------------------------------------------------ */
 async function carregarMonitoramento() {
   try {
     const resposta = await fetch("monitoramento.csv");
@@ -437,7 +681,6 @@ async function carregarMonitoramento() {
       throw new Error("O arquivo monitoramento.csv está vazio.");
     }
 
-    // Identifica se o separador é ponto e vírgula ou vírgula
     const separador = texto.includes(";") ? ";" : ",";
 
     const linhas = texto
@@ -467,9 +710,6 @@ async function carregarMonitoramento() {
         data: indiceData !== -1 ? linha[indiceData] : null
       }));
 
-    /* ------------------------------------------------------
-       IDENTIFICA OS CANDIDATOS E DATAS
-       ------------------------------------------------------ */
     const candidatos = [...new Set(dados.map(d => d.candidato).filter(Boolean))];
     const datas = [...new Set(dados.map(d => d.data).filter(Boolean))];
 
@@ -487,9 +727,6 @@ async function carregarMonitoramento() {
       });
     }
 
-    /* ------------------------------------------------------
-       CRIA OS DATASETS
-       ------------------------------------------------------ */
     const datasets = [];
 
     candidatos.forEach((candidato, indice) => {
@@ -499,19 +736,21 @@ async function carregarMonitoramento() {
 
       datas.forEach(data => {
         const publicacoes = dadosCandidato.filter(d => d.data === data);
-        const total = publicacoes.length;
 
+        // Contagem ABSOLUTA de ocorrências/frequência
         const personalistas = publicacoes.filter(d => d.categoria.includes("personal")).length;
         const programaticos = publicacoes.filter(d => d.categoria.includes("program")).length;
 
-        valoresPersonalistas.push(total ? (personalistas / total) * 100 : 0);
-        valoresProgramaticos.push(total ? (programaticos / total) * 100 : 0);
+        valoresPersonalistas.push(personalistas);
+        valoresProgramaticos.push(programaticos);
       });
 
       const color = palette[indice % palette.length];
 
+      // Linha contínua: Personalista
       datasets.push({
         label: `${candidato} — Personalista`,
+        candidateName: candidato,
         data: valoresPersonalistas,
         borderColor: color,
         backgroundColor: color,
@@ -520,8 +759,10 @@ async function carregarMonitoramento() {
         borderWidth: 2
       });
 
+      // Linha tracejada: Programático
       datasets.push({
         label: `${candidato} — Programático`,
+        candidateName: candidato,
         data: valoresProgramaticos,
         borderColor: color,
         backgroundColor: color,
@@ -532,60 +773,18 @@ async function carregarMonitoramento() {
       });
     });
 
-    /* ------------------------------------------------------
-       CRIA O GRÁFICO
-       ------------------------------------------------------ */
-    const canvas = document.getElementById("graficoApelosTempo");
-    if (!canvas) return;
-
-    if (chartInstances["graficoApelosTempo"]) {
-      chartInstances["graficoApelosTempo"].destroy();
-    }
-
-    chartInstances["graficoApelosTempo"] = new Chart(canvas, {
-      type: "line",
-      data: {
-        labels: datas,
-        datasets: datasets
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-          mode: "index",
-          intersect: false
-        },
-        plugins: {
-          legend: { position: "bottom" },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: { title: { display: true, text: "Data" } },
-          y: {
-            beginAtZero: true,
-            max: 100,
-            title: { display: true, text: "Percentual de publicações" },
-            ticks: {
-              callback: function(value) { return value + "%"; }
-            }
-          }
-        }
-      }
-    });
+    criarGraficoApelosTempo(datas, datasets);
+    renderCandidateFilterButtons(candidatos);
 
   } catch (erro) {
-    console.error("Erro ao carregar monitoramento.csv:", erro);
+    console.warn("Monitoramento.csv não carregado, utilizando visualização interativa com dados de demonstração.", erro);
+    carregarDadosDemo();
+
     const container = document.getElementById("graficoApelosTempo")?.parentElement;
     if (container && window.location.protocol === "file:") {
       const msg = document.createElement("div");
       msg.style.cssText = "color:#d9534f; font-size:0.8rem; margin-top:10px; text-align:center; padding:10px; background:#fdf7f7; border:1px solid #d9534f; border-radius:8px;";
-      msg.innerHTML = "⚠️ <strong>Atenção:</strong> Como você está abrindo o arquivo direto no navegador (protocolo <code>file://</code>), a leitura do arquivo <code>monitoramento.csv</code> é bloqueada por segurança.<br>Utilize a extensão <strong>Live Server</strong> no VS Code ou execute <code>python -m http.server</code> na pasta do projeto.";
+      msg.innerHTML = "⚠️ <strong>Aviso:</strong> Para carregar a planilha <code>monitoramento.csv</code> localmente, abra a pasta no VS Code com a extensão <strong>Live Server</strong> ou rode <code>python -m http.server</code> no terminal.";
       container.appendChild(msg);
     }
   }
@@ -593,7 +792,9 @@ async function carregarMonitoramento() {
 
 carregarMonitoramento();
 
-/* Inicializa os outros gráficos e guarda na lista de instâncias */
+/* ==========================================================
+   INICIALIZAÇÃO DOS DEMAIS GRÁFICOS
+   ========================================================== */
 DATA.candidateAppeals.forEach((d,i)=>{
   const id="donut"+(i+1);
   const el=document.getElementById(id);
@@ -634,7 +835,7 @@ if(formatEl) {
 }
 
 /* ==========================================================
-   GAVETAS EXPANSÍVEIS - COM REDIMENSIONAMENTO DO CHART.JS
+   GAVETAS EXPANSÍVEIS + REDIMENSIONAMENTO DO CHART.JS
    ========================================================== */
 document.querySelectorAll(".section-head").forEach(head=>{
   head.addEventListener("click",()=>{
@@ -643,7 +844,6 @@ document.querySelectorAll(".section-head").forEach(head=>{
     head.classList.toggle("active",open);
     
     if (open) {
-      // Quando a gaveta abre, força o Chart.js a recalcular a largura/altura dos gráficos
       setTimeout(() => {
         window.dispatchEvent(new Event('resize'));
         Object.values(chartInstances).forEach(chart => {
@@ -657,7 +857,7 @@ document.querySelectorAll(".section-head").forEach(head=>{
 });
 
 /* ==========================================================
-   CARROSSEL DE CANDIDATOS
+   CARROSSEL E CLIQUE NOS CARDS DE CANDIDATOS
    ========================================================== */
 const track=document.getElementById("candidateTrack");
 const cards=[...document.querySelectorAll(".candidate-card")];
@@ -689,7 +889,41 @@ next.onclick=()=>{position++;updateCarousel()};
 addEventListener("resize",updateCarousel);
 updateCarousel();
 
-/* Abre a primeira gaveta para orientar o visitante. */
+// Vincular clique nos cards de candidato para filtrar o gráfico da Gaveta 01
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+    const nameEl = card.querySelector(".candidate-name");
+    if (!nameEl) return;
+    const nome = nameEl.textContent.trim();
+
+    // Abrir gaveta 01 se estiver fechada
+    const gaveta01Head = document.querySelector('[data-target="resultado3"]');
+    const gaveta01Content = document.getElementById("resultado3");
+    if (gaveta01Content && !gaveta01Content.classList.contains("open")) {
+      gaveta01Head?.click();
+    }
+
+    // Scroll até o gráfico
+    gaveta01Content?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Ativar o botão correspondente
+    const btns = document.querySelectorAll(".candidate-filter-btn");
+    let achou = false;
+    btns.forEach(b => {
+      if (b.textContent.toLowerCase().trim() === nome.toLowerCase().trim() ||
+          nome.toLowerCase().includes(b.textContent.toLowerCase().trim())) {
+        b.click();
+        achou = true;
+      }
+    });
+
+    if (!achou) {
+      filtrarCandidatoGrafico01(nome);
+    }
+  });
+});
+
+/* Abre a primeira gaveta por padrão */
 document.querySelector(".section-head")?.click();
 </script>
 </body>
