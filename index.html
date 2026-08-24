@@ -461,7 +461,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
 
 <div id="candidateColorLegend" class="candidate-color-legend"></div>
           <p class="chart-note" style="margin-top:10px;">
-            Clique no nome dos candidatos e nas categorias para ver os resultados.
+            Clique no nome dos candidatos para ver os resultados.
           </p>
         </div>
       </div>
@@ -560,8 +560,8 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
     </div>
     <div class="section-content" id="resultado6">
       <div class="chart-card wide">
-        <h3 class="chart-title">Dispersão: curtidas × categoria</h3>
-        <p class="chart-note">Cada ponto representa uma publicação; as categorias Personalista e Programático aparecem sobrepostas no mesmo gráfico.</p>
+        <h3 class="chart-title">Quantidade de curtidas por categoria</h3>
+        <p class="chart-note">Cada ponto representa o número de curtidas recebidas por postagem.</p>
         <div class="chart-wrap"><canvas id="likesScatter"></canvas></div>
       </div>
     </div>
@@ -575,8 +575,8 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
     </div>
     <div class="section-content" id="resultado7">
       <div class="chart-card wide">
-        <h3 class="chart-title">Dispersão: comentários × categoria</h3>
-        <p class="chart-note">Cada ponto representa uma publicação; as categorias Personalista e Programático aparecem sobrepostas no mesmo gráfico.</p>
+        <h3 class="chart-title">Quantidade de comentários por categoria</h3>
+        <p class="chart-note">Cada ponto representa o número de comentários recebidos por postagem.</p>
         <div class="chart-wrap"><canvas id="commentsScatter"></canvas></div>
       </div>
     </div>
@@ -591,7 +591,7 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
     <div class="section-content" id="resultado8">
       <div class="chart-card wide">
         <h3 class="chart-title">Formatos mais adotados</h3>
-        <p class="chart-note">Imagens, vídeos e conteúdos produzidos por IA, conforme a classificação da base.</p>
+        <p class="chart-note"></p>
         <div class="chart-wrap"><canvas id="formatBar"></canvas></div>
       </div>
     </div>
@@ -1060,24 +1060,27 @@ function criarGraficoDispersaoCSV(dados, campo, canvasId, tituloEixoY, chaveGraf
   chartInstances[chaveGrafico] = new Chart(canvas, {
     type: "scatter",
     data: {
-      datasets: [
-        {
-          label: "Publicações",
-          data: pontos,
-          pointRadius: 5,
-          pointHoverRadius: 8,
-          backgroundColor: function(context) {
-            const p = context.raw;
-            return p?.tipo === "Personalista" ? "#8b5cf6" : "#2f80ed";
-          },
-          borderColor: function(context) {
-            const p = context.raw;
-            return p?.tipo === "Personalista" ? "#8b5cf6" : "#2f80ed";
-          },
-          borderWidth: 1
-        }
-      ]
+  datasets: [
+    {
+      label: "Conteúdo personalista",
+      data: pontos.filter(p => p.tipo === "Personalista"),
+      pointRadius: 5,
+      pointHoverRadius: 8,
+      backgroundColor: "#8b5cf6",
+      borderColor: "#8b5cf6",
+      borderWidth: 1
     },
+    {
+      label: "Conteúdo programático",
+      data: pontos.filter(p => p.tipo === "Programático"),
+      pointRadius: 5,
+      pointHoverRadius: 8,
+      backgroundColor: "#2f80ed",
+      borderColor: "#2f80ed",
+      borderWidth: 1
+    }
+  ]
+},
     options: {
       responsive: true,
       maintainAspectRatio: false,
