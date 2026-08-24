@@ -590,11 +590,27 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
     </div>
     <div class="section-content" id="resultado8">
       <div class="chart-card wide">
-        <h3 class="chart-title">Formatos mais adotados</h3>
-        <p class="chart-note"></p>
-        <div class="chart-wrap"><canvas id="formatBar"></canvas></div>
-      </div>
-    </div>
+  <h3 class="chart-title">Formatos mais adotados</h3>
+
+  <p class="chart-note">
+    Distribuição dos formatos das publicações conforme a classificação da base.
+  </p>
+
+  <div class="candidate-filter-bar">
+    <span class="filter-label">
+      <i class="fas fa-filter"></i>
+      Selecionar candidato:
+    </span>
+
+    <select id="formatCandidateFilter" class="candidate-filter-select">
+      <option value="">Todos os candidatos</option>
+    </select>
+  </div>
+
+  <div class="chart-wrap">
+    <canvas id="formatBar"></canvas>
+  </div>
+</div>
   </section>
 
 </main>
@@ -1198,6 +1214,8 @@ async function carregarMonitoramento() {
     const indiceComentarios = cabecalho.indexOf("comentarios");
     const indiceLikes = cabecalho.indexOf("likes");
 
+    const indiceFormato = cabecalho.indexOf("formato");
+
     if (indiceCandidato === -1) {
       throw new Error(
         'O CSV precisa possuir a coluna "candidato".'
@@ -1219,18 +1237,21 @@ async function carregarMonitoramento() {
     const dados = linhas
       .filter(linha => linha.length > 0 && String(linha[indiceCandidato] || "").trim())
       .map(linha => ({
-        candidato: String(linha[indiceCandidato] || "").trim(),
-        categoria: String(linha[indiceCategoria] || "").trim(),
-        data: indiceData !== -1
-          ? String(linha[indiceData] || "").trim()
-          : "",
-        comentarios: indiceComentarios !== -1
-          ? parseNumero(linha[indiceComentarios])
-          : 0,
-        likes: indiceLikes !== -1
-          ? parseNumero(linha[indiceLikes])
-          : 0
-      }));
+  candidato: String(linha[indiceCandidato] || "").trim(),
+  categoria: String(linha[indiceCategoria] || "").trim(),
+  formato: indiceFormato !== -1
+    ? String(linha[indiceFormato] || "").trim()
+    : "",
+  data: indiceData !== -1
+    ? String(linha[indiceData] || "").trim()
+    : "",
+  comentarios: indiceComentarios !== -1
+    ? parseNumero(linha[indiceComentarios])
+    : 0,
+  likes: indiceLikes !== -1
+    ? parseNumero(linha[indiceLikes])
+    : 0
+}));
 
     if (!dados.length) {
       throw new Error("Nenhum registro válido foi encontrado no CSV.");
@@ -1370,6 +1391,7 @@ candidatos.forEach(candidato => {
     criarGraficoComentariosCSV(dados);
 
     criarDonutsPorCandidato(dados);
+    criarGraficoFormatos(dados);
 
     console.info("monitoramento.csv carregado com sucesso.");
     console.info("Candidatos encontrados:", candidatos);
@@ -1438,6 +1460,115 @@ function bar(canvas, labels, values, label = "") {
     }
   });
 }
+
+function criarGraficoFormatos(dados) {
+  const canvas = document.getElementById("formatBar");
+  if (!canvas) return;
+
+  const candidatos = [
+    ...new Set(
+      dados
+        .map(d => d.candidato)
+        .filter(Boolean)
+    )
+  ];
+
+  function atualizarGrafico(candidato = null) {
+    const dadosFiltrados = candidato
+      ? dados.filter(
+          d =>
+            normalizarTexto(d.candidato) ===
+            normalizarTexto(candidato)
+        )
+      : dados;
+
+    const contagem = {};
+
+    dadosFiltrados.forEach(d => {
+      const formato = String(d.formato || "").trim();
+
+      if (!formato) return;
+
+      contagem[formato] = (contagem[formato] || 0) + 1;
+    });
+
+    const labels = Object.keys(contagem);
+    const values = labels.map(formato => contagem[formato]);
+
+    if (chartInstances["formatBar"]) {
+      chartInstances["formatBar"].destroy();
+    }
+
+    chartInstances["formatBar"] = new Chart(canvas, {
+      type: "bar",
+
+      data: {
+        labels,
+
+        datasets: [{
+          label: "Publicações",
+          data: values,
+          backgroundColor: "#5c8db8",
+          borderRadius: 6
+        }]
+      },
+
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+          legend: {
+            display: false
+          },
+
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.raw} publicação(ões)`;
+              }
+            }
+          }
+        },
+
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              precision: 0,
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  }
+
+  atualizarGrafico();
+
+  const filtro = document.getElementById("formatCandidateFilter");
+
+  if (filtro) {
+    filtro.innerHTML = "";
+
+    const opcaoTodos = document.createElement("option");
+    opcaoTodos.value = "";
+    opcaoTodos.textContent = "Todos os candidatos";
+    filtro.appendChild(opcaoTodos);
+
+    candidatos.forEach(candidato => {
+      const option = document.createElement("option");
+      option.value = candidato;
+      option.textContent = candidato;
+      filtro.appendChild(option);
+    });
+
+    filtro.onchange = function() {
+      atualizarGrafico(this.value || null);
+    };
+  }
+}
+
 
 function criarDonutsPorCandidato(dados) {
 
@@ -1592,16 +1723,7 @@ if (subcatEl && DATA.subcategories.datasets.length) {
  * Assim, não há uma segunda inicialização que sobrescreva os dados reais.
  */
 
-const formatEl = document.getElementById("formatBar");
 
-if (formatEl) {
-  chartInstances["formatBar"] = bar(
-    formatEl,
-    DATA.formats.labels,
-    DATA.formats.values,
-    "Publicações"
-  );
-}
 
 /* ==========================================================
    GAVETAS EXPANSÍVEIS + REDIMENSIONAMENTO
