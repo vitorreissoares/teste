@@ -807,60 +807,39 @@ function criarGraficoApelosTempo(labels, datasets) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: "bottom",
-          labels: {
-            usePointStyle: true,
-            generateLabels: function(chart) {
-              return [
-                {
-                  text: "Conteúdo programático",
-                  fillStyle: "#555555",
-                  strokeStyle: "#555555",
-                  pointStyle: "circle",
-                  tipoConteudo: "Programático"
-                },
-                {
-                  text: "Conteúdo personalista",
-                  fillStyle: "#bbbbbb",
-                  strokeStyle: "#bbbbbb",
-                  pointStyle: "circle",
-                  tipoConteudo: "Personalista"
-                }
-              ];
-            }
-          },
-          onClick: function(e, legendItem, legend) {
-            const chart = legend.chart;
-            const tipo = legendItem.tipoConteudo;
-            if (!tipo) return;
+      options: {
+  responsive: true,
+  maintainAspectRatio: false,
 
-            let estaVisivel = false;
+  plugins: {
+    legend: {
+      display: false
+    },
 
-            chart.data.datasets.forEach((ds, i) => {
-              if (ds.tipoConteudo === tipo && chart.isDatasetVisible(i)) {
-                estaVisivel = true;
-              }
-            });
-
-            chart.data.datasets.forEach((ds, i) => {
-              if (ds.tipoConteudo === tipo) {
-                chart.setDatasetVisibility(i, !estaVisivel);
-              }
-            });
-
-            chart.update();
-          }
-        },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return `${context.dataset.label}: ${context.parsed.y} ocorrência(s)`;
-            }
-          }
+    tooltip: {
+      callbacks: {
+        label: function(context) {
+          return `${context.dataset.label}: ${context.parsed.y} ocorrência(s)`;
         }
-      },
+      }
+    }
+  },
+
+  scales: {
+    x: {
+      stacked: true
+    },
+
+    y: {
+      stacked: true,
+      beginAtZero: true,
+      ticks: {
+        precision: 0,
+        stepSize: 1
+      }
+    }
+  }
+},
       scales: {
         x: {
           stacked: true
@@ -1052,26 +1031,7 @@ function criarGraficoDispersaoCSV(dados, campo, canvasId, tituloEixoY, chaveGraf
         legend: {
           position: "bottom",
           labels: {
-            generateLabels: function(chart) {
-              return [
-                {
-                  text: "Personalista",
-                  fillStyle: "#8b5cf6",
-                  strokeStyle: "#8b5cf6",
-                  lineWidth: 1,
-                  hidden: false,
-                  datasetIndex: 0
-                },
-                {
-                  text: "Programático",
-                  fillStyle: "#2f80ed",
-                  strokeStyle: "#2f80ed",
-                  lineWidth: 1,
-                  hidden: false,
-                  datasetIndex: 0
-                }
-              ];
-            }
+            
           }
         },
         tooltip: {
