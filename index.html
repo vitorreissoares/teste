@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Personalismo Eleitoral 2026 | Relatório de Monitoramento</title>
+<title>Programa Político e Mídias Sociais | Política nas Redes</title>
 <meta name="description" content="Dashboard de monitoramento das estratégias de comunicação política dos candidatos à Presidência da República nas mídias sociais.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -246,6 +246,21 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
   .chart-card.wide{grid-column:auto}
   .chart-wrap{height:235px}
 }
+
+.candidate-donut-card {
+  text-align: center;
+}
+
+.donut-candidate-photo {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #e8eef3;
+  margin: 2px auto 8px;
+  display: block;
+}
+
 </style>
 </head>
 
@@ -260,9 +275,9 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
     </div>
     <div>
       <p class="eyebrow">Política nas Redes · 2026</p>
-      <h1>Programa de Governo e Mídias Sociais</h1>
+      <h1>Programa Político e Mídias Sociais</h1>
       <p class="project-description">
-        14 de agosto a 21 de agosto de 2026
+        14 a 21 de agosto de 2026
       </p>
     </div>
     <nav class="socials" aria-label="Mídias sociais do projeto">
@@ -454,22 +469,73 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
   </section>
 
   <!-- RESULTADO 4 -->
-  <section class="project-section">
-    <div class="section-head" data-target="resultado4">
-      <span class="section-title"><span class="result-number">02</span> Categorias por candidato</span>
-      <i class="fas fa-chevron-down section-icon"></i>
-    </div>
-    <div class="section-content" id="resultado4">
-      <div class="chart-grid">
-        <div class="chart-card"><h3 class="chart-title">Candidato 01</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut1"></canvas></div></div>
-        <div class="chart-card"><h3 class="chart-title">Candidato 02</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut2"></canvas></div></div>
-        <div class="chart-card"><h3 class="chart-title">Candidato 03</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut3"></canvas></div></div>
-        <div class="chart-card"><h3 class="chart-title">Candidato 04</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut4"></canvas></div></div>
-        <div class="chart-card"><h3 class="chart-title">Candidato 05</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut5"></canvas></div></div>
-        <div class="chart-card"><h3 class="chart-title">Candidato 06</h3><p class="chart-note">Substitua o nome e os valores.</p><div class="chart-wrap"><canvas id="donut6"></canvas></div></div>
+  <!-- RESULTADO 4 -->
+<section class="project-section">
+
+  <div class="section-head" data-target="resultado4">
+    <span class="section-title">
+      <span class="result-number">02</span>
+      Categorias por candidato
+    </span>
+    <i class="fas fa-chevron-down section-icon"></i>
+  </div>
+
+  <div class="section-content" id="resultado4">
+
+    <div class="chart-grid">
+
+      <div class="chart-card candidate-donut-card">
+        <img class="donut-candidate-photo" src="lula.jpg" alt="Lula">
+        <h3 class="chart-title">Lula</h3>
+        <div class="chart-wrap">
+          <canvas id="donut1"></canvas>
+        </div>
       </div>
+
+      <div class="chart-card candidate-donut-card">
+        <img class="donut-candidate-photo" src="flavio.jpg" alt="Flávio Bolsonaro">
+        <h3 class="chart-title">Flávio Bolsonaro</h3>
+        <div class="chart-wrap">
+          <canvas id="donut2"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card candidate-donut-card">
+        <img class="donut-candidate-photo" src="caiado.jpg" alt="Ronaldo Caiado">
+        <h3 class="chart-title">Ronaldo Caiado</h3>
+        <div class="chart-wrap">
+          <canvas id="donut3"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card candidate-donut-card">
+        <img class="donut-candidate-photo" src="renan.jpg" alt="Renan Santos">
+        <h3 class="chart-title">Renan Santos</h3>
+        <div class="chart-wrap">
+          <canvas id="donut4"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card candidate-donut-card">
+        <img class="donut-candidate-photo" src="cury.jpg" alt="Augusto Cury">
+        <h3 class="chart-title">Augusto Cury</h3>
+        <div class="chart-wrap">
+          <canvas id="donut5"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card candidate-donut-card">
+        <img class="donut-candidate-photo" src="zema.jpg" alt="Romeu Zema">
+        <h3 class="chart-title">Romeu Zema</h3>
+        <div class="chart-wrap">
+          <canvas id="donut6"></canvas>
+        </div>
+      </div>
+
     </div>
-  </section>
+
+  </div>
+</section>
 
   <!-- RESULTADO 5 -->
   <section class="project-section">
@@ -534,8 +600,8 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
 </main>
 
 <footer class="footer">
-  <strong>Personalismo Eleitoral 2026</strong> · Dashboard de pesquisa ·
-  Os gráficos deste arquivo são modelos visuais e devem ser alimentados com a planilha de monitoramento.
+  <strong>Programa Político e Mídias Sociais</strong> · Política nas Redes ·
+  Grupo de trabalho formado por...
 </footer>
 
 <script>
@@ -1300,6 +1366,8 @@ candidatos.forEach(candidato => {
     criarGraficoCurtidasCSV(dados);
     criarGraficoComentariosCSV(dados);
 
+    criarDonutsPorCandidato(dados);
+
     console.info("monitoramento.csv carregado com sucesso.");
     console.info("Candidatos encontrados:", candidatos);
     console.info("Registros:", dados.length);
@@ -1368,35 +1436,122 @@ function bar(canvas, labels, values, label = "") {
   });
 }
 
-DATA.candidateAppeals.forEach((d, i) => {
-  const id = "donut" + (i + 1);
-  const el = document.getElementById(id);
-  if (!el) return;
+function criarDonutsPorCandidato(dados) {
 
-  chartInstances[id] = new Chart(el, {
-    type: "doughnut",
-    data: {
-      labels: ["Individuais", "Coletivos"],
-      datasets: [
-        {
-          data: [d.individual, d.collective],
-          backgroundColor: ["#8b5cf6", "#2f80ed"],
-          borderWidth: 0
-        }
-      ]
+  const candidatos = [
+    "Lula",
+    "Flavio",
+    "Caiado",
+    "Renan",
+    "Cury",
+    "Zema"
+  ];
+
+  const cores = {
+    "Lula": {
+      programatico: "#b91c1c",
+      personalista: "#fecaca"
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: "68%",
-      plugins: {
-        legend: {
-          position: "bottom"
+
+    "Flavio": {
+      programatico: "#15803d",
+      personalista: "#bbf7d0"
+    },
+
+    "Renan": {
+      programatico: "#a16207",
+      personalista: "#fef08a"
+    },
+
+    "Zema": {
+      programatico: "#c2410c",
+      personalista: "#fed7aa"
+    },
+
+    "Caiado": {
+      programatico: "#1d4ed8",
+      personalista: "#bfdbfe"
+    },
+
+    "Cury": {
+      programatico: "#7e22ce",
+      personalista: "#e9d5ff"
+    }
+  };
+
+  candidatos.forEach((candidato, i) => {
+
+    const canvas = document.getElementById("donut" + (i + 1));
+    if (!canvas) return;
+
+    const dadosCandidato = dados.filter(
+      d => normalizarTexto(d.candidato) === normalizarTexto(candidato)
+    );
+
+    const personalistas = dadosCandidato.filter(
+      d => categoriaTipo(d.categoria) === "Personalista"
+    ).length;
+
+    const programaticos = dadosCandidato.filter(
+      d => categoriaTipo(d.categoria) === "Programático"
+    ).length;
+
+    const id = "donut" + (i + 1);
+
+    if (chartInstances[id]) {
+      chartInstances[id].destroy();
+    }
+
+    const cor = cores[candidato];
+
+    chartInstances[id] = new Chart(canvas, {
+      type: "doughnut",
+
+      data: {
+        labels: [
+          "Conteúdo programático",
+          "Conteúdo personalista"
+        ],
+
+        datasets: [{
+          data: [
+            programaticos,
+            personalistas
+          ],
+
+          backgroundColor: [
+            cor.programatico,
+            cor.personalista
+          ],
+
+          borderWidth: 0
+        }]
+      },
+
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        cutout: "68%",
+
+        plugins: {
+          legend: {
+            position: "bottom"
+          },
+
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.label}: ${context.raw}`;
+              }
+            }
+          }
         }
       }
-    }
+    });
+
   });
-});
+}
 
 const subcatEl = document.getElementById("subcategoryBar");
 
