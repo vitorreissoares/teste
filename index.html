@@ -631,7 +631,7 @@ function renderCandidateColorLegend() {
             class="color-legend-swatch"
             style="background:${cor.personalista}"
             title="Conteúdo personalista">
-          ></span>
+          </span>
         </span>
       </div>
     `;
@@ -792,61 +792,49 @@ function criarGraficoApelosTempo(labels, datasets) {
     chartInstances["graficoApelosTempo"].destroy();
   }
 
+  // Nenhum candidato aparece inicialmente.
+  // Os dados serão exibidos somente ao clicar no nome do candidato.
   datasets.forEach(ds => {
-  ds.hidden = true;
-});
+    ds.hidden = true;
+  });
 
   chartInstances["graficoApelosTempo"] = new Chart(canvas, {
     type: "bar",
+
     data: {
       labels,
       datasets
     },
 
-    
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      options: {
-  responsive: true,
-  maintainAspectRatio: false,
 
-  plugins: {
-    legend: {
-      display: false
-    },
+      plugins: {
+        // Remove a legenda nativa do Chart.js:
+        // "Conteúdo programático" / "Conteúdo personalista"
+        legend: {
+          display: false
+        },
 
-    tooltip: {
-      callbacks: {
-        label: function(context) {
-          return `${context.dataset.label}: ${context.parsed.y} ocorrência(s)`;
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.dataset.label}: ${context.parsed.y} ocorrência(s)`;
+            }
+          }
         }
-      }
-    }
-  },
+      },
 
-  scales: {
-    x: {
-      stacked: true
-    },
-
-    y: {
-      stacked: true,
-      beginAtZero: true,
-      ticks: {
-        precision: 0,
-        stepSize: 1
-      }
-    }
-  }
-},
       scales: {
         x: {
           stacked: true
         },
+
         y: {
           stacked: true,
           beginAtZero: true,
+
           ticks: {
             precision: 0,
             stepSize: 1
