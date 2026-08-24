@@ -10,6 +10,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
 
 <style>
 :root{
@@ -159,6 +161,54 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
+.candidate-color-legend {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 14px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.color-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: .68rem;
+  color: var(--text);
+}
+
+.color-legend-name {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.color-legend-types {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: .62rem;
+}
+
+.color-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+  flex: 0 0 10px;
+}
+
+@media(max-width:600px) {
+  .candidate-color-legend {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 .candidate-filter-btn:hover {
   border-color: var(--primary);
   color: var(--primary);
@@ -391,8 +441,10 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
           </div>
 
           <div class="chart-container">
-            <canvas id="graficoApelosTempo"></canvas>
-          </div>
+  <canvas id="graficoApelosTempo"></canvas>
+</div>
+
+<div id="candidateColorLegend" class="candidate-color-legend"></div>
           <p class="chart-note" style="margin-top:10px;">
             Clique no nome dos candidatos e nas categorias para ver os resultados.
           </p>
@@ -521,6 +573,71 @@ function hexToRgba(hex, alpha) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
+function renderCandidateColorLegend() {
+  const container = document.getElementById("candidateColorLegend");
+  if (!container) return;
+
+  const cores = {
+    "Lula": {
+      programatico: "#b91c1c",
+      personalista: "#fecaca"
+    },
+    "Flavio": {
+      programatico: "#15803d",
+      personalista: "#bbf7d0"
+    },
+    "Renan": {
+      programatico: "#a16207",
+      personalista: "#fef08a"
+    },
+    "Zema": {
+      programatico: "#c2410c",
+      personalista: "#fed7aa"
+    },
+    "Caiado": {
+      programatico: "#1d4ed8",
+      personalista: "#bfdbfe"
+    },
+    "Cury": {
+      programatico: "#7e22ce",
+      personalista: "#e9d5ff"
+    }
+  };
+
+  const nomes = [
+    "Lula",
+    "Flavio",
+    "Renan",
+    "Zema",
+    "Caiado",
+    "Cury"
+  ];
+
+  container.innerHTML = nomes.map(nome => {
+    const cor = cores[nome];
+
+    return `
+      <div class="color-legend-item">
+        <span class="color-legend-name">${nome}</span>
+
+        <span class="color-legend-types">
+          <span
+            class="color-legend-swatch"
+            style="background:${cor.programatico}"
+            title="Conteúdo programático">
+          ></span>
+
+          <span
+            class="color-legend-swatch"
+            style="background:${cor.personalista}"
+            title="Conteúdo personalista">
+          ></span>
+        </span>
+      </div>
+    `;
+  }).join("");
+}
+
 /* ==========================================================
    FUNÇÕES AUXILIARES
    ========================================================== */
@@ -637,6 +754,19 @@ function parseDataOrdenavel(str) {
   return new Date(valor);
 }
 
+function parseDataGrafico(str) {
+  if (!str) return null;
+
+  const valor = String(str).trim();
+
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(valor)) {
+    const [dia, mes, ano] = valor.split("/");
+    return new Date(Number(ano), Number(mes) - 1, Number(dia));
+  }
+
+  return parseDataOrdenavel(valor);
+}
+
 function categoriaTipo(categoria) {
   const c = normalizarTexto(categoria);
 
@@ -662,12 +792,18 @@ function criarGraficoApelosTempo(labels, datasets) {
     chartInstances["graficoApelosTempo"].destroy();
   }
 
+  datasets.forEach(ds => {
+  ds.hidden = true;
+});
+
   chartInstances["graficoApelosTempo"] = new Chart(canvas, {
     type: "bar",
     data: {
       labels,
       datasets
     },
+
+    
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -755,20 +891,6 @@ function filtrarCandidatoGrafico01(nomeCandidato, mostrar = true) {
   chart.update();
 }
 
-function exibirTodosCandidatosGrafico01() {
-  const chart = chartInstances["graficoApelosTempo"];
-  if (!chart) return;
-
-  chart.data.datasets.forEach((ds, i) => {
-    chart.setDatasetVisibility(i, true);
-  });
-
-  chart.update();
-
-  document
-    .querySelectorAll(".candidate-filter-btn")
-    .forEach(btn => btn.classList.add("active"));
-}
 
 function renderCandidateFilterButtons(candidatos) {
   const filterContainer = document.getElementById("candidateFilterButtons");
@@ -778,35 +900,28 @@ function renderCandidateFilterButtons(candidatos) {
 
   const lista = candidatos.length > 0
     ? candidatos
-    : ["Lula", "Flávio", "Ronaldo Caiado", "Renan Santos", "Augusto Cury", "Romeu Zema"];
-
-  // Botão para mostrar todos
-  const todosBtn = document.createElement("button");
-  todosBtn.className = "candidate-filter-btn active";
-  todosBtn.textContent = "Todos";
-  todosBtn.onclick = () => exibirTodosCandidatosGrafico01();
-  filterContainer.appendChild(todosBtn);
+    : [
+        "Lula",
+        "Flávio",
+        "Ronaldo Caiado",
+        "Renan Santos",
+        "Augusto Cury",
+        "Romeu Zema"
+      ];
 
   lista.forEach(cand => {
     const btn = document.createElement("button");
-    btn.className = "candidate-filter-btn active";
+
+    // Começa desativado: nenhum candidato aparece inicialmente
+    btn.className = "candidate-filter-btn";
     btn.textContent = cand;
 
     btn.onclick = () => {
       const mostrar = !btn.classList.contains("active");
+
       btn.classList.toggle("active", mostrar);
+
       filtrarCandidatoGrafico01(cand, mostrar);
-
-      // "Todos" deixa de ficar ativo quando há filtro individual.
-      todosBtn.classList.remove("active");
-
-      const todosAtivos = lista.every(nome => {
-        const botoes = [...filterContainer.querySelectorAll(".candidate-filter-btn")];
-        const botao = botoes.find(b => b.textContent === nome);
-        return botao?.classList.contains("active");
-      });
-
-      if (todosAtivos) todosBtn.classList.add("active");
     };
 
     filterContainer.appendChild(btn);
@@ -900,13 +1015,13 @@ function criarGraficoDispersaoCSV(dados, campo, canvasId, tituloEixoY, chaveGraf
     if (!Number.isFinite(valor)) return;
 
     pontos.push({
-      x: tipo === "Personalista" ? 1 : 2,
-      y: valor,
-      candidato: item.candidato,
-      categoria: item.categoria,
-      data: item.data,
-      tipo: tipo
-    });
+  x: parseDataGrafico(item.data),
+  y: valor,
+  candidato: item.candidato,
+  categoria: item.categoria,
+  data: item.data,
+  tipo: tipo
+});
   });
 
   chartInstances[chaveGrafico] = new Chart(canvas, {
@@ -980,22 +1095,22 @@ function criarGraficoDispersaoCSV(dados, campo, canvasId, tituloEixoY, chaveGraf
       },
       scales: {
         x: {
-          type: "linear",
-          min: 0.5,
-          max: 2.5,
-          ticks: {
-            stepSize: 1,
-            callback: function(value) {
-              if (value === 1) return "Personalista";
-              if (value === 2) return "Programático";
-              return "";
-            }
-          },
-          title: {
-            display: true,
-            text: "Categoria"
-          }
-        },
+  type: "time",
+  time: {
+    unit: "day",
+    tooltipFormat: "dd/MM/yyyy",
+    displayFormats: {
+      day: "dd/MM"
+    }
+  },
+  title: {
+    display: true,
+    text: "Data"
+  },
+  ticks: {
+    autoSkip: false
+  }
+},
         y: {
           beginAtZero: true,
           title: {
@@ -1133,16 +1248,43 @@ async function carregarMonitoramento() {
      * Isso evita que candidatos novos desapareçam por falta
      * de configuração no objeto de cores.
      */
-    const coresCandidatos = {};
+    
+    const coresBaseCandidatos = {
+  "Lula": {
+    programatico: "#b91c1c",
+    personalista: "#fecaca"
+  },
+  "Flavio": {
+    programatico: "#15803d",
+    personalista: "#bbf7d0"
+  },
+  "Renan": {
+    programatico: "#a16207",
+    personalista: "#fef08a"
+  },
+  "Zema": {
+    programatico: "#c2410c",
+    personalista: "#fed7aa"
+  },
+  "Caiado": {
+    programatico: "#1d4ed8",
+    personalista: "#bfdbfe"
+  },
+  "Cury": {
+    programatico: "#7e22ce",
+    personalista: "#e9d5ff"
+  }
+};
 
-    candidatos.forEach((candidato, indice) => {
-      const cor = palette[indice % palette.length];
+const coresCandidatos = {};
 
-      coresCandidatos[candidato] = {
-        programatico: cor,
-        personalista: hexToRgba(cor, 0.38)
-      };
-    });
+candidatos.forEach(candidato => {
+  coresCandidatos[candidato] =
+    coresBaseCandidatos[candidato] || {
+      programatico: "#475569",
+      personalista: "#cbd5e1"
+    };
+});
 
     const datasets = [];
 
@@ -1204,6 +1346,7 @@ async function carregarMonitoramento() {
     // Gráfico 01 com TODOS os candidatos encontrados no CSV.
     criarGraficoApelosTempo(datas, datasets);
     renderCandidateFilterButtons(candidatos);
+    renderCandidateColorLegend();
 
     // Gráficos de curtidas e comentários alimentados pelo monitoramento.csv.
     criarGraficoCurtidasCSV(dados);
@@ -1258,6 +1401,8 @@ function bar(canvas, labels, values, label = "") {
         }
       ]
     },
+
+    
     options: {
       responsive: true,
       maintainAspectRatio: false,
