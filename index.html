@@ -597,15 +597,15 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
   </p>
 
   <div class="candidate-filter-bar">
-    <span class="filter-label">
-      <i class="fas fa-filter"></i>
-      Selecionar candidato:
-    </span>
+  <span class="filter-label">
+    <i class="fas fa-filter"></i>
+    Selecionar candidatos:
+  </span>
 
-    <select id="formatCandidateFilter" class="candidate-filter-select">
-      <option value="">Todos os candidatos</option>
-    </select>
+  <div id="formatCandidateFilterButtons" class="filter-buttons">
+    <!-- Botões gerados automaticamente pelo JavaScript -->
   </div>
+</div>
 
   <div class="chart-wrap">
     <canvas id="formatBar"></canvas>
@@ -1463,7 +1463,9 @@ function bar(canvas, labels, values, label = "") {
 
 function criarGraficoFormatos(dados) {
   const canvas = document.getElementById("formatBar");
-  if (!canvas) return;
+  const filtroContainer = document.getElementById("formatCandidateFilterButtons");
+
+  if (!canvas || !filtroContainer) return;
 
   const candidatos = [
     ...new Set(
@@ -1473,100 +1475,225 @@ function criarGraficoFormatos(dados) {
     )
   ];
 
-  function atualizarGrafico(candidato = null) {
-    const dadosFiltrados = candidato
-      ? dados.filter(
+  /*
+   * Candidatos atualmente selecionados.
+   *
+   * IMPORTANTE:
+   * Array vazio = nenhum candidato selecionado.
+   * Nesse caso o gráfico fica vazio.
+   */
+  let candidatosSelecionados = [];
+
+  /*
+   * Paleta de cores dos candidatos.
+   */
+  const cores = [
+    "#245b8f",
+    "#8b5cf6",
+    "#2f80ed",
+    "#6c7a86",
+    "#b26b3c",
+    "#4f8a70"
+  ];
+
+  function atualizarGrafico() {
+
+    /*
+     * Nenhum candidato selecionado:
+     * não mostra nenhum dado.
+     */
+    if (candidatosSelecionados.length === 0) {
+
+      if (chartInstances["formatBar"]) {
+        chartInstances["formatBar"].destroy();
+        chartInstances["formatBar"] = null;
+      }
+
+      return;
+    }
+
+    /*
+     * Formatos encontrados na base.
+     */
+    const formatos = [
+      ...new Set(
+        dados
+          .map(d => String(d.formato || "").trim())
+          .filter(Boolean)
+      )
+    ];
+
+    /*
+     * Cria um dataset para cada candidato.
+     *
+     * Isso permite colocar as barras lado a lado
+     * e comparar os candidatos dentro de cada formato.
+     */
+    const datasets = candidatosSelecionados.map(
+      (candidato, indice) => {
+
+        const dadosCandidato = dados.filter(
           d =>
             normalizarTexto(d.candidato) ===
             normalizarTexto(candidato)
-        )
-      : dados;
+        );
 
-    const contagem = {};
+        const valores = formatos.map(formato => {
 
-    dadosFiltrados.forEach(d => {
-      const formato = String(d.formato || "").trim();
+          return dadosCandidato.filter(
+            d =>
+              normalizarTexto(d.formato) ===
+              normalizarTexto(formato)
+          ).length;
 
-      if (!formato) return;
+        });
 
-      contagem[formato] = (contagem[formato] || 0) + 1;
-    });
+        return {
+          label: candidato,
+          data: valores,
+          backgroundColor: cores[indice % cores.length],
+          borderRadius: 5,
+          borderWidth: 0
+        };
+      }
+    );
 
-    const labels = Object.keys(contagem);
-    const values = labels.map(formato => contagem[formato]);
-
+    /*
+     * Destrói a versão anterior.
+     */
     if (chartInstances["formatBar"]) {
       chartInstances["formatBar"].destroy();
     }
 
+    /*
+     * Cria o novo gráfico.
+     */
     chartInstances["formatBar"] = new Chart(canvas, {
+
       type: "bar",
 
       data: {
-        labels,
-
-        datasets: [{
-          label: "Publicações",
-          data: values,
-          backgroundColor: "#5c8db8",
-          borderRadius: 6
-        }]
+        labels: formatos,
+        datasets
       },
 
       options: {
+
         responsive: true,
         maintainAspectRatio: false,
 
+        interaction: {
+          mode: "index",
+          intersect: false
+        },
+
         plugins: {
+
           legend: {
-            display: false
+            display: true,
+            position: "bottom"
           },
 
           tooltip: {
             callbacks: {
+
               label: function(context) {
-                return `${context.raw} publicação(ões)`;
+
+                return `${context.dataset.label}: ${context.raw} publicação(ões)`;
+
               }
+
             }
           }
+
         },
 
         scales: {
+
+          x: {
+            stacked: false
+          },
+
           y: {
+
             beginAtZero: true,
+
             ticks: {
               precision: 0,
               stepSize: 1
             }
+
           }
+
         }
+
       }
+
     });
+
   }
 
+  /*
+   * Cria os botões dos candidatos.
+   */
+  filtroContainer.innerHTML = "";
+
+  candidatos.forEach(candidato => {
+
+    const btn = document.createElement("button");
+
+    btn.type = "button";
+    btn.className = "candidate-filter-btn";
+    btn.textContent = candidato;
+
+    btn.addEventListener("click", function() {
+
+      const indice =
+        candidatosSelecionados.findIndex(
+          c =>
+            normalizarTexto(c) ===
+            normalizarTexto(candidato)
+        );
+
+      /*
+       * Se o candidato já estiver selecionado,
+       * remove da comparação.
+       */
+      if (indice !== -1) {
+
+        candidatosSelecionados.splice(indice, 1);
+
+        btn.classList.remove("active");
+
+      }
+
+      /*
+       * Caso ainda não esteja selecionado,
+       * adiciona à comparação.
+       */
+      else {
+
+        candidatosSelecionados.push(candidato);
+
+        btn.classList.add("active");
+
+      }
+
+      atualizarGrafico();
+
+    });
+
+    filtroContainer.appendChild(btn);
+
+  });
+
+  /*
+   * Estado inicial:
+   *
+   * NENHUM candidato selecionado.
+   * Portanto, o gráfico começa vazio.
+   */
   atualizarGrafico();
-
-  const filtro = document.getElementById("formatCandidateFilter");
-
-  if (filtro) {
-    filtro.innerHTML = "";
-
-    const opcaoTodos = document.createElement("option");
-    opcaoTodos.value = "";
-    opcaoTodos.textContent = "Todos os candidatos";
-    filtro.appendChild(opcaoTodos);
-
-    candidatos.forEach(candidato => {
-      const option = document.createElement("option");
-      option.value = candidato;
-      option.textContent = candidato;
-      filtro.appendChild(option);
-    });
-
-    filtro.onchange = function() {
-      atualizarGrafico(this.value || null);
-    };
-  }
 }
 
 
