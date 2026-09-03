@@ -1,2252 +1,4715 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Programa Político e Mídias Sociais | Política nas Redes</title>
-<meta name="description" content="Dashboard de monitoramento das estratégias de comunicação política dos candidatos à Presidência da República nas mídias sociais.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-:root{
-  --primary:#245b8f;
-  --primary-dark:#193f63;
-  --accent:#5c8db8;
-  --text:#26333d;
-  --muted:#6f7c86;
-  --bg:#f4f6f8;
-  --surface:#fff;
-  --border:#dfe5ea;
-  --shadow:0 3px 14px rgba(25,45,60,.07);
-  --shadow-hover:0 10px 28px rgba(25,45,60,.11);
-  --individual:#8b5cf6;
-  --collective:#2f80ed;
-  --radius:12px;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.55}
-a{color:inherit;text-decoration:none}
-button{font:inherit}
-.header{
-  background:linear-gradient(145deg,#fff 0%,#f7fafc 100%);
-  border-bottom:1px solid var(--border);
-  padding:34px 20px 30px;
-  position:relative;
-}
-.header-inner{max-width:1080px;margin:auto;display:grid;grid-template-columns:150px 1fr auto;gap:28px;align-items:center}
-.project-photo {
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  <title>Programa Político e Mídias Sociais | Política nas Redes</title>
 
-  background: transparent;
-  border: none;
-  padding: 0;
-  box-shadow: none;
-  border-radius: 0;
-  overflow: visible;
-}
+  <meta
+    name="description"
+    content="Dashboard de monitoramento das estratégias de comunicação política dos candidatos à Presidência da República nas mídias sociais."
+  >
 
-.project-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-.project-photo img{width:100%;height:100%;object-fit:cover;border-radius:12px}
-.eyebrow{font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--primary);font-weight:800;margin:0 0 8px}
-h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#17232c}
-.project-description{max-width:760px;color:var(--muted);margin:0;font-size:.96rem}
-.socials{display:flex;gap:9px;align-self:start}
-.socials a{width:39px;height:39px;border:1px solid var(--border);background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--primary);transition:.2s}
-.socials a:hover{transform:translateY(-2px);box-shadow:var(--shadow);background:var(--primary);color:#fff}
-.container{max-width:1080px;margin:auto;padding:24px 16px 46px}
-.section-label{text-align:center;text-transform:uppercase;letter-spacing:.12em;color:#8a969e;font-size:.72rem;font-weight:800;margin:4px 0 16px}
-.candidate-carousel{display:grid;grid-template-columns:42px 1fr 42px;gap:10px;align-items:center;margin-bottom:28px}
-.carousel-btn{width:42px;height:42px;border:1px solid var(--border);border-radius:50%;background:#fff;color:var(--primary);cursor:pointer}
-.carousel-btn:hover{background:var(--primary);color:#fff}
-.viewport{overflow:hidden;padding:6px 2px 12px}
-.track{display:flex;gap:16px;transition:transform .4s ease}
-.candidate-card{
-  flex:0 0 calc((100% - 32px)/3);background:#fff;border:1px solid var(--border);
-  border-radius:14px;padding:18px;box-shadow:var(--shadow);cursor:pointer;
-  transition:.25s;min-height:208px;
-}
-.candidate-card:hover,.candidate-card.active{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:#b9c9d6}
-.candidate-top{display:flex;gap:13px;align-items:center}
-.candidate-photo{
-  width:66px;height:66px;flex:0 0 66px;border-radius:50%;object-fit:cover;
-  border:3px solid #e8eef3;background:#e9eef2;
-}
-.candidate-name{margin:0;font-size:1rem;font-weight:800}
-.candidate-party{margin:2px 0 0;color:var(--primary);font-size:.77rem;font-weight:700}
-.candidate-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
-.meta-box{background:#f7f9fa;border-radius:8px;padding:8px 9px}
-.meta-box span{display:block;font-size:.64rem;color:#84919a;text-transform:uppercase;letter-spacing:.05em}
-.meta-box strong{font-size:.84rem}
-.candidate-info{margin-top:12px;color:var(--muted);font-size:.75rem;line-height:1.45}
-.dots{text-align:center;margin-top:-8px}
-.dot{width:7px;height:7px;border:0;border-radius:50%;background:#cbd4db;margin:0 3px;cursor:pointer}
-.dot.active{width:22px;border-radius:5px;background:var(--primary)}
-.project-section{
-  background:#fff;border:1px solid var(--border);border-radius:var(--radius);
-  box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px;
-}
-.section-head{display:flex;justify-content:space-between;align-items:center;padding:17px 19px;cursor:pointer}
-.section-head:hover{background:#fafcfd}
-.section-title{font-size:.96rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:9px}
-.section-icon{transition:.2s;color:#87939c}
-.section-head.active .section-icon{transform:rotate(180deg)}
-.section-content{display:none;border-top:1px solid var(--border);padding:18px}
-.section-content.open{display:block}
-.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.method-card{background:#f7f9fa;border:1px solid var(--border);border-radius:10px;padding:16px}
-.method-card h3{font-size:.88rem;margin:0 0 7px;color:#293842}
-.method-card p{font-size:.79rem;color:var(--muted);margin:0}
-.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.chart-card{border:1px solid var(--border);border-radius:10px;background:#fff;padding:15px;min-height:340px}
-.chart-card.wide{grid-column:1/-1}
-.chart-title{font-size:.85rem;font-weight:800;margin:0 0 3px}
-.chart-note{font-size:.7rem;color:var(--muted);margin:0 0 12px}
-.chart-wrap{height:255px;position:relative}
-.chart-container{
-  height:255px;
-  position:relative;
-  width:100%;
-}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-/* ESTILOS DO FILTRO DE CANDIDATOS NA GAVETA 01 */
-.candidate-filter-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-  background: #f8fafc;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-}
-.filter-label {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.filter-buttons {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.candidate-filter-btn {
-  padding: 5px 13px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  border: 1px solid var(--border);
-  background: #fff;
-  color: var(--text);
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-.candidate-color-legend {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px 14px;
-  margin-top: 12px;
-  padding: 10px 12px;
-  background: #f8fafc;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-}
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
 
-.color-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  font-size: .68rem;
-  color: var(--text);
-}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
 
-.color-legend-name {
-  font-weight: 700;
-  white-space: nowrap;
-}
+  <style>
+    :root {
+      --primary: #245b8f;
+      --primary-dark: #193f63;
+      --accent: #5c8db8;
 
-.color-legend-types {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--muted);
-  font-size: .62rem;
-}
+      --text: #26333d;
+      --muted: #6f7c86;
 
-.color-legend-swatch {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
-  display: inline-block;
-  flex: 0 0 10px;
-}
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f7f9fa;
 
-@media(max-width:600px) {
-  .candidate-color-legend {
-    grid-template-columns: 1fr 1fr;
-  }
-}
+      --border: #dfe5ea;
 
-.candidate-filter-btn:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-  background: #f0f4f8;
-}
-.candidate-filter-btn.active {
-  background: var(--primary);
-  color: #fff;
-  border-color: var(--primary);
-  box-shadow: 0 2px 6px rgba(36,91,143,0.25);
-}
+      --individual: #8b5cf6;
+      --collective: #2f80ed;
 
-.result-number{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:7px;background:#eaf1f6;color:var(--primary);font-size:.7rem;font-weight:800}
-.legend-note{font-size:.72rem;color:var(--muted);margin-top:8px}
-.data-placeholder{
-  border:1px dashed #b9c5cd;background:#f8fafb;border-radius:9px;padding:13px;
-  color:#71808a;font-size:.75rem;margin-top:10px
-}
-.footer{border-top:1px solid var(--border);background:#fff;padding:20px;text-align:center;color:#859099;font-size:.72rem}
-@media(max-width:850px){
-  .header-inner{grid-template-columns:100px 1fr}
-  .project-photo{width:100px;height:100px}
-  .socials{grid-column:2;align-self:auto}
-  .candidate-card{flex-basis:calc((100% - 16px)/2)}
-}
-@media(max-width:600px){
-  .header-inner{grid-template-columns:1fr;text-align:center}
-  .project-photo{margin:auto;width:115px;height:115px}
-  .socials{grid-column:auto;justify-content:center}
-  .project-description{font-size:.85rem}
-  .candidate-carousel{grid-template-columns:30px 1fr 30px;gap:5px}
-  .carousel-btn{width:30px;height:30px;font-size:.72rem}
-  .candidate-card{flex-basis:100%}
-  .method-grid,.chart-grid{grid-template-columns:1fr}
-  .chart-card.wide{grid-column:auto}
-  .chart-wrap{height:235px}
-}
+      --success: #16803c;
+      --danger: #b91c1c;
 
-.candidate-donut-card {
-  text-align: center;
-}
+      --radius: 12px;
 
-.donut-candidate-photo {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #e8eef3;
-  margin: 2px auto 8px;
-  display: block;
-}
+      --shadow: 0 3px 14px rgba(25, 45, 60, .07);
+      --shadow-hover: 0 10px 28px rgba(25, 45, 60, .11);
+    }
 
-</style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, sans-serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(36, 91, 143, .25);
+      outline-offset: 2px;
+    }
+
+    /* =====================================================
+       HEADER
+       ===================================================== */
+
+    .header {
+      background: linear-gradient(145deg, #fff 0%, #f7fafc 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 34px 20px 30px;
+    }
+
+    .header-inner {
+      max-width: 1080px;
+      margin: auto;
+
+      display: grid;
+      grid-template-columns: 150px 1fr auto;
+      gap: 28px;
+
+      align-items: center;
+    }
+
+    .project-photo {
+      width: 120px;
+      height: 120px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .project-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+
+      color: var(--primary);
+
+      font-size: .74rem;
+      font-weight: 800;
+
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+
+      color: #17232c;
+
+      font-size: clamp(1.55rem, 4vw, 2.45rem);
+      line-height: 1.12;
+    }
+
+    .project-description {
+      max-width: 760px;
+      margin: 0;
+
+      color: var(--muted);
+      font-size: .96rem;
+    }
+
+    .socials {
+      display: flex;
+      gap: 9px;
+      align-self: start;
+    }
+
+    .socials a {
+      width: 39px;
+      height: 39px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border: 1px solid var(--border);
+      border-radius: 50%;
+
+      background: #fff;
+      color: var(--primary);
+
+      transition: .2s ease;
+    }
+
+    .socials a:hover {
+      transform: translateY(-2px);
+      background: var(--primary);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    /* =====================================================
+       LAYOUT
+       ===================================================== */
+
+    .container {
+      max-width: 1080px;
+      margin: auto;
+      padding: 24px 16px 46px;
+    }
+
+    .section-label {
+      margin: 4px 0 16px;
+
+      text-align: center;
+
+      color: #8a969e;
+
+      font-size: .72rem;
+      font-weight: 800;
+
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    /* =====================================================
+       CARROSSEL
+       ===================================================== */
+
+    .candidate-carousel {
+      display: grid;
+      grid-template-columns: 42px 1fr 42px;
+      gap: 10px;
+      align-items: center;
+
+      margin-bottom: 10px;
+    }
+
+    .carousel-btn {
+      width: 42px;
+      height: 42px;
+
+      border: 1px solid var(--border);
+      border-radius: 50%;
+
+      background: #fff;
+      color: var(--primary);
+
+      cursor: pointer;
+
+      transition: .2s ease;
+    }
+
+    .carousel-btn:hover:not(:disabled) {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .carousel-btn:disabled {
+      opacity: .35;
+      cursor: not-allowed;
+    }
+
+    .viewport {
+      overflow: hidden;
+      padding: 6px 2px 12px;
+    }
+
+    .track {
+      display: flex;
+      gap: 16px;
+
+      transition: transform .35s ease;
+      will-change: transform;
+    }
+
+    .candidate-card {
+      flex: 0 0 calc((100% - 32px) / 3);
+
+      min-height: 208px;
+
+      padding: 18px;
+
+      border: 1px solid var(--border);
+      border-radius: 14px;
+
+      background: #fff;
+
+      box-shadow: var(--shadow);
+
+      cursor: pointer;
+
+      transition: .25s ease;
+    }
+
+    .candidate-card:hover,
+    .candidate-card.active {
+      transform: translateY(-3px);
+
+      border-color: #b9c9d6;
+
+      box-shadow: var(--shadow-hover);
+    }
+
+    .candidate-card.active {
+      outline: 2px solid rgba(36, 91, 143, .15);
+    }
+
+    .candidate-top {
+      display: flex;
+      gap: 13px;
+      align-items: center;
+    }
+
+    .candidate-photo {
+      width: 66px;
+      height: 66px;
+
+      flex: 0 0 66px;
+
+      object-fit: cover;
+
+      border: 3px solid #e8eef3;
+      border-radius: 50%;
+
+      background: #e9eef2;
+    }
+
+    .candidate-name {
+      margin: 0;
+
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .candidate-party {
+      margin: 2px 0 0;
+
+      color: var(--primary);
+
+      font-size: .77rem;
+      font-weight: 700;
+    }
+
+    .candidate-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+
+      margin-top: 16px;
+    }
+
+    .meta-box {
+      padding: 8px 9px;
+
+      border-radius: 8px;
+
+      background: var(--surface-soft);
+    }
+
+    .meta-box span {
+      display: block;
+
+      color: #84919a;
+
+      font-size: .64rem;
+
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .meta-box strong {
+      font-size: .84rem;
+    }
+
+    .candidate-info {
+      margin: 12px 0 0;
+
+      color: var(--muted);
+
+      font-size: .75rem;
+      line-height: 1.45;
+    }
+
+    .dots {
+      margin: 0 0 20px;
+      text-align: center;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+
+      padding: 0;
+
+      border: 0;
+      border-radius: 50%;
+
+      background: #cbd4db;
+
+      margin: 0 3px;
+
+      cursor: pointer;
+    }
+
+    .dot.active {
+      width: 22px;
+      border-radius: 5px;
+      background: var(--primary);
+    }
+
+    /* =====================================================
+       GAVETAS
+       ===================================================== */
+
+    .project-section {
+      overflow: hidden;
+
+      margin-bottom: 12px;
+
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+
+      background: #fff;
+
+      box-shadow: var(--shadow);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 17px 19px;
+
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .section-head:hover {
+      background: #fafcfd;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+
+      color: var(--primary);
+
+      font-size: .96rem;
+      font-weight: 800;
+    }
+
+    .section-icon {
+      color: #87939c;
+      transition: .2s ease;
+    }
+
+    .section-head.active .section-icon {
+      transform: rotate(180deg);
+    }
+
+    .section-content {
+      display: none;
+
+      padding: 18px;
+
+      border-top: 1px solid var(--border);
+    }
+
+    .section-content.open {
+      display: block;
+    }
+
+    /* =====================================================
+       METODOLOGIA
+       ===================================================== */
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .method-card {
+      padding: 16px;
+
+      border: 1px solid var(--border);
+      border-radius: 10px;
+
+      background: var(--surface-soft);
+    }
+
+    .method-card h3 {
+      margin: 0 0 7px;
+
+      color: #293842;
+
+      font-size: .88rem;
+    }
+
+    .method-card p {
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: .79rem;
+    }
+
+    .method-card a {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .data-placeholder {
+      margin-top: 18px;
+      padding: 13px;
+
+      border: 1px dashed #b9c5cd;
+      border-radius: 9px;
+
+      background: #f8fafb;
+
+      color: #71808a;
+
+      font-size: .75rem;
+    }
+
+    /* =====================================================
+       GRÁFICOS
+       ===================================================== */
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .chart-card {
+      min-height: 340px;
+
+      padding: 15px;
+
+      border: 1px solid var(--border);
+      border-radius: 10px;
+
+      background: #fff;
+    }
+
+    .chart-card.wide {
+      grid-column: 1 / -1;
+    }
+
+    .chart-title {
+      margin: 0 0 3px;
+
+      font-size: .85rem;
+      font-weight: 800;
+    }
+
+    .chart-note {
+      margin: 0 0 12px;
+
+      color: var(--muted);
+
+      font-size: .7rem;
+    }
+
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      height: 255px;
+    }
+
+    /* =====================================================
+       FILTROS
+       ===================================================== */
+
+    .candidate-filter-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      margin-bottom: 14px;
+      padding: 10px 14px;
+
+      border: 1px solid var(--border);
+      border-radius: 8px;
+
+      background: #f8fafc;
+    }
+
+    .filter-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      color: var(--primary);
+
+      font-size: .78rem;
+      font-weight: 700;
+    }
+
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .candidate-filter-btn {
+      padding: 5px 13px;
+
+      border: 1px solid var(--border);
+      border-radius: 20px;
+
+      background: #fff;
+      color: var(--text);
+
+      font-size: .78rem;
+      font-weight: 600;
+
+      cursor: pointer;
+
+      transition: .2s ease;
+    }
+
+    .candidate-filter-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #f0f4f8;
+    }
+
+    .candidate-filter-btn.active {
+      border-color: var(--primary);
+
+      background: var(--primary);
+      color: #fff;
+
+      box-shadow: 0 2px 6px rgba(36, 91, 143, .25);
+    }
+
+    /* =====================================================
+       LEGENDA DE CORES
+       ===================================================== */
+
+    .candidate-color-legend {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px 14px;
+
+      margin-top: 12px;
+      padding: 10px 12px;
+
+      border: 1px solid var(--border);
+      border-radius: 8px;
+
+      background: #f8fafc;
+    }
+
+    .color-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      min-width: 0;
+
+      font-size: .68rem;
+    }
+
+    .color-legend-name {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .color-legend-types {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      color: var(--muted);
+
+      font-size: .62rem;
+    }
+
+    .color-legend-swatch {
+      width: 10px;
+      height: 10px;
+
+      display: inline-block;
+      flex: 0 0 10px;
+
+      border-radius: 3px;
+    }
+
+    .legend-explanation {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+
+      margin-top: 10px;
+
+      color: var(--muted);
+
+      font-size: .68rem;
+    }
+
+    .legend-explanation span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* =====================================================
+       ESTADO VAZIO / ERRO
+       ===================================================== */
+
+    .chart-empty {
+      height: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: .78rem;
+    }
+
+    .status-message {
+      margin-top: 12px;
+      padding: 10px 12px;
+
+      border: 1px solid var(--border);
+      border-radius: 8px;
+
+      background: #f8fafb;
+
+      color: var(--muted);
+
+      font-size: .75rem;
+    }
+
+    .status-message.error {
+      border-color: #efb5b5;
+
+      background: #fff7f7;
+
+      color: #a33;
+    }
+
+    .status-message.success {
+      border-color: #b9dfc5;
+
+      background: #f5fcf7;
+
+      color: #23713b;
+    }
+
+    .result-number {
+      width: 25px;
+      height: 25px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 7px;
+
+      background: #eaf1f6;
+      color: var(--primary);
+
+      font-size: .7rem;
+      font-weight: 800;
+    }
+
+    /* =====================================================
+       DONUTS
+       ===================================================== */
+
+    .candidate-donut-card {
+      text-align: center;
+    }
+
+    .donut-candidate-photo {
+      width: 64px;
+      height: 64px;
+
+      display: block;
+
+      margin: 2px auto 8px;
+
+      object-fit: cover;
+
+      border: 3px solid #e8eef3;
+      border-radius: 50%;
+    }
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .footer {
+      padding: 20px;
+
+      border-top: 1px solid var(--border);
+
+      background: #fff;
+
+      color: #859099;
+
+      text-align: center;
+
+      font-size: .72rem;
+    }
+
+    /* =====================================================
+       RESPONSIVIDADE
+       ===================================================== */
+
+    @media (max-width: 850px) {
+      .header-inner {
+        grid-template-columns: 100px 1fr;
+      }
+
+      .project-photo {
+        width: 100px;
+        height: 100px;
+      }
+
+      .socials {
+        grid-column: 2;
+        align-self: auto;
+      }
+
+      .candidate-card {
+        flex-basis: calc((100% - 16px) / 2);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .project-photo {
+        width: 115px;
+        height: 115px;
+        margin: auto;
+      }
+
+      .socials {
+        grid-column: auto;
+        justify-content: center;
+      }
+
+      .project-description {
+        font-size: .85rem;
+      }
+
+      .candidate-carousel {
+        grid-template-columns: 30px 1fr 30px;
+        gap: 5px;
+      }
+
+      .carousel-btn {
+        width: 30px;
+        height: 30px;
+        font-size: .72rem;
+      }
+
+      .candidate-card {
+        flex-basis: 100%;
+      }
+
+      .method-grid,
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-card.wide {
+        grid-column: auto;
+      }
+
+      .chart-wrap {
+        height: 235px;
+      }
+
+      .candidate-color-legend {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
-<header class="header">
-  <div class="header-inner">
-    <div class="project-photo" aria-label="Espaço reservado para foto do projeto">
-      <img 
-    src="politica-logo.jpg" 
-    alt="Foto do projeto Personalismo e Mídias Sociais"
-  >
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <header class="header">
+    <div class="header-inner">
+
+      <div class="project-photo">
+        <img
+          src="politica-logo.jpg"
+          alt="Logo do projeto Política nas Redes"
+        >
+      </div>
+
+      <div>
+        <p class="eyebrow">Política nas Redes · 2026</p>
+
+        <h1>
+          Programa Político e Mídias Sociais
+        </h1>
+
+        <p class="project-description">
+          Monitoramento das estratégias de comunicação política
+          dos candidatos à Presidência da República.
+          <strong>14 a 21 de agosto de 2026.</strong>
+        </p>
+      </div>
+
+      <nav
+        class="socials"
+        aria-label="Mídias sociais do projeto"
+      >
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Instagram"
+          aria-label="Instagram"
+        >
+          <i class="fab fa-instagram"></i>
+        </a>
+
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="X / Twitter"
+          aria-label="X / Twitter"
+        >
+          <i class="fab fa-x-twitter"></i>
+        </a>
+
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="YouTube"
+          aria-label="YouTube"
+        >
+          <i class="fab fa-youtube"></i>
+        </a>
+
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Site do projeto"
+          aria-label="Site do projeto"
+        >
+          <i class="fas fa-globe"></i>
+        </a>
+      </nav>
+
     </div>
-    <div>
-      <p class="eyebrow">Política nas Redes · 2026</p>
-      <h1>Programa Político e Mídias Sociais</h1>
-      <p class="project-description">
-        14 a 21 de agosto de 2026
-      </p>
-    </div>
-    <nav class="socials" aria-label="Mídias sociais do projeto">
-      <a href="#" target="_blank" rel="noopener" title="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="#" target="_blank" rel="noopener" title="X / Twitter"><i class="fab fa-x-twitter"></i></a>
-      <a href="#" target="_blank" rel="noopener" title="YouTube"><i class="fab fa-youtube"></i></a>
-      <a href="#" target="_blank" rel="noopener" title="Site do projeto"><i class="fas fa-globe"></i></a>
-    </nav>
-  </div>
-</header>
+  </header>
 
-<main class="container">
 
-  <p class="section-label">Candidaturas acompanhadas</p>
-  <section class="candidate-carousel" aria-label="Carrossel de candidatos">
-    <button class="carousel-btn" id="candidatePrev" aria-label="Candidato anterior"><i class="fas fa-chevron-left"></i></button>
-    <div class="viewport">
-      <div class="track" id="candidateTrack">
+  <main class="container">
 
-        <article class="candidate-card">
-          <div class="candidate-top">
-            <img class="candidate-photo" src="lula.jpg" alt="Foto de Lula">
-            <div>
-              <h2 class="candidate-name">Lula da Silva</h2>
-              <p class="candidate-party">PT · 13</p>
+    <!-- ===================================================
+         CANDIDATOS
+         =================================================== -->
+
+    <p class="section-label">
+      Candidaturas acompanhadas
+    </p>
+
+    <section
+      class="candidate-carousel"
+      aria-label="Carrossel de candidatos"
+    >
+
+      <button
+        type="button"
+        class="carousel-btn"
+        id="candidatePrev"
+        aria-label="Candidato anterior"
+      >
+        <i class="fas fa-chevron-left"></i>
+      </button>
+
+      <div class="viewport">
+        <div
+          class="track"
+          id="candidateTrack"
+        >
+
+          <article
+            class="candidate-card"
+            data-candidate="Lula"
+            tabindex="0"
+          >
+            <div class="candidate-top">
+              <img
+                class="candidate-photo"
+                src="lula.jpg"
+                alt="Foto de Lula"
+              >
+
+              <div>
+                <h2 class="candidate-name">
+                  Lula da Silva
+                </h2>
+
+                <p class="candidate-party">
+                  PT · 13
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="candidate-meta">
-            <div class="meta-box"><span>Intenção de voto</span><strong>38%</strong></div>
-            <div class="meta-box"><span>Seguidores IG</span><strong>14.9M</strong></div>
-          </div>
-          <p class="candidate-info">Clique para ver mais.</p>
-        </article>
 
-        <article class="candidate-card">
-          <div class="candidate-top">
-            <img class="candidate-photo" src="flavio.jpg" alt="Foto de Flávio">
-            <div>
-              <h2 class="candidate-name">Flávio Bolsonaro</h2>
-              <p class="candidate-party">PL · 22</p>
-            </div>
-          </div>
-          <div class="candidate-meta">
-            <div class="meta-box"><span>Intenção de voto</span><strong>31%</strong></div>
-            <div class="meta-box"><span>Seguidores IG</span><strong>11.3M</strong></div>
-          </div>
-          <p class="candidate-info">Clique para ver mais.</p>
-        </article>
+            <div class="candidate-meta">
+              <div class="meta-box">
+                <span>Intenção de voto</span>
+                <strong>38%</strong>
+              </div>
 
-        <article class="candidate-card">
-          <div class="candidate-top">
-            <img class="candidate-photo" src="caiado.jpg" alt="Foto do candidato 3">
-            <div>
-              <h2 class="candidate-name">Ronaldo Caiado</h2>
-              <p class="candidate-party">PSD · 55</p>
+              <div class="meta-box">
+                <span>Seguidores IG</span>
+                <strong>14.9M</strong>
+              </div>
             </div>
-          </div>
-          <div class="candidate-meta">
-            <div class="meta-box"><span>Intenção de voto</span><strong>4%</strong></div>
-            <div class="meta-box"><span>Seguidores IG</span><strong>2.2M</strong></div>
-          </div>
-          <p class="candidate-info">Clique para ver mais.</p>
-        </article>
 
-        <article class="candidate-card">
-          <div class="candidate-top">
-            <img class="candidate-photo" src="renan.jpg" alt="Foto do candidato 4">
-            <div>
-              <h2 class="candidate-name">Renan Santos</h2>
-              <p class="candidate-party">Missão · 14</p>
-            </div>
-          </div>
-          <div class="candidate-meta">
-            <div class="meta-box"><span>Intenção de voto</span><strong>4%</strong></div>
-            <div class="meta-box"><span>Seguidores IG</span><strong>2.4M</strong></div>
-          </div>
-          <p class="candidate-info">Clique para ver mais.</p>
-        </article>
+            <p class="candidate-info">
+              Clique para filtrar os resultados.
+            </p>
+          </article>
 
-        <article class="candidate-card">
-          <div class="candidate-top">
-            <img class="candidate-photo" src="cury.jpg" alt="Foto do candidato 5">
-            <div>
-              <h2 class="candidate-name">Augusto Cury</h2>
-              <p class="candidate-party">Avante · 70</p>
-            </div>
-          </div>
-          <div class="candidate-meta">
-            <div class="meta-box"><span>Intenção de voto</span><strong>2%</strong></div>
-            <div class="meta-box"><span>Seguidores IG</span><strong>8.3M</strong></div>
-          </div>
-          <p class="candidate-info">Clique para ver mais.</p>
-        </article>
 
-        <article class="candidate-card">
-          <div class="candidate-top">
-            <img class="candidate-photo" src="zema.jpg" alt="Foto do candidato 6">
-            <div>
-              <h2 class="candidate-name">Romeu Zema</h2>
-              <p class="candidate-party">Novo · 30</p>
+          <article
+            class="candidate-card"
+            data-candidate="Flávio Bolsonaro"
+            tabindex="0"
+          >
+            <div class="candidate-top">
+              <img
+                class="candidate-photo"
+                src="flavio.jpg"
+                alt="Foto de Flávio Bolsonaro"
+              >
+
+              <div>
+                <h2 class="candidate-name">
+                  Flávio Bolsonaro
+                </h2>
+
+                <p class="candidate-party">
+                  PL · 22
+                </p>
+              </div>
             </div>
+
+            <div class="candidate-meta">
+              <div class="meta-box">
+                <span>Intenção de voto</span>
+                <strong>31%</strong>
+              </div>
+
+              <div class="meta-box">
+                <span>Seguidores IG</span>
+                <strong>11.3M</strong>
+              </div>
+            </div>
+
+            <p class="candidate-info">
+              Clique para filtrar os resultados.
+            </p>
+          </article>
+
+
+          <article
+            class="candidate-card"
+            data-candidate="Ronaldo Caiado"
+            tabindex="0"
+          >
+            <div class="candidate-top">
+              <img
+                class="candidate-photo"
+                src="caiado.jpg"
+                alt="Foto de Ronaldo Caiado"
+              >
+
+              <div>
+                <h2 class="candidate-name">
+                  Ronaldo Caiado
+                </h2>
+
+                <p class="candidate-party">
+                  PSD · 55
+                </p>
+              </div>
+            </div>
+
+            <div class="candidate-meta">
+              <div class="meta-box">
+                <span>Intenção de voto</span>
+                <strong>4%</strong>
+              </div>
+
+              <div class="meta-box">
+                <span>Seguidores IG</span>
+                <strong>2.2M</strong>
+              </div>
+            </div>
+
+            <p class="candidate-info">
+              Clique para filtrar os resultados.
+            </p>
+          </article>
+
+
+          <article
+            class="candidate-card"
+            data-candidate="Renan Santos"
+            tabindex="0"
+          >
+            <div class="candidate-top">
+              <img
+                class="candidate-photo"
+                src="renan.jpg"
+                alt="Foto de Renan Santos"
+              >
+
+              <div>
+                <h2 class="candidate-name">
+                  Renan Santos
+                </h2>
+
+                <p class="candidate-party">
+                  Missão · 14
+                </p>
+              </div>
+            </div>
+
+            <div class="candidate-meta">
+              <div class="meta-box">
+                <span>Intenção de voto</span>
+                <strong>4%</strong>
+              </div>
+
+              <div class="meta-box">
+                <span>Seguidores IG</span>
+                <strong>2.4M</strong>
+              </div>
+            </div>
+
+            <p class="candidate-info">
+              Clique para filtrar os resultados.
+            </p>
+          </article>
+
+
+          <article
+            class="candidate-card"
+            data-candidate="Augusto Cury"
+            tabindex="0"
+          >
+            <div class="candidate-top">
+              <img
+                class="candidate-photo"
+                src="cury.jpg"
+                alt="Foto de Augusto Cury"
+              >
+
+              <div>
+                <h2 class="candidate-name">
+                  Augusto Cury
+                </h2>
+
+                <p class="candidate-party">
+                  Avante · 70
+                </p>
+              </div>
+            </div>
+
+            <div class="candidate-meta">
+              <div class="meta-box">
+                <span>Intenção de voto</span>
+                <strong>2%</strong>
+              </div>
+
+              <div class="meta-box">
+                <span>Seguidores IG</span>
+                <strong>8.3M</strong>
+              </div>
+            </div>
+
+            <p class="candidate-info">
+              Clique para filtrar os resultados.
+            </p>
+          </article>
+
+
+          <article
+            class="candidate-card"
+            data-candidate="Romeu Zema"
+            tabindex="0"
+          >
+            <div class="candidate-top">
+              <img
+                class="candidate-photo"
+                src="zema.jpg"
+                alt="Foto de Romeu Zema"
+              >
+
+              <div>
+                <h2 class="candidate-name">
+                  Romeu Zema
+                </h2>
+
+                <p class="candidate-party">
+                  Novo · 30
+                </p>
+              </div>
+            </div>
+
+            <div class="candidate-meta">
+              <div class="meta-box">
+                <span>Intenção de voto</span>
+                <strong>2%</strong>
+              </div>
+
+              <div class="meta-box">
+                <span>Seguidores IG</span>
+                <strong>3.5M</strong>
+              </div>
+            </div>
+
+            <p class="candidate-info">
+              Clique para filtrar os resultados.
+            </p>
+          </article>
+
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="carousel-btn"
+        id="candidateNext"
+        aria-label="Próximo candidato"
+      >
+        <i class="fas fa-chevron-right"></i>
+      </button>
+
+    </section>
+
+    <div
+      class="dots"
+      id="candidateDots"
+      aria-label="Navegação do carrossel"
+    ></div>
+
+
+    <!-- ===================================================
+         METODOLOGIA
+         =================================================== -->
+
+    <section class="project-section">
+
+      <div
+        class="section-head"
+        data-target="metodologia"
+        tabindex="0"
+        role="button"
+        aria-expanded="false"
+      >
+        <span class="section-title">
+          <i class="fas fa-microscope"></i>
+          Sobre a Pesquisa
+        </span>
+
+        <i class="fas fa-chevron-down section-icon"></i>
+      </div>
+
+      <div
+        class="section-content"
+        id="metodologia"
+      >
+
+        <div class="method-grid">
+
+          <div class="method-card">
+            <h3>Problema de pesquisa</h3>
+
+            <p>
+              Investigar em que medida as candidaturas utilizam
+              as mídias sociais para apresentar programas de governo
+              em comparação à ênfase conferida aos atributos pessoais.
+            </p>
           </div>
-          <div class="candidate-meta">
-            <div class="meta-box"><span>Intenção de voto</span><strong>2%</strong></div>
-            <div class="meta-box"><span>Seguidores IG</span><strong>3.5M</strong></div>
+
+
+          <div class="method-card">
+            <h3>Dados</h3>
+
+            <p>
+              Postagens dos candidatos à Presidência da República
+              no Brasil, realizadas em seus perfis oficiais no Instagram.
+            </p>
           </div>
-          <p class="candidate-info">Clique para ver mais.</p>
-        </article>
+
+
+          <div class="method-card">
+            <h3>Critério de seleção</h3>
+
+            <p>
+              Candidatos que alcancem 2% ou mais de intenção de voto
+              nas pesquisas eleitorais oficiais para o período de análise.
+              <a
+                href="https://g1.globo.com/politica/eleicoes/2026/pesquisa-eleitoral/noticia/2026/08/14/quaest-presidente-1o-turno-14-agosto.ghtml"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Acessar a pesquisa.
+              </a>
+            </p>
+          </div>
+
+
+          <div class="method-card">
+            <h3>Categorização</h3>
+
+            <p>
+              Análise de conteúdo orientada por categorias emergentes
+              da literatura: apelos individuais e coletivos, com
+              subcategorias discursivas e imagéticas.
+            </p>
+          </div>
+
+
+          <div class="method-card">
+            <h3>Subcategorias</h3>
+
+            <p>
+              Emergentes da Análise de Conteúdo e sustentadas
+              pela literatura.
+            </p>
+          </div>
+
+
+          <div class="method-card">
+            <h3>Formatos</h3>
+
+            <p>
+              Imagens, vídeos e conteúdos produzidos por IA
+              são registrados na base.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="data-placeholder">
+          <strong>Fonte dos dados:</strong>
+          Perfis oficiais dos candidatos no Instagram.
+        </div>
+
+        <div
+          id="csvStatus"
+          class="status-message"
+          aria-live="polite"
+        >
+          Carregando dados...
+        </div>
 
       </div>
-    </div>
-    <button class="carousel-btn" id="candidateNext" aria-label="Próximo candidato"><i class="fas fa-chevron-right"></i></button>
-  </section>
-  <div class="dots" id="candidateDots"></div>
+    </section>
 
-  <!-- METODOLOGIA -->
-  <section class="project-section">
-    <div class="section-head" data-target="metodologia">
-      <span class="section-title"><i class="fas fa-microscope"></i> Sobre a Pesquisa</span>
-      <i class="fas fa-chevron-down section-icon"></i>
-    </div>
-    <div class="section-content" id="metodologia">
-      <div class="method-grid">
-        <div class="method-card">
-          <h3>Problema de pesquisa</h3>
-          <p>Investigar em que medida as candidaturas utilizam as mídias sociais para apresentar programas de governo em comparação à ênfase conferida aos atributos pessoais.</p>
-        </div>
-        <div class="method-card">
-          <h3>Dados</h3>
-          <p>Postagens dos candidatos à Presidência da República no Brasil, realizadas em seus perfis oficiais no Instagram.</p>
-        </div>
-        <div class="method-card">
-          <h3>Critério de seleção</h3>
-          <p>Candidatos que alcancem 2% ou mais de intenção de voto nas pesquisas eleitorais oficiais para o período de análise. <a href="https://g1.globo.com/politica/eleicoes/2026/pesquisa-eleitoral/noticia/2026/08/14/quaest-presidente-1o-turno-14-agosto.ghtml"> Clique aqui para acessar a pesquisa.</a></p>
-        </div>
-        <div class="method-card">
-          <h3>Categorização</h3>
-          <p>Análise de conteúdo orientada por categorias emergentes da literatura: apelos individuais e coletivos, com subcategorias discursivas e imagéticas. A codificação humana constitui a base para posterior treinamento de modelos de aprendizagem de máquina.</p>
-        </div>
-        <div class="method-card">
-          <h3>Subcategorias</h3>
-          <p>Emergentes da Análise de Conteúdo e sustentadas pela literatura.</p>
-        </div>
-        <div class="method-card">
-          <h3>Formatos</h3>
-          <p>Imagens, vídeos e conteúdos produzidos por IA são registrados.</p>
-        </div>
+
+    <!-- ===================================================
+         RESULTADO 01
+         =================================================== -->
+
+    <section class="project-section">
+
+      <div
+        class="section-head"
+        data-target="resultado3"
+        tabindex="0"
+        role="button"
+        aria-expanded="false"
+      >
+        <span class="section-title">
+          <span class="result-number">01</span>
+          Programáticos e Personalistas
+        </span>
+
+        <i class="fas fa-chevron-down section-icon"></i>
       </div>
-      <div class="data-placeholder"><strong>Fonte dos dados:</strong> Perfis oficiais dos candidatos no Instagram.</div>
-    </div>
-  </section>
 
-  <!-- RESULTADO 3 (GAVETA 01) -->
-  <section class="project-section">
-    <div class="section-head" data-target="resultado3">
-      <span class="section-title">
-        <span class="result-number">01</span>
-        Programáticos e Personalistas
-      </span>
-      <i class="fas fa-chevron-down section-icon"></i>
-    </div>
-    <div class="section-content" id="resultado3">
-      <div class="chart-card wide">
-        <div class="card-header">
+
+      <div
+        class="section-content"
+        id="resultado3"
+      >
+
+        <div class="chart-card wide">
+
           <h3 class="chart-title">
             Distribuição das categorias
           </h3>
-        </div>
-        <div class="card-body">
-          <!-- BARRA DE FILTRO POR CANDIDATO -->
+
+          <p class="chart-note">
+            Selecione um ou mais candidatos para visualizar a distribuição
+            temporal das publicações programáticas e personalistas.
+          </p>
+
+
           <div class="candidate-filter-bar">
-            <span class="filter-label"><i class="fas fa-filter"></i> Selecionar candidatos:</span>
-            <div id="candidateFilterButtons" class="filter-buttons">
-              <!-- Botões gerados via JS -->
-            </div>
+
+            <span class="filter-label">
+              <i class="fas fa-filter"></i>
+              Selecionar candidatos:
+            </span>
+
+            <div
+              id="candidateFilterButtons"
+              class="filter-buttons"
+            ></div>
+
           </div>
 
-          <div class="chart-container">
-  <canvas id="graficoApelosTempo"></canvas>
-</div>
 
-<div id="candidateColorLegend" class="candidate-color-legend"></div>
-          <p class="chart-note" style="margin-top:10px;">
-            Clique no nome dos candidatos para ver os resultados.
+          <div class="chart-wrap">
+            <canvas id="graficoApelosTempo"></canvas>
+          </div>
+
+
+          
+
+
+          
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ===================================================
+         RESULTADO 02
+         =================================================== -->
+
+    <section class="project-section">
+
+      <div
+        class="section-head"
+        data-target="resultado4"
+        tabindex="0"
+        role="button"
+        aria-expanded="false"
+      >
+        <span class="section-title">
+          <span class="result-number">02</span>
+          Categorias por candidato
+        </span>
+
+        <i class="fas fa-chevron-down section-icon"></i>
+      </div>
+
+
+      <div
+        class="section-content"
+        id="resultado4"
+      >
+
+        <div
+          class="chart-grid"
+          id="donutGrid"
+        ></div>
+
+      </div>
+    </section>
+
+
+    <!-- ===================================================
+         RESULTADO 03
+         =================================================== -->
+
+    <section class="project-section">
+
+      <div
+        class="section-head"
+        data-target="resultado5"
+        tabindex="0"
+        role="button"
+        aria-expanded="false"
+      >
+        <span class="section-title">
+          <span class="result-number">03</span>
+          Subcategorias por candidato
+        </span>
+
+        <i class="fas fa-chevron-down section-icon"></i>
+      </div>
+
+
+      <div
+        class="section-content"
+        id="resultado5"
+      >
+
+        <div class="chart-card wide">
+
+          <h3 class="chart-title">
+            Distribuição das subcategorias
+          </h3>
+
+          <p class="chart-note">
+            Selecione os candidatos que deseja comparar.
           </p>
+
+
+          <div class="candidate-filter-bar">
+
+            <span class="filter-label">
+              <i class="fas fa-filter"></i>
+              Selecionar candidatos:
+            </span>
+
+            <div
+              id="subcategoryCandidateFilterButtons"
+              class="filter-buttons"
+            ></div>
+
+          </div>
+
+
+          <div class="chart-wrap">
+            <canvas id="subcategoryBar"></canvas>
+          </div>
+
         </div>
+
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- RESULTADO 4 -->
-  <!-- RESULTADO 4 -->
-<section class="project-section">
 
-  <div class="section-head" data-target="resultado4">
-    <span class="section-title">
-      <span class="result-number">02</span>
-      Categorias por candidato
-    </span>
-    <i class="fas fa-chevron-down section-icon"></i>
-  </div>
+    <!-- ===================================================
+         RESULTADO 04
+         =================================================== -->
 
-  <div class="section-content" id="resultado4">
+    <section class="project-section">
 
-    <div class="chart-grid">
-
-      <div class="chart-card candidate-donut-card">
-        <img class="donut-candidate-photo" src="lula.jpg" alt="Lula">
-        <h3 class="chart-title">Lula</h3>
-        <div class="chart-wrap">
-          <canvas id="donut1"></canvas>
-        </div>
-      </div>
-
-      <div class="chart-card candidate-donut-card">
-        <img class="donut-candidate-photo" src="flavio.jpg" alt="Flávio Bolsonaro">
-        <h3 class="chart-title">Flávio Bolsonaro</h3>
-        <div class="chart-wrap">
-          <canvas id="donut2"></canvas>
-        </div>
-      </div>
-
-      <div class="chart-card candidate-donut-card">
-        <img class="donut-candidate-photo" src="caiado.jpg" alt="Ronaldo Caiado">
-        <h3 class="chart-title">Ronaldo Caiado</h3>
-        <div class="chart-wrap">
-          <canvas id="donut3"></canvas>
-        </div>
-      </div>
-
-      <div class="chart-card candidate-donut-card">
-        <img class="donut-candidate-photo" src="renan.jpg" alt="Renan Santos">
-        <h3 class="chart-title">Renan Santos</h3>
-        <div class="chart-wrap">
-          <canvas id="donut4"></canvas>
-        </div>
-      </div>
-
-      <div class="chart-card candidate-donut-card">
-        <img class="donut-candidate-photo" src="cury.jpg" alt="Augusto Cury">
-        <h3 class="chart-title">Augusto Cury</h3>
-        <div class="chart-wrap">
-          <canvas id="donut5"></canvas>
-        </div>
-      </div>
-
-      <div class="chart-card candidate-donut-card">
-        <img class="donut-candidate-photo" src="zema.jpg" alt="Romeu Zema">
-        <h3 class="chart-title">Romeu Zema</h3>
-        <div class="chart-wrap">
-          <canvas id="donut6"></canvas>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-
-  <!-- RESULTADO 5 -->
-  <section class="project-section">
-    <div class="section-head" data-target="resultado5">
-      <span class="section-title"><span class="result-number">03</span> Subcategorias por candidato</span>
-      <i class="fas fa-chevron-down section-icon"></i>
-    </div>
-    <div class="section-content" id="resultado5">
-      <div class="chart-card wide">
-        </h3>
-
-    <p class="chart-note">
-        Distribuição das subcategorias por candidato.
-    </p>
-
-    <div class="candidate-filter-bar">
-        <span class="filter-label">
-            <i class="fas fa-filter"></i>
-            Selecionar candidatos:
+      <div
+        class="section-head"
+        data-target="resultado6"
+        tabindex="0"
+        role="button"
+        aria-expanded="false"
+      >
+        <span class="section-title">
+          <span class="result-number">04</span>
+          Curtidas por categoria
         </span>
 
-        <div id="subcategoryCandidateFilterButtons"
-             class="filter-buttons">
+        <i class="fas fa-chevron-down section-icon"></i>
+      </div>
+
+
+      <div
+        class="section-content"
+        id="resultado6"
+      >
+
+        <div class="chart-card wide">
+
+          <h3 class="chart-title">
+            Quantidade de curtidas por categoria
+          </h3>
+
+          <p class="chart-note">
+            Cada ponto representa o número de curtidas recebidas
+            por uma publicação.
+          </p>
+
+          <div class="chart-wrap">
+            <canvas id="likesScatter"></canvas>
+          </div>
+
         </div>
-    </div>
 
-    <div class="chart-wrap">
-        <canvas id="subcategoryBar"></canvas>
-    </div>
-</div>
-    </div>
-  </section>
-
-  <!-- RESULTADO 6 -->
-  <section class="project-section">
-    <div class="section-head" data-target="resultado6">
-      <span class="section-title"><span class="result-number">04</span> Curtidas por categoria</span>
-      <i class="fas fa-chevron-down section-icon"></i>
-    </div>
-    <div class="section-content" id="resultado6">
-      <div class="chart-card wide">
-        <h3 class="chart-title">Quantidade de curtidas por categoria</h3>
-        <p class="chart-note">Cada ponto representa o número de curtidas recebidas por postagem.</p>
-        <div class="chart-wrap"><canvas id="likesScatter"></canvas></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- RESULTADO 7 -->
-  <section class="project-section">
-    <div class="section-head" data-target="resultado7">
-      <span class="section-title"><span class="result-number">05</span> Comentários por categoria</span>
-      <i class="fas fa-chevron-down section-icon"></i>
-    </div>
-    <div class="section-content" id="resultado7">
-      <div class="chart-card wide">
-        <h3 class="chart-title">Quantidade de comentários por categoria</h3>
-        <p class="chart-note">Cada ponto representa o número de comentários recebidos por postagem.</p>
-        <div class="chart-wrap"><canvas id="commentsScatter"></canvas></div>
-      </div>
-    </div>
-  </section>
 
-  <!-- RESULTADO 8 -->
-  <section class="project-section">
-    <div class="section-head" data-target="resultado8">
-      <span class="section-title"><span class="result-number">06</span> Formatos das postagens</span>
-      <i class="fas fa-chevron-down section-icon"></i>
-    </div>
-    <div class="section-content" id="resultado8">
-      <div class="chart-card wide">
-  <h3 class="chart-title">Formatos mais adotados</h3>
+    <!-- ===================================================
+         RESULTADO 05
+         =================================================== -->
 
-  <p class="chart-note">
-    Distribuição dos formatos das publicações conforme a classificação da base.
-  </p>
+    <section class="project-section">
 
-  <div class="candidate-filter-bar">
-  <span class="filter-label">
-    <i class="fas fa-filter"></i>
-    Selecionar candidatos:
-  </span>
-
-  <div id="formatCandidateFilterButtons" class="filter-buttons">
-    <!-- Botões gerados automaticamente pelo JavaScript -->
-  </div>
-</div>
-
-  <div class="chart-wrap">
-    <canvas id="formatBar"></canvas>
-  </div>
-</div>
-  </section>
-
-</main>
-
-<footer class="footer">
-  <strong>Programa Político e Mídias Sociais</strong> · Política nas Redes ·
-  Grupo de trabalho formado por...
-</footer>
-
-<script>
-/* ==========================================================
-   DADOS MOCK — USADOS SOMENTE NOS GRÁFICOS QUE AINDA NÃO
-   ESTÃO LIGADOS AO CSV
-   ========================================================== */
-const DATA = {
-  candidateAppeals: [],
-  subcategories: {
-    labels:["Perfil técnico","Ruralidade","Homem forte","Família","Patriotismo","Religião","Segurança","Trabalho","Agro","Outros"],
-    datasets:[]
-  },
-  likes: [
-    {x:0,y:0,label:"Individual"},
-    {x:0,y:0,label:"Coletivo"}
-  ],
-  formats: {
-    labels:["Imagem","Vídeo","IA"],
-    values:[0,0,0]
-  }
-};
-
-const palette = ["#245b8f","#8b5cf6","#2f80ed","#6c7a86","#b26b3c","#4f8a70"];
-const chartInstances = {};
-
-Chart.defaults.font.family = "Inter, system-ui, sans-serif";
-Chart.defaults.font.size = 11;
-Chart.defaults.color = "#66737d";
-
-function hexToRgba(hex, alpha) {
-  const r = parseInt(hex.substring(1, 3), 16);
-  const g = parseInt(hex.substring(3, 5), 16);
-  const b = parseInt(hex.substring(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
-
-function renderCandidateColorLegend() {
-  const container = document.getElementById("candidateColorLegend");
-  if (!container) return;
-
-  const cores = {
-    "Lula": {
-      programatico: "#b91c1c",
-      personalista: "#fecaca"
-    },
-    "Flavio": {
-      programatico: "#15803d",
-      personalista: "#bbf7d0"
-    },
-    "Renan": {
-      programatico: "#a16207",
-      personalista: "#fef08a"
-    },
-    "Zema": {
-      programatico: "#c2410c",
-      personalista: "#fed7aa"
-    },
-    "Caiado": {
-      programatico: "#1d4ed8",
-      personalista: "#bfdbfe"
-    },
-    "Cury": {
-      programatico: "#7e22ce",
-      personalista: "#e9d5ff"
-    }
-  };
-
-  const nomes = [
-    "Lula",
-    "Flavio",
-    "Renan",
-    "Zema",
-    "Caiado",
-    "Cury"
-  ];
-
-  container.innerHTML = nomes.map(nome => {
-    const cor = cores[nome];
-
-    return `
-      <div class="color-legend-item">
-        <span class="color-legend-name">${nome}</span>
-
-        <span class="color-legend-types">
-          <span
-            class="color-legend-swatch"
-            style="background:${cor.programatico}"
-            title="Conteúdo programático">
-          ></span>
-
-          <span
-            class="color-legend-swatch"
-            style="background:${cor.personalista}"
-            title="Conteúdo personalista">
-          </span>
+      <div
+        class="section-head"
+        data-target="resultado7"
+        tabindex="0"
+        role="button"
+        aria-expanded="false"
+      >
+        <span class="section-title">
+          <span class="result-number">05</span>
+          Comentários por categoria
         </span>
+
+        <i class="fas fa-chevron-down section-icon"></i>
       </div>
-    `;
-  }).join("");
-}
-
-/* ==========================================================
-   FUNÇÕES AUXILIARES
-   ========================================================== */
-
-function normalizarTexto(valor) {
-  return String(valor ?? "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .toLowerCase();
-}
-
-function limparCabecalho(valor) {
-  return normalizarTexto(valor).replace(/^"|"$/g, "");
-}
-
-function parseNumero(valor) {
-  if (valor === null || valor === undefined || String(valor).trim() === "") {
-    return 0;
-  }
-
-  let s = String(valor)
-    .trim()
-    .replace(/^"|"$/g, "")
-    .replace(/\s/g, "");
-
-  // Formato brasileiro: 1.234,56
-  if (s.includes(",") && s.includes(".")) {
-    s = s.replace(/\./g, "").replace(",", ".");
-  }
-  // Formato brasileiro inteiro: 1.234
-  else if (/^\d{1,3}(\.\d{3})+$/.test(s)) {
-    s = s.replace(/\./g, "");
-  }
-  // Formato decimal: 1234,56
-  else if (s.includes(",")) {
-    s = s.replace(",", ".");
-  }
-
-  const n = Number(s.replace(/[^0-9.-]/g, ""));
-  return Number.isFinite(n) ? n : 0;
-}
-
-/*
- * Parser CSV simples, mas compatível com campos entre aspas
- * contendo vírgulas ou ponto e vírgula.
- */
-function parseCSV(texto) {
-  const linhas = [];
-  let linha = [];
-  let campo = "";
-  let dentroAspas = false;
-
-  for (let i = 0; i < texto.length; i++) {
-    const ch = texto[i];
-    const prox = texto[i + 1];
-
-    if (ch === '"') {
-      if (dentroAspas && prox === '"') {
-        campo += '"';
-        i++;
-      } else {
-        dentroAspas = !dentroAspas;
-      }
-      continue;
-    }
-
-    if (!dentroAspas && (ch === "," || ch === ";")) {
-      linha.push(campo.trim());
-      campo = "";
-      continue;
-    }
-
-    if (!dentroAspas && (ch === "\n" || ch === "\r")) {
-      if (ch === "\r" && prox === "\n") i++;
-      linha.push(campo.trim());
-      campo = "";
-
-      if (linha.some(v => String(v).trim() !== "")) {
-        linhas.push(linha);
-      }
-
-      linha = [];
-      continue;
-    }
-
-    campo += ch;
-  }
-
-  if (campo !== "" || linha.length) {
-    linha.push(campo.trim());
-    if (linha.some(v => String(v).trim() !== "")) {
-      linhas.push(linha);
-    }
-  }
-
-  return linhas;
-}
-
-function parseDataOrdenavel(str) {
-  if (!str) return new Date(0);
-
-  const valor = String(str).trim();
-
-  if (/^\d{2}\/\d{2}\/\d{4}$/.test(valor)) {
-    const [dia, mes, ano] = valor.split("/");
-    return new Date(Number(ano), Number(mes) - 1, Number(dia));
-  }
-
-  if (/^\d{4}-\d{2}-\d{2}/.test(valor)) {
-    return new Date(valor);
-  }
-
-  return new Date(valor);
-}
-
-function parseDataGrafico(str) {
-  if (!str) return null;
-
-  const valor = String(str).trim();
-
-  if (/^\d{2}\/\d{2}\/\d{4}$/.test(valor)) {
-    const [dia, mes, ano] = valor.split("/");
-    return new Date(Number(ano), Number(mes) - 1, Number(dia));
-  }
-
-  return parseDataOrdenavel(valor);
-}
-
-function categoriaTipo(categoria) {
-  const c = normalizarTexto(categoria);
-
-  if (c.includes("personal")) return "Personalista";
-  if (c.includes("program")) return "Programático";
-
-  // Mantém compatibilidade caso a base utilize "individual/coletivo".
-  if (c.includes("individual")) return "Personalista";
-  if (c.includes("coletiv")) return "Programático";
-
-  return null;
-}
-
-/* ==========================================================
-   GRÁFICO GAVETA 01 — APELOS PERSONALISTAS × PROGRAMÁTICOS
-   ========================================================== */
-
-function criarGraficoApelosTempo(labels, datasets) {
-  const canvas = document.getElementById("graficoApelosTempo");
-  if (!canvas) return;
-
-  if (chartInstances["graficoApelosTempo"]) {
-    chartInstances["graficoApelosTempo"].destroy();
-  }
-
-  // Nenhum candidato aparece inicialmente.
-  // Os dados serão exibidos somente ao clicar no nome do candidato.
-  datasets.forEach(ds => {
-    ds.hidden = true;
-  });
-
-  chartInstances["graficoApelosTempo"] = new Chart(canvas, {
-    type: "bar",
-
-    data: {
-      labels,
-      datasets
-    },
-
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-
-      plugins: {
-        // Remove a legenda nativa do Chart.js:
-        // "Conteúdo programático" / "Conteúdo personalista"
-        legend: {
-          display: false
-        },
-
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return `${context.dataset.label}: ${context.parsed.y} ocorrência(s)`;
-            }
-          }
-        }
-      },
-
-      scales: {
-        x: {
-          stacked: true
-        },
-
-        y: {
-          stacked: true,
-          beginAtZero: true,
-
-          ticks: {
-            precision: 0,
-            stepSize: 1
-          }
-        }
-      }
-    }
-  });
-}
-
-function filtrarCandidatoGrafico01(nomeCandidato, mostrar = true) {
-  const chart = chartInstances["graficoApelosTempo"];
-  if (!chart) return;
-
-  chart.data.datasets.forEach((ds, i) => {
-    if (ds.candidateName === nomeCandidato) {
-      chart.setDatasetVisibility(i, mostrar);
-    }
-  });
-
-  chart.update();
-}
 
 
-function renderCandidateFilterButtons(candidatos) {
-  const filterContainer = document.getElementById("candidateFilterButtons");
-  if (!filterContainer) return;
+      <div
+        class="section-content"
+        id="resultado7"
+      >
 
-  filterContainer.innerHTML = "";
+        <div class="chart-card wide">
 
-  const lista = candidatos.length > 0
-    ? candidatos
-    : [
+          <h3 class="chart-title">
+            Quantidade de comentários por categoria
+          </h3>
+
+          <p class="chart-note">
+            Cada ponto representa o número de comentários recebidos
+            por uma publicação.
+          </p>
+
+          <div class="chart-wrap">
+            <canvas id="commentsScatter"></canvas>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ===================================================
+         RESULTADO 06
+         =================================================== -->
+
+    <section class="project-section">
+
+      <div
+        class="section-head"
+        data-target="resultado8"
+        tabindex="0"
+        role="button"
+        aria-expanded="false"
+      >
+        <span class="section-title">
+          <span class="result-number">06</span>
+          Formatos das postagens
+        </span>
+
+        <i class="fas fa-chevron-down section-icon"></i>
+      </div>
+
+
+      <div
+        class="section-content"
+        id="resultado8"
+      >
+
+        <div class="chart-card wide">
+
+          <h3 class="chart-title">
+            Formatos mais adotados
+          </h3>
+
+          <p class="chart-note">
+            Distribuição dos formatos das publicações conforme
+            a classificação da base.
+          </p>
+
+
+          <div class="candidate-filter-bar">
+
+            <span class="filter-label">
+              <i class="fas fa-filter"></i>
+              Selecionar candidatos:
+            </span>
+
+            <div
+              id="formatCandidateFilterButtons"
+              class="filter-buttons"
+            ></div>
+
+          </div>
+
+
+          <div class="chart-wrap">
+            <canvas id="formatBar"></canvas>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <footer class="footer">
+
+    <strong>
+      Programa Político e Mídias Sociais
+    </strong>
+
+    · Política nas Redes ·
+
+    Grupo de trabalho formado por...
+
+  </footer>
+
+
+  <script>
+    "use strict";
+
+    /* =========================================================
+       CONFIGURAÇÃO CENTRAL
+       ========================================================= */
+
+    const CONFIG = {
+
+      csv: "monitoramento.csv",
+
+      defaultCandidateNames: [
         "Lula",
-        "Flávio",
+        "Flávio Bolsonaro",
         "Ronaldo Caiado",
         "Renan Santos",
         "Augusto Cury",
         "Romeu Zema"
-      ];
-
-  lista.forEach(cand => {
-    const btn = document.createElement("button");
-
-    // Começa desativado: nenhum candidato aparece inicialmente
-    btn.className = "candidate-filter-btn";
-    btn.textContent = cand;
-
-    btn.onclick = () => {
-      const mostrar = !btn.classList.contains("active");
-
-      btn.classList.toggle("active", mostrar);
-
-      filtrarCandidatoGrafico01(cand, mostrar);
-    };
-
-    filterContainer.appendChild(btn);
-  });
-}
-
-/* ==========================================================
-   DADOS DE DEMO / FALLBACK
-   Só será usado se o CSV realmente não puder ser carregado.
-   ========================================================== */
-
-function carregarDadosDemo() {
-  const datasDemo = ["01/08", "05/08", "10/08", "15/08", "20/08"];
-  const candidatosDemo = ["Lula", "Flávio"];
-
-  const datasetsDemo = [
-    {
-      label: "Lula — Personalista",
-      candidateName: "Lula",
-      tipoConteudo: "Personalista",
-      data: [12, 18, 15, 22, 25],
-      borderColor: "#245b8f",
-      backgroundColor: "#245b8f",
-      tension: 0.28,
-      pointRadius: 3,
-      borderWidth: 2
-    },
-    {
-      label: "Lula — Programático",
-      candidateName: "Lula",
-      tipoConteudo: "Programático",
-      data: [8, 12, 14, 19, 21],
-      borderColor: "#245b8f",
-      backgroundColor: "#245b8f",
-      borderDash: [6, 4],
-      tension: 0.28,
-      pointRadius: 3,
-      borderWidth: 2
-    },
-    {
-      label: "Flávio — Personalista",
-      candidateName: "Flávio",
-      tipoConteudo: "Personalista",
-      data: [15, 10, 20, 16, 28],
-      borderColor: "#8b5cf6",
-      backgroundColor: "#8b5cf6",
-      tension: 0.28,
-      pointRadius: 3,
-      borderWidth: 2
-    },
-    {
-      label: "Flávio — Programático",
-      candidateName: "Flávio",
-      tipoConteudo: "Programático",
-      data: [5, 9, 11, 12, 15],
-      borderColor: "#8b5cf6",
-      backgroundColor: "#8b5cf6",
-      borderDash: [6, 4],
-      tension: 0.28,
-      pointRadius: 3,
-      borderWidth: 2
-    }
-  ];
-
-  criarGraficoApelosTempo(datasDemo, datasetsDemo);
-  renderCandidateFilterButtons(candidatosDemo);
-}
-
-/* ==========================================================
-   GRÁFICOS DE CURTIDAS E COMENTÁRIOS × CATEGORIA
-   Um único gráfico para cada métrica, com todos os pontos
-   sobrepostos nas categorias Personalista/Programático.
-   Os dados vêm diretamente do monitoramento.csv.
-   ========================================================== */
-
-function criarGraficoDispersaoCSV(dados, campo, canvasId, tituloEixoY, chaveGrafico) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-
-  if (chartInstances[chaveGrafico]) {
-    chartInstances[chaveGrafico].destroy();
-  }
-
-  const pontos = [];
-
-  dados.forEach(item => {
-    const tipo = categoriaTipo(item.categoria);
-    if (!tipo) return;
-
-    const valor = parseNumero(item[campo]);
-    if (!Number.isFinite(valor)) return;
-
-    pontos.push({
-  x: parseDataGrafico(item.data),
-  y: valor,
-  candidato: item.candidato,
-  categoria: item.categoria,
-  data: item.data,
-  tipo: tipo
-});
-  });
-
-  chartInstances[chaveGrafico] = new Chart(canvas, {
-    type: "scatter",
-    data: {
-  datasets: [
-    {
-      label: "Conteúdo personalista",
-      data: pontos.filter(p => p.tipo === "Personalista"),
-      pointRadius: 5,
-      pointHoverRadius: 8,
-      backgroundColor: "#8b5cf6",
-      borderColor: "#8b5cf6",
-      borderWidth: 1
-    },
-    {
-      label: "Conteúdo programático",
-      data: pontos.filter(p => p.tipo === "Programático"),
-      pointRadius: 5,
-      pointHoverRadius: 8,
-      backgroundColor: "#2f80ed",
-      borderColor: "#2f80ed",
-      borderWidth: 1
-    }
-  ]
-},
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: "bottom",
-          labels: {
-            
-          }
-        },
-        tooltip: {
-          callbacks: {
-            title: function() {
-              return "Publicação";
-            },
-            label: function(context) {
-              const p = context.raw || {};
-              const valorFormatado = Number(p.y || 0).toLocaleString("pt-BR");
-
-              return [
-                `Candidato: ${p.candidato || "-"}`,
-                `Categoria: ${p.categoria || "-"}`,
-                `Data: ${p.data || "-"}`,
-                `${tituloEixoY}: ${valorFormatado}`
-              ];
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-  type: "time",
-  time: {
-    unit: "day",
-    tooltipFormat: "dd/MM/yyyy",
-    displayFormats: {
-      day: "dd/MM"
-    }
-  },
-  title: {
-    display: true,
-    text: "Data"
-  },
-  ticks: {
-    autoSkip: false
-  }
-},
-        y: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: tituloEixoY
-          }
-        }
-      }
-    }
-  });
-}
-
-function criarGraficoCurtidasCSV(dados) {
-  criarGraficoDispersaoCSV(
-    dados,
-    "likes",
-    "likesScatter",
-    "Número de curtidas",
-    "likesScatter"
-  );
-}
-
-function criarGraficoComentariosCSV(dados) {
-  criarGraficoDispersaoCSV(
-    dados,
-    "comentarios",
-    "commentsScatter",
-    "Número de comentários",
-    "commentsScatter"
-  );
-}
-
-/* ==========================================================
-   CARREGAMENTO DO MONITORAMENTO.CSV
-   ========================================================== */
-
-async function carregarMonitoramento() {
-  try {
-    const resposta = await fetch("monitoramento.csv", { cache: "no-store" });
-
-    if (!resposta.ok) {
-      throw new Error(
-        `Não foi possível carregar monitoramento.csv (Status: ${resposta.status})`
-      );
-    }
-
-    const texto = await resposta.text();
-
-    if (!texto.trim()) {
-      throw new Error("O arquivo monitoramento.csv está vazio.");
-    }
-
-    const linhas = parseCSV(texto);
-
-    if (linhas.length < 2) {
-      throw new Error(
-        "O CSV precisa conter um cabeçalho e pelo menos uma linha de dados."
-      );
-    }
-
-    // CORREÇÃO IMPORTANTE:
-    // antes o código utilizava "cabecalho" sem criá-lo.
-    const cabecalho = linhas.shift().map(limparCabecalho);
-
-    const indiceCandidato = cabecalho.indexOf("candidato");
-    const indiceCategoria = cabecalho.indexOf("categoria");
-    const indiceData = cabecalho.indexOf("data");
-    const indiceComentarios = cabecalho.indexOf("comentarios");
-    const indiceLikes = cabecalho.indexOf("likes");
-
-    const indiceFormato = cabecalho.indexOf("formato");
-    const indiceSubcategoria = cabecalho.indexOf("subcategoria");
-
-    if (indiceCandidato === -1) {
-      throw new Error(
-        'O CSV precisa possuir a coluna "candidato".'
-      );
-    }
-
-    if (indiceCategoria === -1) {
-      throw new Error(
-        'O CSV precisa possuir a coluna "categoria".'
-      );
-    }
-
-    if (indiceComentarios === -1) {
-      console.warn(
-        'A coluna "comentarios" não foi encontrada. O gráfico será criado com zero comentários.'
-      );
-    }
-
-    const dados = linhas
-      .filter(linha => linha.length > 0 && String(linha[indiceCandidato] || "").trim())
-      .map(linha => ({
-  candidato: String(linha[indiceCandidato] || "").trim(),
-  categoria: String(linha[indiceCategoria] || "").trim(),
-  formato: indiceFormato !== -1
-    ? String(linha[indiceFormato] || "").trim()
-    : "",
-  data: indiceData !== -1
-    ? String(linha[indiceData] || "").trim()
-    : "",
-  comentarios: indiceComentarios !== -1
-    ? parseNumero(linha[indiceComentarios])
-    : 0,
-  likes: indiceLikes !== -1
-    ? parseNumero(linha[indiceLikes])
-    : 0
-}));
-
-    if (!dados.length) {
-      throw new Error("Nenhum registro válido foi encontrado no CSV.");
-    }
-
-    /*
-     * Lista real de candidatos encontrada no CSV.
-     * Não há mais limite artificial a Lula e Flávio.
-     */
-    const candidatos = [
-      ...new Set(
-        dados
-          .map(d => d.candidato)
-          .filter(Boolean)
-      )
-    ];
-
-    const datas = [
-      ...new Set(
-        dados
-          .map(d => d.data)
-          .filter(Boolean)
-      )
-    ];
-
-    datas.sort(
-      (a, b) => parseDataOrdenavel(a) - parseDataOrdenavel(b)
-    );
-
-    /*
-     * Uma cor-base para cada candidato encontrado.
-     * Isso evita que candidatos novos desapareçam por falta
-     * de configuração no objeto de cores.
-     */
-    
-    const coresBaseCandidatos = {
-  "Lula": {
-    programatico: "#b91c1c",
-    personalista: "#fecaca"
-  },
-  "Flavio": {
-    programatico: "#15803d",
-    personalista: "#bbf7d0"
-  },
-  "Renan": {
-    programatico: "#a16207",
-    personalista: "#fef08a"
-  },
-  "Zema": {
-    programatico: "#c2410c",
-    personalista: "#fed7aa"
-  },
-  "Caiado": {
-    programatico: "#1d4ed8",
-    personalista: "#bfdbfe"
-  },
-  "Cury": {
-    programatico: "#7e22ce",
-    personalista: "#e9d5ff"
-  }
-};
-
-const coresCandidatos = {};
-
-candidatos.forEach(candidato => {
-  coresCandidatos[candidato] =
-    coresBaseCandidatos[candidato] || {
-      programatico: "#475569",
-      personalista: "#cbd5e1"
-    };
-});
-
-    const datasets = [];
-
-    candidatos.forEach((candidato, indice) => {
-      const dadosCandidato = dados.filter(
-        d => d.candidato === candidato
-      );
-
-      const valoresPersonalistas = [];
-      const valoresProgramaticos = [];
-
-      datas.forEach(data => {
-        const publicacoes = dadosCandidato.filter(
-          d => d.data === data
-        );
-
-        const personalistas = publicacoes.filter(
-          d => categoriaTipo(d.categoria) === "Personalista"
-        ).length;
-
-        const programaticos = publicacoes.filter(
-          d => categoriaTipo(d.categoria) === "Programático"
-        ).length;
-
-        valoresPersonalistas.push(personalistas);
-        valoresProgramaticos.push(programaticos);
-      });
-
-      const cores = coresCandidatos[candidato];
-
-      /*
-       * IMPORTANTE:
-       * hidden:false para os seis candidatos aparecerem
-       * inicialmente no gráfico.
-       */
-      datasets.push({
-        label: `${candidato} — Personalista`,
-        candidateName: candidato,
-        tipoConteudo: "Personalista",
-        data: valoresPersonalistas,
-        hidden: false,
-        backgroundColor: cores.personalista,
-        borderColor: cores.personalista,
-        borderWidth: 1
-      });
-
-      datasets.push({
-        label: `${candidato} — Programático`,
-        candidateName: candidato,
-        tipoConteudo: "Programático",
-        data: valoresProgramaticos,
-        hidden: false,
-        backgroundColor: cores.programatico,
-        borderColor: cores.programatico,
-        borderWidth: 1
-      });
-    });
-
-    // Gráfico 01 com TODOS os candidatos encontrados no CSV.
-    criarGraficoApelosTempo(datas, datasets);
-    renderCandidateFilterButtons(candidatos);
-    renderCandidateColorLegend();
-
-    // Gráficos de curtidas e comentários alimentados pelo monitoramento.csv.
-    criarGraficoCurtidasCSV(dados);
-    criarGraficoComentariosCSV(dados);
-
-    criarDonutsPorCandidato(dados);
-    criarGraficoFormatos(dados);
-    criarGraficoSubcategorias(dados);
-
-    console.info("monitoramento.csv carregado com sucesso.");
-    console.info("Candidatos encontrados:", candidatos);
-    console.info("Registros:", dados.length);
-
-  } catch (erro) {
-    console.error("Erro ao carregar monitoramento.csv:", erro);
-
-    carregarDadosDemo();
-
-    const container =
-      document.getElementById("graficoApelosTempo")?.parentElement;
-
-    if (container && window.location.protocol === "file:") {
-      const msg = document.createElement("div");
-
-      msg.style.cssText =
-        "color:#d9534f;font-size:0.8rem;margin-top:10px;text-align:center;" +
-        "padding:10px;background:#fdf7f7;border:1px solid #d9534f;border-radius:8px;";
-
-      msg.innerHTML =
-        "⚠️ <strong>O CSV não foi carregado.</strong> " +
-        "Abra o projeto pelo VS Code com <strong>Live Server</strong> " +
-        "ou rode <code>python -m http.server</code> na pasta do projeto.";
-
-      container.appendChild(msg);
-    }
-  }
-}
-
-/* ==========================================================
-   DEMAIS GRÁFICOS
-   ========================================================== */
-
-function bar(canvas, labels, values, label = "") {
-  if (!canvas) return null;
-
-  return new Chart(canvas, {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [
-        {
-          label,
-          data: values,
-          backgroundColor: "#5c8db8",
-          borderRadius: 6
-        }
-      ]
-    },
-
-    
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: !!label
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-}
-
-function criarGraficoFormatos(dados) {
-  const canvas = document.getElementById("formatBar");
-  const filtroContainer = document.getElementById("formatCandidateFilterButtons");
-
-  if (!canvas || !filtroContainer) return;
-
-  const candidatos = [
-    ...new Set(
-      dados
-        .map(d => d.candidato)
-        .filter(Boolean)
-    )
-  ];
-
-  /*
-   * Candidatos atualmente selecionados.
-   *
-   * IMPORTANTE:
-   * Array vazio = nenhum candidato selecionado.
-   * Nesse caso o gráfico fica vazio.
-   */
-  let candidatosSelecionados = [];
-
-  /*
-   * Paleta de cores dos candidatos.
-   */
-  const cores = [
-    "#245b8f",
-    "#8b5cf6",
-    "#2f80ed",
-    "#6c7a86",
-    "#b26b3c",
-    "#4f8a70"
-  ];
-
-  function atualizarGrafico() {
-
-    /*
-     * Nenhum candidato selecionado:
-     * não mostra nenhum dado.
-     */
-    if (candidatosSelecionados.length === 0) {
-
-      if (chartInstances["formatBar"]) {
-        chartInstances["formatBar"].destroy();
-        chartInstances["formatBar"] = null;
-      }
-
-      return;
-    }
-
-    /*
-     * Formatos encontrados na base.
-     */
-    const formatos = [
-      ...new Set(
-        dados
-          .map(d => String(d.formato || "").trim())
-          .filter(Boolean)
-      )
-    ];
-
-    /*
-     * Cria um dataset para cada candidato.
-     *
-     * Isso permite colocar as barras lado a lado
-     * e comparar os candidatos dentro de cada formato.
-     */
-    const datasets = candidatosSelecionados.map(
-      (candidato, indice) => {
-
-        const dadosCandidato = dados.filter(
-          d =>
-            normalizarTexto(d.candidato) ===
-            normalizarTexto(candidato)
-        );
-
-        const valores = formatos.map(formato => {
-
-          return dadosCandidato.filter(
-            d =>
-              normalizarTexto(d.formato) ===
-              normalizarTexto(formato)
-          ).length;
-
-        });
-
-        return {
-          label: candidato,
-          data: valores,
-          backgroundColor: cores[indice % cores.length],
-          borderRadius: 5,
-          borderWidth: 0
-        };
-      }
-    );
-
-    /*
-     * Destrói a versão anterior.
-     */
-    if (chartInstances["formatBar"]) {
-      chartInstances["formatBar"].destroy();
-    }
-
-    /*
-     * Cria o novo gráfico.
-     */
-    chartInstances["formatBar"] = new Chart(canvas, {
-
-      type: "bar",
-
-      data: {
-        labels: formatos,
-        datasets
+      ],
+
+      candidateImages: {
+        "Lula": "lula.jpg",
+        "Flávio Bolsonaro": "flavio.jpg",
+        "Ronaldo Caiado": "caiado.jpg",
+        "Renan Santos": "renan.jpg",
+        "Augusto Cury": "cury.jpg",
+        "Romeu Zema": "zema.jpg"
       },
 
-      options: {
-
-        responsive: true,
-        maintainAspectRatio: false,
-
-        interaction: {
-          mode: "index",
-          intersect: false
+      candidateColors: {
+        "Lula": {
+          strong: "#b91c1c",
+          light: "#fecaca"
         },
 
-        plugins: {
-
-          legend: {
-            display: true,
-            position: "bottom"
-          },
-
-          tooltip: {
-            callbacks: {
-
-              label: function(context) {
-
-                return `${context.dataset.label}: ${context.raw} publicação(ões)`;
-
-              }
-
-            }
-          }
-
+        "Flávio Bolsonaro": {
+          strong: "#15803d",
+          light: "#bbf7d0"
         },
 
-        scales: {
+        "Ronaldo Caiado": {
+          strong: "#1d4ed8",
+          light: "#bfdbfe"
+        },
 
-          x: {
-            stacked: false
-          },
+        "Renan Santos": {
+          strong: "#a16207",
+          light: "#fef08a"
+        },
 
-          y: {
+        "Augusto Cury": {
+          strong: "#7e22ce",
+          light: "#e9d5ff"
+        },
 
-            beginAtZero: true,
-
-            ticks: {
-              precision: 0,
-              stepSize: 1
-            }
-
-          }
-
+        "Romeu Zema": {
+          strong: "#c2410c",
+          light: "#fed7aa"
         }
+      },
 
-      }
-
-    });
-
-  }
-
-  /*
-   * Cria os botões dos candidatos.
-   */
-  filtroContainer.innerHTML = "";
-
-  candidatos.forEach(candidato => {
-
-    const btn = document.createElement("button");
-
-    btn.type = "button";
-    btn.className = "candidate-filter-btn";
-    btn.textContent = candidato;
-
-    btn.addEventListener("click", function() {
-
-      const indice =
-        candidatosSelecionados.findIndex(
-          c =>
-            normalizarTexto(c) ===
-            normalizarTexto(candidato)
-        );
-
-      /*
-       * Se o candidato já estiver selecionado,
-       * remove da comparação.
-       */
-      if (indice !== -1) {
-
-        candidatosSelecionados.splice(indice, 1);
-
-        btn.classList.remove("active");
-
-      }
-
-      /*
-       * Caso ainda não esteja selecionado,
-       * adiciona à comparação.
-       */
-      else {
-
-        candidatosSelecionados.push(candidato);
-
-        btn.classList.add("active");
-
-      }
-
-      atualizarGrafico();
-
-    });
-
-    filtroContainer.appendChild(btn);
-
-  });
-
-  /*
-   * Estado inicial:
-   *
-   * NENHUM candidato selecionado.
-   * Portanto, o gráfico começa vazio.
-   */
-  atualizarGrafico();
-}
-
-function criarGraficoSubcategorias(dados) {
-
-    const canvas = document.getElementById("subcategoryBar");
-    const filtroContainer = document.getElementById(
-        "subcategoryCandidateFilterButtons"
-    );
-
-    if (!canvas || !filtroContainer) return;
-
-    const candidatos = [
-        ...new Set(
-            dados
-                .map(d => String(d.candidato || "").trim())
-                .filter(Boolean)
-        )
-    ];
-
-    const subcategorias = [
-        ...new Set(
-            dados
-                .map(d => String(d.subcategoria || "").trim())
-                .filter(Boolean)
-        )
-    ];
-
-    let candidatosSelecionados = [];
-
-    const cores = [
+      fallbackColors: [
         "#245b8f",
         "#8b5cf6",
         "#2f80ed",
         "#6c7a86",
         "#b26b3c",
-        "#4f8a70"
-    ];
+        "#4f8a70",
+        "#9f1239",
+        "#0369a1"
+      ]
 
-    function atualizarGrafico() {
+    };
 
-        if (chartInstances["subcategoryBar"]) {
-            chartInstances["subcategoryBar"].destroy();
-            chartInstances["subcategoryBar"] = null;
+
+    /* =========================================================
+       ESTADO DA APLICAÇÃO
+       ========================================================= */
+
+    const STATE = {
+
+      dados: [],
+
+      candidatos: [],
+
+      datas: [],
+
+      candidatosSelecionados: {
+        apelos: new Set(),
+        subcategorias: new Set(),
+        formatos: new Set()
+      },
+
+      charts: {},
+
+      carouselPosition: 0
+
+    };
+
+
+    /* =========================================================
+       CONFIGURAÇÃO DO CHART.JS
+       ========================================================= */
+
+    Chart.defaults.font.family =
+      "Inter, system-ui, sans-serif";
+
+    Chart.defaults.font.size = 11;
+
+    Chart.defaults.color = "#66737d";
+
+
+    /* =========================================================
+       UTILITÁRIOS
+       ========================================================= */
+
+    function normalizarTexto(valor) {
+
+      return String(valor ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+
+    }
+
+
+    function normalizarCandidato(nome) {
+
+      const original =
+        String(nome ?? "")
+          .replace(/^["']|["']$/g, "")
+          .trim();
+
+      const normalizado =
+        normalizarTexto(original);
+
+      const aliases = {
+
+        "lula da silva": "Lula",
+        "lula": "Lula",
+
+        "flavio bolsonaro": "Flávio Bolsonaro",
+        "flavio": "Flávio Bolsonaro",
+
+        "ronaldo caiado": "Ronaldo Caiado",
+        "caiado": "Ronaldo Caiado",
+
+        "renan santos": "Renan Santos",
+        "renan": "Renan Santos",
+
+        "augusto cury": "Augusto Cury",
+        "cury": "Augusto Cury",
+
+        "romeu zema": "Romeu Zema",
+        "zema": "Romeu Zema"
+
+      };
+
+      return aliases[normalizado] || original;
+
+    }
+
+
+    function limparCabecalho(valor) {
+
+      return normalizarTexto(valor)
+        .replace(/^"|"$/g, "");
+
+    }
+
+
+    function parseNumero(valor) {
+
+      if (
+        valor === null ||
+        valor === undefined ||
+        String(valor).trim() === ""
+      ) {
+        return 0;
+      }
+
+      let s = String(valor)
+        .trim()
+        .replace(/^"|"$/g, "")
+        .replace(/\s/g, "");
+
+      if (s.includes(",") && s.includes(".")) {
+
+        s = s
+          .replace(/\./g, "")
+          .replace(",", ".");
+
+      } else if (
+        /^\d{1,3}(\.\d{3})+$/.test(s)
+      ) {
+
+        s = s.replace(/\./g, "");
+
+      } else if (s.includes(",")) {
+
+        s = s.replace(",", ".");
+
+      }
+
+      const numero = Number(
+        s.replace(/[^0-9.-]/g, "")
+      );
+
+      return Number.isFinite(numero)
+        ? numero
+        : 0;
+
+    }
+
+
+    function parseCSV(texto) {
+
+      const linhas = [];
+
+      let linha = [];
+      let campo = "";
+
+      let dentroAspas = false;
+
+      for (
+        let i = 0;
+        i < texto.length;
+        i++
+      ) {
+
+        const ch = texto[i];
+        const prox = texto[i + 1];
+
+        if (ch === '"') {
+
+          if (
+            dentroAspas &&
+            prox === '"'
+          ) {
+
+            campo += '"';
+            i++;
+
+          } else {
+
+            dentroAspas =
+              !dentroAspas;
+
+          }
+
+          continue;
         }
 
-        if (candidatosSelecionados.length === 0) {
-            return;
+
+        if (
+          !dentroAspas &&
+          (ch === "," || ch === ";")
+        ) {
+
+          linha.push(campo.trim());
+
+          campo = "";
+
+          continue;
         }
 
-        const datasets = candidatosSelecionados.map(
-            (candidato, indice) => {
 
-                const valores = subcategorias.map(
-                    subcategoria => {
+        if (
+          !dentroAspas &&
+          (ch === "\n" || ch === "\r")
+        ) {
 
-                        return dados.filter(d => {
+          if (
+            ch === "\r" &&
+            prox === "\n"
+          ) {
+            i++;
+          }
 
-                            const mesmoCandidato =
-                                normalizarTexto(d.candidato) ===
-                                normalizarTexto(candidato);
+          linha.push(campo.trim());
 
-                            const mesmaSubcategoria =
-                                normalizarTexto(d.subcategoria) ===
-                                normalizarTexto(subcategoria);
+          campo = "";
 
-                            return mesmoCandidato &&
-                                   mesmaSubcategoria;
-                        }).length;
+          if (
+            linha.some(
+              valor =>
+                String(valor).trim() !== ""
+            )
+          ) {
 
-                    }
-                );
+            linhas.push(linha);
 
-                return {
-                    label: candidato,
-                    data: valores,
-                    backgroundColor:
-                        cores[indice % cores.length],
-                    borderRadius: 5,
-                    borderWidth: 0
-                };
-            }
+          }
+
+          linha = [];
+
+          continue;
+        }
+
+        campo += ch;
+
+      }
+
+
+      if (
+        campo !== "" ||
+        linha.length
+      ) {
+
+        linha.push(campo.trim());
+
+        if (
+          linha.some(
+            valor =>
+              String(valor).trim() !== ""
+          )
+        ) {
+
+          linhas.push(linha);
+
+        }
+
+      }
+
+      return linhas;
+
+    }
+
+
+    function parseData(valor) {
+
+      if (!valor) {
+        return null;
+      }
+
+      const texto =
+        String(valor).trim();
+
+
+      if (
+        /^\d{2}\/\d{2}\/\d{4}$/.test(texto)
+      ) {
+
+        const [
+          dia,
+          mes,
+          ano
+        ] = texto.split("/");
+
+        return new Date(
+          Number(ano),
+          Number(mes) - 1,
+          Number(dia)
         );
 
-        chartInstances["subcategoryBar"] =
-            new Chart(canvas, {
+      }
 
-                type: "bar",
+
+      if (
+        /^\d{4}-\d{2}-\d{2}/.test(texto)
+      ) {
+
+        const [
+          ano,
+          mes,
+          dia
+        ] = texto
+          .substring(0, 10)
+          .split("-");
+
+        return new Date(
+          Number(ano),
+          Number(mes) - 1,
+          Number(dia)
+        );
+
+      }
+
+
+      const data =
+        new Date(texto);
+
+      return Number.isNaN(data.getTime())
+        ? null
+        : data;
+
+    }
+
+
+    function formatarData(valor) {
+
+      const data =
+        parseData(valor);
+
+      if (!data) {
+        return "-";
+      }
+
+      return data.toLocaleDateString(
+        "pt-BR"
+      );
+
+    }
+
+
+    function categoriaTipo(categoria) {
+
+      const valor =
+        normalizarTexto(categoria);
+
+
+      if (
+        valor.includes("personal")
+      ) {
+
+        return "Personalista";
+
+      }
+
+
+      if (
+        valor.includes("program") ||
+        valor.includes("coletiv")
+      ) {
+
+        return "Programático";
+
+      }
+
+
+      if (
+        valor.includes("individual")
+      ) {
+
+        return "Personalista";
+
+      }
+
+
+      return null;
+
+    }
+
+
+    function getCandidateColor(
+      candidato,
+      tipo = "strong"
+    ) {
+
+      const nome =
+        normalizarCandidato(candidato);
+
+      if (
+        CONFIG.candidateColors[nome]
+      ) {
+
+        return CONFIG
+          .candidateColors[nome][tipo];
+
+      }
+
+      const index =
+        Math.max(
+          0,
+          STATE.candidatos.indexOf(nome)
+        );
+
+      return CONFIG
+        .fallbackColors[
+          index %
+          CONFIG.fallbackColors.length
+        ];
+
+    }
+
+
+    function destruirChart(id) {
+
+      if (
+        STATE.charts[id]
+      ) {
+
+        STATE.charts[id].destroy();
+
+        delete STATE.charts[id];
+
+      }
+
+    }
+
+
+    function destruirTodosGraficos() {
+
+      Object.keys(
+        STATE.charts
+      ).forEach(
+        destruirChart
+      );
+
+    }
+
+
+    /* =========================================================
+       STATUS
+       ========================================================= */
+
+    function setStatus(
+      mensagem,
+      tipo = ""
+    ) {
+
+      const elemento =
+        document.getElementById(
+          "csvStatus"
+        );
+
+      if (!elemento) {
+        return;
+      }
+
+      elemento.textContent =
+        mensagem;
+
+      elemento.className =
+        "status-message";
+
+      if (tipo) {
+        elemento.classList.add(tipo);
+      }
+
+    }
+
+
+    /* =========================================================
+       FILTROS PADRONIZADOS
+       ========================================================= */
+
+    function criarFiltroCandidatos({
+      containerId,
+      estado,
+      onChange
+    }) {
+
+      const container =
+        document.getElementById(
+          containerId
+        );
+
+      if (!container) {
+        return;
+      }
+
+      container.innerHTML = "";
+
+      STATE.candidatos.forEach(
+        candidato => {
+
+          const botao =
+            document.createElement(
+              "button"
+            );
+
+          botao.type = "button";
+
+          botao.className =
+            "candidate-filter-btn";
+
+          botao.textContent =
+            candidato;
+
+          botao.setAttribute(
+            "aria-pressed",
+            estado.has(candidato)
+              ? "true"
+              : "false"
+          );
+
+          botao.addEventListener(
+            "click",
+            () => {
+
+              if (
+                estado.has(candidato)
+              ) {
+
+                estado.delete(
+                  candidato
+                );
+
+              } else {
+
+                estado.add(
+                  candidato
+                );
+
+              }
+
+              atualizarEstadoVisualFiltro(
+                container,
+                estado
+              );
+
+              onChange();
+
+            }
+          );
+
+          container.appendChild(
+            botao
+          );
+
+        }
+      );
+
+      atualizarEstadoVisualFiltro(
+        container,
+        estado
+      );
+
+    }
+
+
+    function atualizarEstadoVisualFiltro(
+      container,
+      estado
+    ) {
+
+      container
+        .querySelectorAll(
+          ".candidate-filter-btn"
+        )
+        .forEach(botao => {
+
+          const candidato =
+            botao.textContent.trim();
+
+          const ativo =
+            estado.has(candidato);
+
+          botao.classList.toggle(
+            "active",
+            ativo
+          );
+
+          botao.setAttribute(
+            "aria-pressed",
+            ativo
+              ? "true"
+              : "false"
+          );
+
+        });
+
+    }
+
+
+    /* =========================================================
+       GRÁFICO 01 — PROGRAMÁTICO × PERSONALISTA
+       ========================================================= */
+
+    function criarGraficoApelos() {
+
+      const canvas =
+        document.getElementById(
+          "graficoApelosTempo"
+        );
+
+      if (!canvas) {
+        return;
+      }
+
+      destruirChart(
+        "graficoApelosTempo"
+      );
+
+
+      const selecionados =
+        [...STATE.candidatosSelecionados.apelos];
+
+
+      if (!selecionados.length) {
+
+        mostrarEstadoVazio(
+          canvas,
+          "Selecione um ou mais candidatos acima."
+        );
+
+        return;
+
+      }
+
+
+      restaurarCanvas(canvas);
+
+
+      const datasets = [];
+
+
+      selecionados.forEach(
+        candidato => {
+
+          const dadosCandidato =
+            STATE.dados.filter(
+              item =>
+                normalizarCandidato(
+                  item.candidato
+                ) === candidato
+            );
+
+
+          const personalistas =
+            STATE.datas.map(
+              data =>
+                dadosCandidato.filter(
+                  item =>
+                    item.data === data &&
+                    categoriaTipo(
+                      item.categoria
+                    ) === "Personalista"
+                ).length
+            );
+
+
+          const programaticos =
+            STATE.datas.map(
+              data =>
+                dadosCandidato.filter(
+                  item =>
+                    item.data === data &&
+                    categoriaTipo(
+                      item.categoria
+                    ) === "Programático"
+                ).length
+            );
+
+
+          const corForte =
+            getCandidateColor(
+              candidato,
+              "strong"
+            );
+
+          const corClara =
+            getCandidateColor(
+              candidato,
+              "light"
+            );
+
+
+          datasets.push({
+
+            label:
+              `${candidato} — Programático`,
+
+            candidateName:
+              candidato,
+
+            tipoConteudo:
+              "Programático",
+
+            data:
+              programaticos,
+
+            backgroundColor:
+              corForte,
+
+            borderColor:
+              corForte,
+
+            borderWidth: 1,
+
+            borderRadius: 2
+
+          });
+
+
+          datasets.push({
+
+            label:
+              `${candidato} — Personalista`,
+
+            candidateName:
+              candidato,
+
+            tipoConteudo:
+              "Personalista",
+
+            data:
+              personalistas,
+
+            backgroundColor:
+              corClara,
+
+            borderColor:
+              corClara,
+
+            borderWidth: 1,
+
+            borderRadius: 2
+
+          });
+
+        }
+      );
+
+
+      STATE.charts.graficoApelosTempo =
+        new Chart(
+          canvas,
+          {
+
+            type: "bar",
+
+            data: {
+
+              labels:
+                STATE.datas.map(
+                  formatarData
+                ),
+
+              datasets
+
+            },
+
+            options: {
+
+              responsive: true,
+
+              maintainAspectRatio:
+                false,
+
+              interaction: {
+                mode: "index",
+                intersect: false
+              },
+
+              plugins: {
+
+                legend: {
+                  display: true,
+                  position: "bottom"
+                },
+
+                tooltip: {
+
+                  callbacks: {
+
+                    label:
+                      context =>
+                        `${context.dataset.label}: ${context.raw} publicação(ões)`
+
+                  }
+
+                }
+
+              },
+
+              scales: {
+
+                x: {
+                  stacked: true
+                },
+
+                y: {
+
+                  stacked: true,
+
+                  beginAtZero: true,
+
+                  ticks: {
+                    precision: 0,
+                    stepSize: 1
+                  },
+
+                  title: {
+                    display: true,
+                    text: "Número de publicações"
+                  }
+
+                }
+
+              }
+
+            }
+
+          }
+        );
+
+    }
+
+
+    /* =========================================================
+       LEGENDA
+       ========================================================= */
+
+    function renderCandidateColorLegend() {
+
+      const container =
+        document.getElementById(
+          "candidateColorLegend"
+        );
+
+      if (!container) {
+        return;
+      }
+
+      container.innerHTML = "";
+
+
+      STATE.candidatos.forEach(
+        candidato => {
+
+          const wrapper =
+            document.createElement(
+              "div"
+            );
+
+          wrapper.className =
+            "color-legend-item";
+
+
+          const nome =
+            document.createElement(
+              "span"
+            );
+
+          nome.className =
+            "color-legend-name";
+
+          nome.textContent =
+            candidato;
+
+
+          const tipos =
+            document.createElement(
+              "span"
+            );
+
+          tipos.className =
+            "color-legend-types";
+
+
+          const programatico =
+            document.createElement(
+              "span"
+            );
+
+          programatico.className =
+            "color-legend-swatch";
+
+          programatico.style.background =
+            getCandidateColor(
+              candidato,
+              "strong"
+            );
+
+          programatico.title =
+            "Conteúdo programático";
+
+
+          const personalista =
+            document.createElement(
+              "span"
+            );
+
+          personalista.className =
+            "color-legend-swatch";
+
+          personalista.style.background =
+            getCandidateColor(
+              candidato,
+              "light"
+            );
+
+          personalista.title =
+            "Conteúdo personalista";
+
+
+          tipos.appendChild(
+            programatico
+          );
+
+          tipos.appendChild(
+            personalista
+          );
+
+
+          wrapper.appendChild(
+            nome
+          );
+
+          wrapper.appendChild(
+            tipos
+          );
+
+
+          container.appendChild(
+            wrapper
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       DONUTS
+       ========================================================= */
+
+    function criarDonuts() {
+
+      const grid =
+        document.getElementById(
+          "donutGrid"
+        );
+
+      if (!grid) {
+        return;
+      }
+
+      grid.innerHTML = "";
+
+
+      STATE.candidatos.forEach(
+        (candidato, index) => {
+
+          const id =
+            `donut-${index}`;
+
+
+          const card =
+            document.createElement(
+              "div"
+            );
+
+          card.className =
+            "chart-card candidate-donut-card";
+
+
+          const foto =
+            document.createElement(
+              "img"
+            );
+
+          foto.className =
+            "donut-candidate-photo";
+
+          foto.src =
+            CONFIG.candidateImages[
+              candidato
+            ] || "";
+
+          foto.alt =
+            `Foto de ${candidato}`;
+
+
+          const titulo =
+            document.createElement(
+              "h3"
+            );
+
+          titulo.className =
+            "chart-title";
+
+          titulo.textContent =
+            candidato;
+
+
+          const wrap =
+            document.createElement(
+              "div"
+            );
+
+          wrap.className =
+            "chart-wrap";
+
+
+          const canvas =
+            document.createElement(
+              "canvas"
+            );
+
+          canvas.id = id;
+
+
+          wrap.appendChild(
+            canvas
+          );
+
+          card.appendChild(
+            foto
+          );
+
+          card.appendChild(
+            titulo
+          );
+
+          card.appendChild(
+            wrap
+          );
+
+          grid.appendChild(
+            card
+          );
+
+
+          const dadosCandidato =
+            STATE.dados.filter(
+              item =>
+                normalizarCandidato(
+                  item.candidato
+                ) === candidato
+            );
+
+
+          const personalistas =
+            dadosCandidato.filter(
+              item =>
+                categoriaTipo(
+                  item.categoria
+                ) === "Personalista"
+            ).length;
+
+
+          const programaticos =
+            dadosCandidato.filter(
+              item =>
+                categoriaTipo(
+                  item.categoria
+                ) === "Programático"
+            ).length;
+
+
+          STATE.charts[id] =
+            new Chart(
+              canvas,
+              {
+
+                type: "doughnut",
 
                 data: {
-                    labels: subcategorias,
-                    datasets: datasets
+
+                  labels: [
+                    "Conteúdo programático",
+                    "Conteúdo personalista"
+                  ],
+
+                  datasets: [
+
+                    {
+
+                      data: [
+                        programaticos,
+                        personalistas
+                      ],
+
+                      backgroundColor: [
+
+                        getCandidateColor(
+                          candidato,
+                          "strong"
+                        ),
+
+                        getCandidateColor(
+                          candidato,
+                          "light"
+                        )
+
+                      ],
+
+                      borderWidth: 0
+
+                    }
+
+                  ]
+
                 },
 
                 options: {
 
-                    responsive: true,
-                    maintainAspectRatio: false,
+                  responsive: true,
 
-                    interaction: {
-                        mode: "index",
-                        intersect: false
+                  maintainAspectRatio:
+                    false,
+
+                  cutout: "68%",
+
+                  plugins: {
+
+                    legend: {
+                      position: "bottom"
                     },
 
-                    plugins: {
+                    tooltip: {
 
-                        legend: {
-                            display: true,
-                            position: "bottom"
-                        },
+                      callbacks: {
 
-                        tooltip: {
+                        label:
+                          context =>
+                            `${context.label}: ${context.raw} publicação(ões)`
 
-                            callbacks: {
-
-                                label: function(context) {
-
-                                    return (
-                                        context.dataset.label +
-                                        ": " +
-                                        context.raw +
-                                        " publicação(ões)"
-                                    );
-
-                                }
-
-                            }
-
-                        }
-
-                    },
-
-                    scales: {
-
-                        x: {
-                            stacked: false
-                        },
-
-                        y: {
-
-                            beginAtZero: true,
-
-                            ticks: {
-                                precision: 0,
-                                stepSize: 1
-                            }
-
-                        }
+                      }
 
                     }
 
-                }
-
-            });
-    }
-
-    filtroContainer.innerHTML = "";
-
-    candidatos.forEach(candidato => {
-
-        const botao = document.createElement("button");
-
-        botao.type = "button";
-
-        botao.className =
-            "candidate-filter-btn";
-
-        botao.textContent = candidato;
-
-        botao.addEventListener(
-            "click",
-            function() {
-
-                const indice =
-                    candidatosSelecionados.findIndex(
-                        c =>
-                            normalizarTexto(c) ===
-                            normalizarTexto(candidato)
-                    );
-
-                if (indice !== -1) {
-
-                    candidatosSelecionados.splice(
-                        indice,
-                        1
-                    );
-
-                    botao.classList.remove("active");
-
-                } else {
-
-                    candidatosSelecionados.push(
-                        candidato
-                    );
-
-                    botao.classList.add("active");
+                  }
 
                 }
 
-                atualizarGrafico();
-
-            }
-        );
-
-        filtroContainer.appendChild(botao);
-
-    });
-
-    atualizarGrafico();
-}
-
-
-function criarDonutsPorCandidato(dados) {
-
-  const candidatos = [
-    "Lula",
-    "Flavio",
-    "Caiado",
-    "Renan",
-    "Cury",
-    "Zema"
-  ];
-
-  const cores = {
-    "Lula": {
-      programatico: "#b91c1c",
-      personalista: "#fecaca"
-    },
-
-    "Flavio": {
-      programatico: "#15803d",
-      personalista: "#bbf7d0"
-    },
-
-    "Renan": {
-      programatico: "#a16207",
-      personalista: "#fef08a"
-    },
-
-    "Zema": {
-      programatico: "#c2410c",
-      personalista: "#fed7aa"
-    },
-
-    "Caiado": {
-      programatico: "#1d4ed8",
-      personalista: "#bfdbfe"
-    },
-
-    "Cury": {
-      programatico: "#7e22ce",
-      personalista: "#e9d5ff"
-    }
-  };
-
-  candidatos.forEach((candidato, i) => {
-
-    const canvas = document.getElementById("donut" + (i + 1));
-    if (!canvas) return;
-
-    const dadosCandidato = dados.filter(
-      d => normalizarTexto(d.candidato) === normalizarTexto(candidato)
-    );
-
-    const personalistas = dadosCandidato.filter(
-      d => categoriaTipo(d.categoria) === "Personalista"
-    ).length;
-
-    const programaticos = dadosCandidato.filter(
-      d => categoriaTipo(d.categoria) === "Programático"
-    ).length;
-
-    const id = "donut" + (i + 1);
-
-    if (chartInstances[id]) {
-      chartInstances[id].destroy();
-    }
-
-    const cor = cores[candidato];
-
-    chartInstances[id] = new Chart(canvas, {
-      type: "doughnut",
-
-      data: {
-        labels: [
-          "Conteúdo programático",
-          "Conteúdo personalista"
-        ],
-
-        datasets: [{
-          data: [
-            programaticos,
-            personalistas
-          ],
-
-          backgroundColor: [
-            cor.programatico,
-            cor.personalista
-          ],
-
-          borderWidth: 0
-        }]
-      },
-
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-
-        cutout: "68%",
-
-        plugins: {
-          legend: {
-            position: "bottom"
-          },
-
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return `${context.label}: ${context.raw}`;
               }
-            }
-          }
+            );
+
         }
-      }
-    });
-
-  });
-}
-
-const subcatEl = document.getElementById("subcategoryBar");
-
-if (subcatEl && DATA.subcategories.datasets.length) {
-  chartInstances["subcategoryBar"] = new Chart(subcatEl, {
-    type: "bar",
-    data: {
-      labels: DATA.subcategories.labels,
-      datasets: DATA.subcategories.datasets.map((d, i) => ({
-        ...d,
-        backgroundColor: palette[i % palette.length],
-        borderRadius: 4
-      }))
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: "bottom"
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-}
-
-/*
- * Os gráficos de curtidas e comentários são criados dentro de
- * carregarMonitoramento(), depois que o CSV é lido.
- * Assim, não há uma segunda inicialização que sobrescreva os dados reais.
- */
-
-
-
-/* ==========================================================
-   GAVETAS EXPANSÍVEIS + REDIMENSIONAMENTO
-   ========================================================== */
-
-document.querySelectorAll(".section-head").forEach(head => {
-  head.addEventListener("click", () => {
-    const target = document.getElementById(head.dataset.target);
-    if (!target) return;
-
-    const open = target.classList.toggle("open");
-    head.classList.toggle("active", open);
-
-    if (open) {
-      setTimeout(() => {
-        window.dispatchEvent(new Event("resize"));
-
-        Object.values(chartInstances).forEach(chart => {
-          if (chart && typeof chart.resize === "function") {
-            chart.resize();
-          }
-        });
-      }, 50);
-    }
-  });
-});
-
-/* ==========================================================
-   CARROSSEL DE CANDIDATOS
-   ========================================================== */
-
-const track = document.getElementById("candidateTrack");
-const cards = [...document.querySelectorAll(".candidate-card")];
-const prev = document.getElementById("candidatePrev");
-const next = document.getElementById("candidateNext");
-const dots = document.getElementById("candidateDots");
-let position = 0;
-
-function perView() {
-  return innerWidth <= 600 ? 1 : innerWidth <= 850 ? 2 : 3;
-}
-
-function maxPos() {
-  return Math.max(0, cards.length - perView());
-}
-
-function updateCarousel() {
-  if (!track) return;
-
-  position = Math.min(position, maxPos());
-
-  const gap = 16;
-  const cardWidth =
-    cards[0]?.getBoundingClientRect().width || 0;
-
-  track.style.transform =
-    `translateX(-${position * (cardWidth + gap)}px)`;
-
-  if (prev) prev.disabled = position === 0;
-  if (next) next.disabled = position === maxPos();
-
-  if (dots) {
-    dots.innerHTML = "";
-
-    for (let i = 0; i <= maxPos(); i++) {
-      const b = document.createElement("button");
-
-      b.className =
-        "dot" + (i === position ? " active" : "");
-
-      b.setAttribute(
-        "aria-label",
-        "Ir para posição " + (i + 1)
       );
 
-      b.onclick = () => {
-        position = i;
-        updateCarousel();
-      };
-
-      dots.appendChild(b);
     }
-  }
-}
 
-if (prev) {
-  prev.onclick = () => {
-    position--;
-    updateCarousel();
-  };
-}
 
-if (next) {
-  next.onclick = () => {
-    position++;
-    updateCarousel();
-  };
-}
+    /* =========================================================
+       GRÁFICO DE DISPERSÃO
+       ========================================================= */
 
-addEventListener("resize", updateCarousel);
-updateCarousel();
-
-/* ==========================================================
-   CLIQUE NOS CARDS DOS CANDIDATOS
-   ========================================================== */
-
-cards.forEach(card => {
-  card.addEventListener("click", () => {
-    const nameEl = card.querySelector(".candidate-name");
-    if (!nameEl) return;
-
-    const nome = nameEl.textContent.trim();
-
-    const gaveta01Head =
-      document.querySelector('[data-target="resultado3"]');
-
-    const gaveta01Content =
-      document.getElementById("resultado3");
-
-    if (
-      gaveta01Content &&
-      !gaveta01Content.classList.contains("open")
+    function criarGraficoDispersao(
+      campo,
+      canvasId,
+      chartId,
+      eixoY
     ) {
-      gaveta01Head?.click();
+
+      const canvas =
+        document.getElementById(
+          canvasId
+        );
+
+      if (!canvas) {
+        return;
+      }
+
+      destruirChart(chartId);
+
+
+      const personalistas =
+        [];
+
+      const programaticos =
+        [];
+
+
+      STATE.dados.forEach(
+        item => {
+
+          const tipo =
+            categoriaTipo(
+              item.categoria
+            );
+
+          if (!tipo) {
+            return;
+          }
+
+
+          const data =
+            parseData(
+              item.data
+            );
+
+          if (!data) {
+            return;
+          }
+
+
+          const ponto = {
+
+            x: data,
+
+            y: parseNumero(
+              item[campo]
+            ),
+
+            candidato:
+              normalizarCandidato(
+                item.candidato
+              ),
+
+            categoria:
+              item.categoria,
+
+            dataOriginal:
+              item.data,
+
+            tipo
+
+          };
+
+
+          if (
+            tipo === "Personalista"
+          ) {
+
+            personalistas.push(
+              ponto
+            );
+
+          } else {
+
+            programaticos.push(
+              ponto
+            );
+
+          }
+
+        }
+      );
+
+
+      restaurarCanvas(canvas);
+
+
+      STATE.charts[chartId] =
+        new Chart(
+          canvas,
+          {
+
+            type: "scatter",
+
+            data: {
+
+              datasets: [
+
+                {
+
+                  label:
+                    "Conteúdo personalista",
+
+                  data:
+                    personalistas,
+
+                  pointRadius: 5,
+
+                  pointHoverRadius: 8,
+
+                  backgroundColor:
+                    "#8b5cf6",
+
+                  borderColor:
+                    "#8b5cf6",
+
+                  borderWidth: 1
+
+                },
+
+
+                {
+
+                  label:
+                    "Conteúdo programático",
+
+                  data:
+                    programaticos,
+
+                  pointRadius: 5,
+
+                  pointHoverRadius: 8,
+
+                  backgroundColor:
+                    "#2f80ed",
+
+                  borderColor:
+                    "#2f80ed",
+
+                  borderWidth: 1
+
+                }
+
+              ]
+
+            },
+
+            options: {
+
+              responsive: true,
+
+              maintainAspectRatio:
+                false,
+
+              plugins: {
+
+                legend: {
+                  position: "bottom"
+                },
+
+                tooltip: {
+
+                  callbacks: {
+
+                    title:
+                      () =>
+                        "Publicação",
+
+                    label:
+                      context => {
+
+                        const ponto =
+                          context.raw;
+
+                        return [
+
+                          `Candidato: ${ponto.candidato}`,
+
+                          `Categoria: ${ponto.categoria}`,
+
+                          `Data: ${formatarData(ponto.dataOriginal)}`,
+
+                          `${eixoY}: ${Number(ponto.y).toLocaleString("pt-BR")}`
+
+                        ];
+
+                      }
+
+                  }
+
+                }
+
+              },
+
+              scales: {
+
+                x: {
+
+                  type: "time",
+
+                  time: {
+
+                    unit: "day",
+
+                    tooltipFormat:
+                      "dd/MM/yyyy",
+
+                    displayFormats: {
+
+                      day: "dd/MM"
+
+                    }
+
+                  },
+
+                  title: {
+
+                    display: true,
+
+                    text: "Data"
+
+                  }
+
+                },
+
+                y: {
+
+                  beginAtZero: true,
+
+                  title: {
+
+                    display: true,
+
+                    text: eixoY
+
+                  }
+
+                }
+
+              }
+
+            }
+
+          }
+        );
+
     }
 
-    gaveta01Content?.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
 
-    const btns =
-      document.querySelectorAll(".candidate-filter-btn");
+    /* =========================================================
+       GRÁFICO DE SUBCATEGORIAS
+       ========================================================= */
 
-    let achou = false;
+    function criarGraficoSubcategorias() {
 
-    btns.forEach(b => {
+      const canvas =
+        document.getElementById(
+          "subcategoryBar"
+        );
+
+      if (!canvas) {
+        return;
+      }
+
+      destruirChart(
+        "subcategoryBar"
+      );
+
+
+      const selecionados =
+        [...STATE.candidatosSelecionados.subcategorias];
+
+
+      if (!selecionados.length) {
+
+        mostrarEstadoVazio(
+          canvas,
+          "Selecione um ou mais candidatos acima."
+        );
+
+        return;
+
+      }
+
+
+      restaurarCanvas(canvas);
+
+
+      const subcategorias =
+        [
+          ...new Set(
+            STATE.dados
+              .map(
+                item =>
+                  String(
+                    item.subcategoria ||
+                    ""
+                  ).trim()
+              )
+              .filter(Boolean)
+          )
+        ];
+
+
+      if (!subcategorias.length) {
+
+        mostrarEstadoVazio(
+          canvas,
+          "A coluna de subcategoria não possui dados."
+        );
+
+        return;
+
+      }
+
+
+      const datasets =
+        selecionados.map(
+          candidato => {
+
+            const valores =
+              subcategorias.map(
+                subcategoria =>
+                  STATE.dados.filter(
+                    item =>
+
+                      normalizarCandidato(
+                        item.candidato
+                      ) === candidato &&
+
+                      normalizarTexto(
+                        item.subcategoria
+                      ) ===
+                      normalizarTexto(
+                        subcategoria
+                      )
+                  ).length
+              );
+
+
+            return {
+
+              label:
+                candidato,
+
+              data:
+                valores,
+
+              backgroundColor:
+                getCandidateColor(
+                  candidato,
+                  "strong"
+                ),
+
+              borderRadius: 5,
+
+              borderWidth: 0
+
+            };
+
+          }
+        );
+
+
+      STATE.charts.subcategoryBar =
+        new Chart(
+          canvas,
+          {
+
+            type: "bar",
+
+            data: {
+
+              labels:
+                subcategorias,
+
+              datasets
+
+            },
+
+            options: {
+
+              responsive: true,
+
+              maintainAspectRatio:
+                false,
+
+              interaction: {
+
+                mode: "index",
+
+                intersect: false
+
+              },
+
+              plugins: {
+
+                legend: {
+                  position: "bottom"
+                },
+
+                tooltip: {
+
+                  callbacks: {
+
+                    label:
+                      context =>
+                        `${context.dataset.label}: ${context.raw} publicação(ões)`
+
+                  }
+
+                }
+
+              },
+
+              scales: {
+
+                x: {
+                  stacked: false
+                },
+
+                y: {
+
+                  beginAtZero: true,
+
+                  ticks: {
+
+                    precision: 0,
+
+                    stepSize: 1
+
+                  },
+
+                  title: {
+
+                    display: true,
+
+                    text: "Publicações"
+
+                  }
+
+                }
+
+              }
+
+            }
+
+          }
+        );
+
+    }
+
+
+    /* =========================================================
+       GRÁFICO DE FORMATOS
+       ========================================================= */
+
+    function criarGraficoFormatos() {
+
+      const canvas =
+        document.getElementById(
+          "formatBar"
+        );
+
+      if (!canvas) {
+        return;
+      }
+
+      destruirChart(
+        "formatBar"
+      );
+
+
+      const selecionados =
+        [...STATE.candidatosSelecionados.formatos];
+
+
+      if (!selecionados.length) {
+
+        mostrarEstadoVazio(
+          canvas,
+          "Selecione um ou mais candidatos acima."
+        );
+
+        return;
+
+      }
+
+
+      restaurarCanvas(canvas);
+
+
+      const formatos =
+        [
+          ...new Set(
+            STATE.dados
+              .map(
+                item =>
+                  String(
+                    item.formato ||
+                    ""
+                  ).trim()
+              )
+              .filter(Boolean)
+          )
+        ];
+
+
+      if (!formatos.length) {
+
+        mostrarEstadoVazio(
+          canvas,
+          "A coluna de formato não possui dados."
+        );
+
+        return;
+
+      }
+
+
+      const datasets =
+        selecionados.map(
+          candidato => {
+
+            const valores =
+              formatos.map(
+                formato =>
+                  STATE.dados.filter(
+                    item =>
+
+                      normalizarCandidato(
+                        item.candidato
+                      ) === candidato &&
+
+                      normalizarTexto(
+                        item.formato
+                      ) ===
+                      normalizarTexto(
+                        formato
+                      )
+                  ).length
+              );
+
+
+            return {
+
+              label:
+                candidato,
+
+              data:
+                valores,
+
+              backgroundColor:
+                getCandidateColor(
+                  candidato,
+                  "strong"
+                ),
+
+              borderRadius: 5,
+
+              borderWidth: 0
+
+            };
+
+          }
+        );
+
+
+      STATE.charts.formatBar =
+        new Chart(
+          canvas,
+          {
+
+            type: "bar",
+
+            data: {
+
+              labels:
+                formatos,
+
+              datasets
+
+            },
+
+            options: {
+
+              responsive: true,
+
+              maintainAspectRatio:
+                false,
+
+              interaction: {
+
+                mode: "index",
+
+                intersect: false
+
+              },
+
+              plugins: {
+
+                legend: {
+
+                  display: true,
+
+                  position: "bottom"
+
+                },
+
+                tooltip: {
+
+                  callbacks: {
+
+                    label:
+                      context =>
+                        `${context.dataset.label}: ${context.raw} publicação(ões)`
+
+                  }
+
+                }
+
+              },
+
+              scales: {
+
+                x: {
+                  stacked: false
+                },
+
+                y: {
+
+                  beginAtZero: true,
+
+                  ticks: {
+
+                    precision: 0,
+
+                    stepSize: 1
+
+                  },
+
+                  title: {
+
+                    display: true,
+
+                    text: "Publicações"
+
+                  }
+
+                }
+
+              }
+
+            }
+
+          }
+        );
+
+    }
+
+
+    /* =========================================================
+       ESTADO VAZIO DO CANVAS
+       ========================================================= */
+
+    function mostrarEstadoVazio(
+      canvas,
+      mensagem
+    ) {
+
+      if (!canvas) {
+        return;
+      }
+
+      const parent =
+        canvas.parentElement;
+
+      if (!parent) {
+        return;
+      }
+
+
+      canvas.style.display =
+        "none";
+
+
+      let empty =
+        parent.querySelector(
+          ".chart-empty"
+        );
+
+
+      if (!empty) {
+
+        empty =
+          document.createElement(
+            "div"
+          );
+
+        empty.className =
+          "chart-empty";
+
+        parent.appendChild(
+          empty
+        );
+
+      }
+
+
+      empty.textContent =
+        mensagem;
+
+    }
+
+
+    function restaurarCanvas(
+      canvas
+    ) {
+
+      if (!canvas) {
+        return;
+      }
+
+      canvas.style.display =
+        "block";
+
+
+      const empty =
+        canvas.parentElement
+          ?.querySelector(
+            ".chart-empty"
+          );
+
+
+      if (empty) {
+        empty.remove();
+      }
+
+    }
+
+
+    /* =========================================================
+       CSV
+       ========================================================= */
+
+    async function carregarMonitoramento() {
+
+      setStatus(
+        "Carregando monitoramento.csv..."
+      );
+
+
+      try {
+
+        const resposta =
+          await fetch(
+            CONFIG.csv,
+            {
+              cache: "no-store"
+            }
+          );
+
+
+        if (!resposta.ok) {
+
+          throw new Error(
+            `Não foi possível carregar ${CONFIG.csv}. Status ${resposta.status}.`
+          );
+
+        }
+
+
+        const texto =
+          await resposta.text();
+
+
+        if (!texto.trim()) {
+
+          throw new Error(
+            "O arquivo monitoramento.csv está vazio."
+          );
+
+        }
+
+
+        const linhas =
+          parseCSV(texto);
+
+
+        if (linhas.length < 2) {
+
+          throw new Error(
+            "O CSV precisa possuir cabeçalho e pelo menos um registro."
+          );
+
+        }
+
+
+        const cabecalho =
+          linhas
+            .shift()
+            .map(
+              limparCabecalho
+            );
+
+
+        const indices = {
+
+          candidato:
+            cabecalho.indexOf(
+              "candidato"
+            ),
+
+          categoria:
+            cabecalho.indexOf(
+              "categoria"
+            ),
+
+          data:
+            cabecalho.indexOf(
+              "data"
+            ),
+
+          likes:
+            cabecalho.indexOf(
+              "likes"
+            ),
+
+          comentarios:
+            cabecalho.indexOf(
+              "comentarios"
+            ),
+
+          formato:
+            cabecalho.indexOf(
+              "formato"
+            ),
+
+          subcategoria:
+            cabecalho.indexOf(
+              "subcategoria"
+            )
+
+        };
+
+
+        if (
+          indices.candidato === -1
+        ) {
+
+          throw new Error(
+            'O CSV precisa possuir a coluna "candidato".'
+          );
+
+        }
+
+
+        if (
+          indices.categoria === -1
+        ) {
+
+          throw new Error(
+            'O CSV precisa possuir a coluna "categoria".'
+          );
+
+        }
+
+
+        STATE.dados =
+          linhas
+            .filter(
+              linha =>
+                String(
+                  linha[
+                    indices.candidato
+                  ] || ""
+                ).trim()
+            )
+            .map(
+              linha => ({
+
+                candidato:
+                  normalizarCandidato(
+                    linha[
+                      indices.candidato
+                    ]
+                  ),
+
+                categoria:
+                  String(
+                    linha[
+                      indices.categoria
+                    ] || ""
+                  ).trim(),
+
+                data:
+                  indices.data !== -1
+                    ? String(
+                        linha[
+                          indices.data
+                        ] || ""
+                      ).trim()
+                    : "",
+
+                likes:
+                  indices.likes !== -1
+                    ? parseNumero(
+                        linha[
+                          indices.likes
+                        ]
+                      )
+                    : 0,
+
+                comentarios:
+                  indices.comentarios !== -1
+                    ? parseNumero(
+                        linha[
+                          indices.comentarios
+                        ]
+                      )
+                    : 0,
+
+                formato:
+                  indices.formato !== -1
+                    ? String(
+                        linha[
+                          indices.formato
+                        ] || ""
+                      ).trim()
+                    : "",
+
+                subcategoria:
+                  indices.subcategoria !== -1
+                    ? String(
+                        linha[
+                          indices.subcategoria
+                        ] || ""
+                      ).trim()
+                    : ""
+
+              })
+            );
+
+
+        if (!STATE.dados.length) {
+
+          throw new Error(
+            "Nenhum registro válido foi encontrado no CSV."
+          );
+
+        }
+
+
+        STATE.candidatos =
+          [
+            ...new Set(
+              STATE.dados
+                .map(
+                  item =>
+                    item.candidato
+                )
+                .filter(Boolean)
+            )
+          ];
+
+
+        STATE.datas =
+          [
+            ...new Set(
+              STATE.dados
+                .map(
+                  item =>
+                    item.data
+                )
+                .filter(Boolean)
+            )
+          ];
+
+
+        STATE.datas.sort(
+          (a, b) =>
+            (parseData(a)?.getTime() || 0) -
+            (parseData(b)?.getTime() || 0)
+        );
+
+
+        inicializarFiltros();
+
+        renderCandidateColorLegend();
+
+        criarGraficoApelos();
+
+        criarDonuts();
+
+        criarGraficoSubcategorias();
+
+        criarGraficoFormatos();
+
+        criarGraficoDispersao(
+          "likes",
+          "likesScatter",
+          "likesScatter",
+          "Número de curtidas"
+        );
+
+        criarGraficoDispersao(
+          "comentarios",
+          "commentsScatter",
+          "commentsScatter",
+          "Número de comentários"
+        );
+
+
+        setStatus(
+          `${STATE.dados.length.toLocaleString("pt-BR")} publicações carregadas · ${STATE.candidatos.length} candidatos encontrados.`,
+          "success"
+        );
+
+
+        console.info(
+          "CSV carregado:",
+          STATE.dados
+        );
+
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao carregar CSV:",
+          erro
+        );
+
+
+        setStatus(
+          `${erro.message} O dashboard será mantido em modo de demonstração.`,
+          "error"
+        );
+
+
+        carregarDadosDemo();
+
+      }
+
+    }
+
+
+    /* =========================================================
+       FILTROS
+       ========================================================= */
+
+    function inicializarFiltros() {
+
+      criarFiltroCandidatos({
+
+        containerId:
+          "candidateFilterButtons",
+
+        estado:
+          STATE.candidatosSelecionados.apelos,
+
+        onChange:
+          criarGraficoApelos
+
+      });
+
+
+      criarFiltroCandidatos({
+
+        containerId:
+          "subcategoryCandidateFilterButtons",
+
+        estado:
+          STATE.candidatosSelecionados.subcategorias,
+
+        onChange:
+          criarGraficoSubcategorias
+
+      });
+
+
+      criarFiltroCandidatos({
+
+        containerId:
+          "formatCandidateFilterButtons",
+
+        estado:
+          STATE.candidatosSelecionados.formatos,
+
+        onChange:
+          criarGraficoFormatos
+
+      });
+
+    }
+
+
+    /* =========================================================
+       DEMO / FALLBACK
+       ========================================================= */
+
+    function carregarDadosDemo() {
+
+      const candidatos =
+        CONFIG.defaultCandidateNames;
+
+
+      STATE.candidatos =
+        [...candidatos];
+
+
+      STATE.datas =
+        [
+          "14/08/2026",
+          "15/08/2026",
+          "16/08/2026",
+          "17/08/2026",
+          "18/08/2026",
+          "19/08/2026",
+          "20/08/2026",
+          "21/08/2026"
+        ];
+
+
+      STATE.dados = [];
+
+
+      candidatos.forEach(
+        candidato => {
+
+          STATE.datas.forEach(
+            data => {
+
+              const base =
+                Math.floor(
+                  Math.random() * 8
+                );
+
+
+              STATE.dados.push({
+
+                candidato,
+
+                categoria:
+                  "Programático",
+
+                data,
+
+                likes:
+                  Math.floor(
+                    Math.random() *
+                    1000
+                  ),
+
+                comentarios:
+                  Math.floor(
+                    Math.random() *
+                    200
+                  ),
+
+                formato:
+                  "Imagem",
+
+                subcategoria:
+                  "Segurança"
+
+              });
+
+
+              STATE.dados.push({
+
+                candidato,
+
+                categoria:
+                  "Personalista",
+
+                data,
+
+                likes:
+                  Math.floor(
+                    Math.random() *
+                    1000
+                  ),
+
+                comentarios:
+                  Math.floor(
+                    Math.random() *
+                    200
+                  ),
+
+                formato:
+                  "Vídeo",
+
+                subcategoria:
+                  "Família"
+
+              });
+
+
+              if (base > 4) {
+
+                STATE.dados.push({
+
+                  candidato,
+
+                  categoria:
+                    "Programático",
+
+                  data,
+
+                  likes:
+                    Math.floor(
+                      Math.random() *
+                      1500
+                    ),
+
+                  comentarios:
+                    Math.floor(
+                      Math.random() *
+                      250
+                    ),
+
+                  formato:
+                    "IA",
+
+                  subcategoria:
+                    "Trabalho"
+
+                });
+
+              }
+
+            }
+          );
+
+        }
+      );
+
+
+      inicializarFiltros();
+
+      renderCandidateColorLegend();
+
+      criarGraficoApelos();
+
+      criarDonuts();
+
+      criarGraficoSubcategorias();
+
+      criarGraficoFormatos();
+
+      criarGraficoDispersao(
+        "likes",
+        "likesScatter",
+        "likesScatter",
+        "Número de curtidas"
+      );
+
+      criarGraficoDispersao(
+        "comentarios",
+        "commentsScatter",
+        "commentsScatter",
+        "Número de comentários"
+      );
+
+    }
+
+
+    /* =========================================================
+       GAVETAS
+       ========================================================= */
+
+    function inicializarGavetas() {
+
+      document
+        .querySelectorAll(
+          ".section-head"
+        )
+        .forEach(
+          head => {
+
+            const alternar =
+              () => {
+
+                const target =
+                  document.getElementById(
+                    head.dataset.target
+                  );
+
+                if (!target) {
+                  return;
+                }
+
+
+                const abriu =
+                  target.classList.toggle(
+                    "open"
+                  );
+
+
+                head.classList.toggle(
+                  "active",
+                  abriu
+                );
+
+
+                head.setAttribute(
+                  "aria-expanded",
+                  abriu
+                    ? "true"
+                    : "false"
+                );
+
+
+                if (abriu) {
+
+                  requestAnimationFrame(
+                    () => {
+
+                      Object.values(
+                        STATE.charts
+                      ).forEach(
+                        chart => {
+
+                          if (
+                            chart &&
+                            typeof chart.resize ===
+                              "function"
+                          ) {
+
+                            chart.resize();
+
+                          }
+
+                        }
+                      );
+
+                    }
+                  );
+
+                }
+
+              };
+
+
+            head.addEventListener(
+              "click",
+              alternar
+            );
+
+
+            head.addEventListener(
+              "keydown",
+              evento => {
+
+                if (
+                  evento.key === "Enter" ||
+                  evento.key === " "
+                ) {
+
+                  evento.preventDefault();
+
+                  alternar();
+
+                }
+
+              }
+            );
+
+          }
+        );
+
+    }
+
+
+    /* =========================================================
+       CARROSSEL
+       ========================================================= */
+
+    const carousel = {
+
+      track:
+        document.getElementById(
+          "candidateTrack"
+        ),
+
+      cards:
+        [
+          ...document.querySelectorAll(
+            ".candidate-card"
+          )
+        ],
+
+      prev:
+        document.getElementById(
+          "candidatePrev"
+        ),
+
+      next:
+        document.getElementById(
+          "candidateNext"
+        ),
+
+      dots:
+        document.getElementById(
+          "candidateDots"
+        )
+
+    };
+
+
+    function carouselPerView() {
+
       if (
-        b.textContent.toLowerCase().trim() ===
-          nome.toLowerCase().trim() ||
-        nome.toLowerCase().includes(
-          b.textContent.toLowerCase().trim()
+        window.innerWidth <= 600
+      ) {
+        return 1;
+      }
+
+      if (
+        window.innerWidth <= 850
+      ) {
+        return 2;
+      }
+
+      return 3;
+
+    }
+
+
+    function carouselMaxPosition() {
+
+      return Math.max(
+        0,
+        carousel.cards.length -
+        carouselPerView()
+      );
+
+    }
+
+
+    function atualizarCarrossel() {
+
+      if (!carousel.track) {
+        return;
+      }
+
+
+      const max =
+        carouselMaxPosition();
+
+
+      STATE.carouselPosition =
+        Math.min(
+          STATE.carouselPosition,
+          max
+        );
+
+
+      STATE.carouselPosition =
+        Math.max(
+          0,
+          STATE.carouselPosition
+        );
+
+
+      const card =
+        carousel.cards[0];
+
+
+      const largura =
+        card?.getBoundingClientRect()
+          .width || 0;
+
+
+      const gap = 16;
+
+
+      carousel.track.style.transform =
+        `translateX(-${
+          STATE.carouselPosition *
+          (largura + gap)
+        }px)`;
+
+
+      if (carousel.prev) {
+
+        carousel.prev.disabled =
+          STATE.carouselPosition === 0;
+
+      }
+
+
+      if (carousel.next) {
+
+        carousel.next.disabled =
+          STATE.carouselPosition === max;
+
+      }
+
+
+      if (carousel.dots) {
+
+        carousel.dots.innerHTML = "";
+
+
+        for (
+          let i = 0;
+          i <= max;
+          i++
+        ) {
+
+          const botao =
+            document.createElement(
+              "button"
+            );
+
+          botao.type = "button";
+
+          botao.className =
+            "dot" +
+            (
+              i ===
+              STATE.carouselPosition
+                ? " active"
+                : ""
+            );
+
+
+          botao.setAttribute(
+            "aria-label",
+            `Ir para posição ${i + 1}`
+          );
+
+
+          botao.addEventListener(
+            "click",
+            () => {
+
+              STATE.carouselPosition =
+                i;
+
+              atualizarCarrossel();
+
+            }
+          );
+
+
+          carousel.dots.appendChild(
+            botao
+          );
+
+        }
+
+      }
+
+    }
+
+
+    function inicializarCarrossel() {
+
+      carousel.prev?.addEventListener(
+        "click",
+        () => {
+
+          STATE.carouselPosition--;
+
+          atualizarCarrossel();
+
+        }
+      );
+
+
+      carousel.next?.addEventListener(
+        "click",
+        () => {
+
+          STATE.carouselPosition++;
+
+          atualizarCarrossel();
+
+        }
+      );
+
+
+      window.addEventListener(
+        "resize",
+        atualizarCarrossel
+      );
+
+
+      atualizarCarrossel();
+
+    }
+
+
+    /* =========================================================
+       CLIQUE NOS CARDS
+       ========================================================= */
+
+    function selecionarCandidatoAPartirDoCard(
+      candidato
+    ) {
+
+      const nome =
+        normalizarCandidato(
+          candidato
+        );
+
+
+      const gavetaHead =
+        document.querySelector(
+          '[data-target="resultado3"]'
+        );
+
+
+      const gaveta =
+        document.getElementById(
+          "resultado3"
+        );
+
+
+      if (
+        gaveta &&
+        !gaveta.classList.contains(
+          "open"
         )
       ) {
-        if (b.textContent.trim() !== "Todos") {
-          b.click();
-        }
-        achou = true;
+
+        gavetaHead?.click();
+
       }
-    });
 
-    if (!achou) {
-      filtrarCandidatoGrafico01(nome, true);
+
+      const estado =
+        STATE.candidatosSelecionados
+          .apelos;
+
+
+      if (estado.has(nome)) {
+
+        estado.delete(nome);
+
+      } else {
+
+        estado.add(nome);
+
+      }
+
+
+      const container =
+        document.getElementById(
+          "candidateFilterButtons"
+        );
+
+
+      if (container) {
+
+        atualizarEstadoVisualFiltro(
+          container,
+          estado
+        );
+
+      }
+
+
+      criarGraficoApelos();
+
+
+      gaveta?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+
+      carousel.cards.forEach(
+        card => {
+
+          card.classList.toggle(
+            "active",
+            normalizarCandidato(
+              card.dataset.candidate
+            ) === nome &&
+            estado.has(nome)
+          );
+
+        }
+      );
+
     }
-  });
-});
 
-/* ==========================================================
-   INICIALIZAÇÃO
-   ========================================================== */
 
-/*
- * O CSV é carregado depois que TODAS as funções acima
- * já foram declaradas.
- */
-carregarMonitoramento();
+    function inicializarCards() {
 
-/* Abre a primeira gaveta por padrão. */
-document.querySelector(".section-head")?.click();
-</script>
+      carousel.cards.forEach(
+        card => {
+
+          const ativar =
+            () => {
+
+              selecionarCandidatoAPartirDoCard(
+                card.dataset.candidate
+              );
+
+            };
+
+
+          card.addEventListener(
+            "click",
+            ativar
+          );
+
+
+          card.addEventListener(
+            "keydown",
+            evento => {
+
+              if (
+                evento.key === "Enter" ||
+                evento.key === " "
+              ) {
+
+                evento.preventDefault();
+
+                ativar();
+
+              }
+
+            }
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       INICIALIZAÇÃO
+       ========================================================= */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        inicializarGavetas();
+
+        inicializarCarrossel();
+
+        inicializarCards();
+
+        carregarMonitoramento();
+
+      }
+    );
+
+  </script>
+
 </body>
 </html>
+
