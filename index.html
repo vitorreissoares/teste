@@ -545,10 +545,27 @@ h1{font-size:clamp(1.55rem,4vw,2.45rem);line-height:1.12;margin:0 0 10px;color:#
     </div>
     <div class="section-content" id="resultado5">
       <div class="chart-card wide">
-        <h3 class="chart-title">Características e repertórios discursivos e imagéticos</h3>
-        <p class="chart-note">Perfil técnico, ruralidade, “homem forte”, família, patriotismo, religião, segurança, trabalho, agro e demais categorias do protocolo.</p>
-        <div class="chart-wrap"><canvas id="subcategoryBar"></canvas></div>
-      </div>
+        </h3>
+
+    <p class="chart-note">
+        Distribuição das subcategorias por candidato.
+    </p>
+
+    <div class="candidate-filter-bar">
+        <span class="filter-label">
+            <i class="fas fa-filter"></i>
+            Selecionar candidatos:
+        </span>
+
+        <div id="subcategoryCandidateFilterButtons"
+             class="filter-buttons">
+        </div>
+    </div>
+
+    <div class="chart-wrap">
+        <canvas id="subcategoryBar"></canvas>
+    </div>
+</div>
     </div>
   </section>
 
@@ -1215,6 +1232,7 @@ async function carregarMonitoramento() {
     const indiceLikes = cabecalho.indexOf("likes");
 
     const indiceFormato = cabecalho.indexOf("formato");
+    const indiceSubcategoria = cabecalho.indexOf("subcategoria");
 
     if (indiceCandidato === -1) {
       throw new Error(
@@ -1392,6 +1410,7 @@ candidatos.forEach(candidato => {
 
     criarDonutsPorCandidato(dados);
     criarGraficoFormatos(dados);
+    criarGraficoSubcategorias(dados);
 
     console.info("monitoramento.csv carregado com sucesso.");
     console.info("Candidatos encontrados:", candidatos);
@@ -1694,6 +1713,214 @@ function criarGraficoFormatos(dados) {
    * Portanto, o gráfico começa vazio.
    */
   atualizarGrafico();
+}
+
+function criarGraficoSubcategorias(dados) {
+
+    const canvas = document.getElementById("subcategoryBar");
+    const filtroContainer = document.getElementById(
+        "subcategoryCandidateFilterButtons"
+    );
+
+    if (!canvas || !filtroContainer) return;
+
+    const candidatos = [
+        ...new Set(
+            dados
+                .map(d => String(d.candidato || "").trim())
+                .filter(Boolean)
+        )
+    ];
+
+    const subcategorias = [
+        ...new Set(
+            dados
+                .map(d => String(d.subcategoria || "").trim())
+                .filter(Boolean)
+        )
+    ];
+
+    let candidatosSelecionados = [];
+
+    const cores = [
+        "#245b8f",
+        "#8b5cf6",
+        "#2f80ed",
+        "#6c7a86",
+        "#b26b3c",
+        "#4f8a70"
+    ];
+
+    function atualizarGrafico() {
+
+        if (chartInstances["subcategoryBar"]) {
+            chartInstances["subcategoryBar"].destroy();
+            chartInstances["subcategoryBar"] = null;
+        }
+
+        if (candidatosSelecionados.length === 0) {
+            return;
+        }
+
+        const datasets = candidatosSelecionados.map(
+            (candidato, indice) => {
+
+                const valores = subcategorias.map(
+                    subcategoria => {
+
+                        return dados.filter(d => {
+
+                            const mesmoCandidato =
+                                normalizarTexto(d.candidato) ===
+                                normalizarTexto(candidato);
+
+                            const mesmaSubcategoria =
+                                normalizarTexto(d.subcategoria) ===
+                                normalizarTexto(subcategoria);
+
+                            return mesmoCandidato &&
+                                   mesmaSubcategoria;
+                        }).length;
+
+                    }
+                );
+
+                return {
+                    label: candidato,
+                    data: valores,
+                    backgroundColor:
+                        cores[indice % cores.length],
+                    borderRadius: 5,
+                    borderWidth: 0
+                };
+            }
+        );
+
+        chartInstances["subcategoryBar"] =
+            new Chart(canvas, {
+
+                type: "bar",
+
+                data: {
+                    labels: subcategorias,
+                    datasets: datasets
+                },
+
+                options: {
+
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    interaction: {
+                        mode: "index",
+                        intersect: false
+                    },
+
+                    plugins: {
+
+                        legend: {
+                            display: true,
+                            position: "bottom"
+                        },
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                label: function(context) {
+
+                                    return (
+                                        context.dataset.label +
+                                        ": " +
+                                        context.raw +
+                                        " publicação(ões)"
+                                    );
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+                    scales: {
+
+                        x: {
+                            stacked: false
+                        },
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+                                precision: 0,
+                                stepSize: 1
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            });
+    }
+
+    filtroContainer.innerHTML = "";
+
+    candidatos.forEach(candidato => {
+
+        const botao = document.createElement("button");
+
+        botao.type = "button";
+
+        botao.className =
+            "candidate-filter-btn";
+
+        botao.textContent = candidato;
+
+        botao.addEventListener(
+            "click",
+            function() {
+
+                const indice =
+                    candidatosSelecionados.findIndex(
+                        c =>
+                            normalizarTexto(c) ===
+                            normalizarTexto(candidato)
+                    );
+
+                if (indice !== -1) {
+
+                    candidatosSelecionados.splice(
+                        indice,
+                        1
+                    );
+
+                    botao.classList.remove("active");
+
+                } else {
+
+                    candidatosSelecionados.push(
+                        candidato
+                    );
+
+                    botao.classList.add("active");
+
+                }
+
+                atualizarGrafico();
+
+            }
+        );
+
+        filtroContainer.appendChild(botao);
+
+    });
+
+    atualizarGrafico();
 }
 
 
