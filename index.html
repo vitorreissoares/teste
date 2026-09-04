@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Programa Político e Mídias Sociais | Política nas Redes</title>
+  <title>Programa Político e Personalismo nas Mídias Sociais | Política nas Redes</title>
 
   <meta
     name="description"
@@ -560,6 +560,33 @@
     }
 
     /* =====================================================
+       SEÇÃO 03 — GRÁFICOS DE SUBCATEGORIAS
+       ===================================================== */
+
+    .subcategory-chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .subcategory-chart-card {
+      min-height: 360px;
+      padding: 15px;
+
+      border: 1px solid var(--border);
+      border-radius: 10px;
+
+      background: #fff;
+    }
+
+    .subcategory-chart-wrap {
+      position: relative;
+      width: 100%;
+      height: 300px;
+    }
+
+    /* =====================================================
        FILTROS
        ===================================================== */
 
@@ -878,6 +905,18 @@
         height: 235px;
       }
 
+      .subcategory-chart-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .subcategory-chart-card {
+        min-height: 340px;
+      }
+
+      .subcategory-chart-wrap {
+        height: 285px;
+      }
+
       .candidate-color-legend {
         grid-template-columns: 1fr 1fr;
       }
@@ -905,13 +944,13 @@
         <p class="eyebrow">Política nas Redes · 2026</p>
 
         <h1>
-          Programa Político e Mídias Sociais
+          Programa Político e Personalismo nas Mídias Sociais
         </h1>
 
         <p class="project-description">
           Monitoramento das estratégias de comunicação política
           dos candidatos à Presidência da República.
-          <strong>14 a 21 de agosto de 2026.</strong>
+          <strong>16 a 22 de agosto de 2026.</strong>
         </p>
       </div>
 
@@ -1278,13 +1317,26 @@
           Sobre a Pesquisa
         </span>
 
+        
         <i class="fas fa-chevron-down section-icon"></i>
       </div>
+
+      
 
       <div
         class="section-content"
         id="metodologia"
       >
+
+      <div class="method-card">
+            <h3>A Pesquisa</h3>
+
+            <p>
+              Pesquisas apontam para a crescente personalização da política nas democracias contemporâneas, marcada pelo enfraquecimento dos partidos e pela centralidade de lideranças individuais. Nesse contexto, o personalismo eleitoral refere-se às estratégias usadas pelos candidatos para se diferenciar, por meio de atributos pessoais, como experiência e simpatia, ou de elementos coletivos, como filiação partidária e propostas programáticas.
+            </p>
+          </div>
+
+      
 
         <div class="method-grid">
 
@@ -1292,19 +1344,20 @@
             <h3>Problema de pesquisa</h3>
 
             <p>
-              Investigar em que medida as candidaturas utilizam
-              as mídias sociais para apresentar programas de governo
-              em comparação à ênfase conferida aos atributos pessoais.
+               
+
+<p>A expansão das mídias sociais favoreceu campanhas mais personalizadas, embora estudos indiquem que os eleitores acompanham pouco os planos de governo e obtêm informações por diferentes meios, incluindo televisão, jornais e plataformas digitais.</p>
+
+<p>Assim, considerando a tendência de personalização das campanhas digitais e a importância das mídias sociais para o acesso às propostas e o debate público, este estudo investiga, no contexto brasileiro, em que medida as candidaturas utilizam o Instagram para divulgar seus programas de governo ou enfatizar seus atributos pessoais.
             </p>
           </div>
 
 
           <div class="method-card">
-            <h3>Dados</h3>
+            <h3>Procedimentos Metodológicos</h3>
 
             <p>
-              Postagens dos candidatos à Presidência da República
-              no Brasil, realizadas em seus perfis oficiais no Instagram.
+              30% das postagens mais curtidas dos candidatos à Presidência da República no Brasil, publicadas em seus perfis oficiais no Instagram, foram categorizadas por meio do modelo de linguagem GPT-5.6 Luna (LLM) e posteriormente submetidas à validação por pesquisadores humanos. Essa etapa permitirá avaliar, ao longo do desenvolvimento da pesquisa, a acurácia das classificações realizadas pelo modelo em comparação com a codificação humana.
             </p>
           </div>
 
@@ -1330,9 +1383,7 @@
             <h3>Categorização</h3>
 
             <p>
-              Análise de conteúdo orientada por categorias emergentes
-              da literatura: apelos individuais e coletivos, com
-              subcategorias discursivas e imagéticas.
+              Orientada por categorias analíticas derivadas da literatura, a análise distingue entre apelos individuais, associados ao conteúdo personalista, e apelos coletivos, relacionados ao conteúdo programático.
             </p>
           </div>
 
@@ -1341,8 +1392,7 @@
             <h3>Subcategorias</h3>
 
             <p>
-              Emergentes da Análise de Conteúdo e sustentadas
-              pela literatura.
+              Emergentes e sustentadas pela literatura.
             </p>
           </div>
 
@@ -1515,7 +1565,9 @@
           </h3>
 
           <p class="chart-note">
-            Selecione os candidatos que deseja comparar.
+            Selecione os candidatos que deseja comparar. Os resultados
+            são separados entre subcategorias de conteúdos programáticos
+            e personalistas para facilitar a leitura.
           </p>
 
 
@@ -1534,8 +1586,41 @@
           </div>
 
 
-          <div class="chart-wrap">
-            <canvas id="subcategoryBar"></canvas>
+          <div class="subcategory-chart-grid">
+
+            <div class="subcategory-chart-card">
+
+              <h3 class="chart-title">
+                Subcategorias programáticas
+              </h3>
+
+              <p class="chart-note">
+                Temas e propostas associados ao conteúdo programático.
+              </p>
+
+              <div class="subcategory-chart-wrap">
+                <canvas id="subcategoryProgrammaticBar"></canvas>
+              </div>
+
+            </div>
+
+
+            <div class="subcategory-chart-card">
+
+              <h3 class="chart-title">
+                Subcategorias personalistas
+              </h3>
+
+              <p class="chart-note">
+                Temas associados aos atributos e características pessoais.
+              </p>
+
+              <div class="subcategory-chart-wrap">
+                <canvas id="subcategoryPersonalistBar"></canvas>
+              </div>
+
+            </div>
+
           </div>
 
         </div>
@@ -1578,8 +1663,8 @@
           </h3>
 
           <p class="chart-note">
-            Cada ponto representa o número de curtidas recebidas
-            por uma publicação.
+            Cada ponto representa o percentual de curtidas em relação
+            ao maior valor observado no período.
           </p>
 
           <div class="chart-wrap">
@@ -1626,8 +1711,8 @@
           </h3>
 
           <p class="chart-note">
-            Cada ponto representa o número de comentários recebidos
-            por uma publicação.
+            Cada ponto representa o percentual de comentários em relação
+            ao maior valor observado no período.
           </p>
 
           <div class="chart-wrap">
@@ -1645,6 +1730,52 @@
          =================================================== -->
 
     <section class="project-section">
+      <div class="section-head" data-target="resultado9" tabindex="0" role="button" aria-expanded="false">
+        <span class="section-title"><span class="result-number">06</span> Curtidas por subcategoria</span>
+        <i class="fas fa-chevron-down section-icon"></i>
+      </div>
+      <div class="section-content" id="resultado9">
+        <div class="chart-card wide">
+          <h3 class="chart-title">Curtidas por subcategoria</h3>
+          <p class="chart-note">Quantidade de curtidas por subcategoria ao longo do período.</p>
+          <div class="candidate-filter-bar">
+            <span class="filter-label"><i class="fas fa-filter"></i> Selecionar candidatos:</span>
+            <div id="likesSubcategoryCandidateFilterButtons" class="filter-buttons"></div>
+          </div>
+          <div class="chart-wrap"><canvas id="likesSubcategoryBar"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================
+         RESULTADO 07
+         =================================================== -->
+
+    <section class="project-section">
+      <div class="section-head" data-target="resultado10" tabindex="0" role="button" aria-expanded="false">
+        <span class="section-title"><span class="result-number">07</span> Comentários por subcategoria</span>
+        <i class="fas fa-chevron-down section-icon"></i>
+      </div>
+      <div class="section-content" id="resultado10">
+        <div class="chart-card wide">
+          <h3 class="chart-title">Comentários por subcategoria</h3>
+          <p class="chart-note">Quantidade de comentários por subcategoria ao longo do período.</p>
+          <div class="candidate-filter-bar">
+            <span class="filter-label"><i class="fas fa-filter"></i> Selecionar candidatos:</span>
+            <div id="commentsSubcategoryCandidateFilterButtons" class="filter-buttons"></div>
+          </div>
+          <div class="chart-wrap"><canvas id="commentsSubcategoryBar"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================
+         RESULTADO 08
+         =================================================== -->
+
+    <section class="project-section">
 
       <div
         class="section-head"
@@ -1654,7 +1785,7 @@
         aria-expanded="false"
       >
         <span class="section-title">
-          <span class="result-number">06</span>
+          <span class="result-number">08</span>
           Formatos das postagens
         </span>
 
@@ -1709,12 +1840,12 @@
   <footer class="footer">
 
     <strong>
-      Programa Político e Mídias Sociais
+      Programa Político e Personalismo nas Mídias Sociais
     </strong>
 
     · Política nas Redes ·
 
-    Grupo de trabalho formado por...
+    Grupo de trabalho formado por Vitor Reis, Malu Alden, Malu Paschoal, Natália Lucciola, Natalia Paiva, Shamira Rossi, Eduardo Barbabela, Eduarda e Polly
 
   </footer>
 
@@ -1809,7 +1940,9 @@
       candidatosSelecionados: {
         apelos: new Set(),
         subcategorias: new Set(),
-        formatos: new Set()
+        formatos: new Set(),
+        curtidasSubcategorias: new Set(),
+        comentariosSubcategorias: new Set()
       },
 
       charts: {},
@@ -1935,6 +2068,16 @@
 
     }
 
+
+    function calcularPercentual(valor, total) {
+
+      if (!total || total <= 0) {
+        return 0;
+      }
+
+      return (valor / total) * 100;
+
+    }
 
     function parseCSV(texto) {
 
@@ -2431,29 +2574,39 @@
             );
 
 
+          const totalPublicacoesCandidato =
+            dadosCandidato.length;
+
+
           const personalistas =
             STATE.datas.map(
               data =>
-                dadosCandidato.filter(
-                  item =>
-                    item.data === data &&
-                    categoriaTipo(
-                      item.categoria
-                    ) === "Personalista"
-                ).length
+                calcularPercentual(
+                  dadosCandidato.filter(
+                    item =>
+                      item.data === data &&
+                      categoriaTipo(
+                        item.categoria
+                      ) === "Personalista"
+                  ).length,
+                  totalPublicacoesCandidato
+                )
             );
 
 
           const programaticos =
             STATE.datas.map(
               data =>
-                dadosCandidato.filter(
-                  item =>
-                    item.data === data &&
-                    categoriaTipo(
-                      item.categoria
-                    ) === "Programático"
-                ).length
+                calcularPercentual(
+                  dadosCandidato.filter(
+                    item =>
+                      item.data === data &&
+                      categoriaTipo(
+                        item.categoria
+                      ) === "Programático"
+                  ).length,
+                  totalPublicacoesCandidato
+                )
             );
 
 
@@ -2570,7 +2723,7 @@
 
                     label:
                       context =>
-                        `${context.dataset.label}: ${context.raw} publicação(ões)`
+                        `${context.dataset.label}: ${Number(context.raw).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`
 
                   }
 
@@ -2591,13 +2744,14 @@
                   beginAtZero: true,
 
                   ticks: {
-                    precision: 0,
-                    stepSize: 1
+                    precision: 1,
+                    stepSize: 10,
+                    callback: valor => `${valor}%`
                   },
 
                   title: {
                     display: true,
-                    text: "Número de publicações"
+                    text: "Percentual de publicações"
                   }
 
                 }
@@ -2854,6 +3008,21 @@
                 ) === "Programático"
             ).length;
 
+          const totalCategorias =
+            programaticos + personalistas;
+
+          const personalistasPercentual =
+            calcularPercentual(
+              personalistas,
+              totalCategorias
+            );
+
+          const programaticosPercentual =
+            calcularPercentual(
+              programaticos,
+              totalCategorias
+            );
+
 
           STATE.charts[id] =
             new Chart(
@@ -2874,8 +3043,8 @@
                     {
 
                       data: [
-                        programaticos,
-                        personalistas
+                        programaticosPercentual,
+                        personalistasPercentual
                       ],
 
                       backgroundColor: [
@@ -2921,7 +3090,7 @@
 
                         label:
                           context =>
-                            `${context.label}: ${context.raw} publicação(ões)`
+                            `${context.label}: ${Number(context.raw).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`
 
                       }
 
@@ -3037,6 +3206,12 @@
       );
 
 
+      const personalistasQuantidade =
+        personalistas;
+
+      const programaticosQuantidade =
+        programaticos;
+
       restaurarCanvas(canvas);
 
 
@@ -3057,7 +3232,7 @@
                     "Conteúdo personalista",
 
                   data:
-                    personalistas,
+                    personalistasQuantidade,
 
                   pointRadius: 5,
 
@@ -3080,7 +3255,7 @@
                     "Conteúdo programático",
 
                   data:
-                    programaticos,
+                    programaticosQuantidade,
 
                   pointRadius: 5,
 
@@ -3182,6 +3357,11 @@
 
                   beginAtZero: true,
 
+                  ticks: {
+                    precision: 0,
+                    callback: valor => Number(valor).toLocaleString("pt-BR")
+                  },
+
                   title: {
 
                     display: true,
@@ -3203,27 +3383,361 @@
 
 
     /* =========================================================
-       GRÁFICO DE SUBCATEGORIAS
+       GRÁFICOS DE SUBCATEGORIAS
        ========================================================= */
 
     function criarGraficoSubcategorias() {
 
+      const configuracoes = [
+        {
+          canvasId:
+            "subcategoryProgrammaticBar",
+
+          chartId:
+            "subcategoryProgrammaticBar",
+
+          tipo:
+            "Programático",
+
+          titulo:
+            "Subcategorias programáticas",
+
+          mensagem:
+            "Não há subcategorias programáticas para os candidatos selecionados."
+        },
+
+        {
+          canvasId:
+            "subcategoryPersonalistBar",
+
+          chartId:
+            "subcategoryPersonalistBar",
+
+          tipo:
+            "Personalista",
+
+          titulo:
+            "Subcategorias personalistas",
+
+          mensagem:
+            "Não há subcategorias personalistas para os candidatos selecionados."
+        }
+      ];
+
+
+      const selecionados =
+        [...STATE.candidatosSelecionados.subcategorias];
+
+
+      configuracoes.forEach(
+        configuracao => {
+
+          const canvas =
+            document.getElementById(
+              configuracao.canvasId
+            );
+
+          if (!canvas) {
+            return;
+          }
+
+          destruirChart(
+            configuracao.chartId
+          );
+
+
+          if (!selecionados.length) {
+
+            mostrarEstadoVazio(
+              canvas,
+              "Selecione um ou mais candidatos acima."
+            );
+
+            return;
+          }
+
+
+          restaurarCanvas(canvas);
+
+
+          const subcategorias =
+            [
+              ...new Set(
+                STATE.dados
+                  .filter(
+                    item =>
+                      categoriaTipo(
+                        item.categoria
+                      ) === configuracao.tipo
+                  )
+                  .map(
+                    item =>
+                      String(
+                        item.subcategoria ||
+                        ""
+                      ).trim()
+                  )
+                  .filter(Boolean)
+              )
+            ];
+
+
+          const subcategoriasOrdenadas =
+            subcategorias
+              .map(
+                subcategoria => ({
+                  nome:
+                    subcategoria,
+
+                  total:
+                    selecionados.reduce(
+                      (soma, candidato) =>
+                        soma +
+                        STATE.dados.filter(
+                          item =>
+                            normalizarCandidato(
+                              item.candidato
+                            ) === candidato &&
+
+                            categoriaTipo(
+                              item.categoria
+                            ) === configuracao.tipo &&
+
+                            normalizarTexto(
+                              item.subcategoria
+                            ) ===
+                            normalizarTexto(
+                              subcategoria
+                            )
+                        ).length,
+                      0
+                    )
+                })
+              )
+              .sort(
+                (a, b) =>
+                  b.total - a.total ||
+                  a.nome.localeCompare(
+                    b.nome,
+                    "pt-BR"
+                  )
+              )
+              .map(
+                item => item.nome
+              );
+
+
+          if (!subcategoriasOrdenadas.length) {
+
+            mostrarEstadoVazio(
+              canvas,
+              "A coluna de subcategoria não possui dados para este tipo de conteúdo."
+            );
+
+            return;
+          }
+
+
+          const datasets =
+            selecionados.map(
+              candidato => {
+
+                const dadosComSubcategoria =
+                  STATE.dados.filter(
+                    item =>
+                      normalizarCandidato(
+                        item.candidato
+                      ) === candidato &&
+                      categoriaTipo(
+                        item.categoria
+                      ) === configuracao.tipo &&
+                      String(
+                        item.subcategoria ||
+                        ""
+                      ).trim() !== ""
+                  );
+
+                const totalComSubcategoria =
+                  dadosComSubcategoria.length;
+
+                const valores =
+                  subcategoriasOrdenadas.map(
+                    subcategoria =>
+                      calcularPercentual(
+                        dadosComSubcategoria.filter(
+                          item =>
+                            normalizarTexto(
+                              item.subcategoria
+                            ) ===
+                            normalizarTexto(
+                              subcategoria
+                            )
+                        ).length,
+                        totalComSubcategoria
+                      )
+                  );
+
+
+                return {
+                  label:
+                    candidato,
+
+                  data:
+                    valores,
+
+                  backgroundColor:
+                    getCandidateColor(
+                      candidato,
+                      "strong"
+                    ),
+
+                  borderRadius: 5,
+
+                  borderWidth: 0,
+
+                  maxBarThickness: 24
+                };
+
+              }
+            );
+
+
+          STATE.charts[
+            configuracao.chartId
+          ] =
+            new Chart(
+              canvas,
+              {
+
+                type: "bar",
+
+                data: {
+
+                  labels:
+                    subcategoriasOrdenadas,
+
+                  datasets
+
+                },
+
+                options: {
+
+                  indexAxis: "y",
+
+                  responsive: true,
+
+                  maintainAspectRatio:
+                    false,
+
+                  interaction: {
+
+                    mode: "index",
+
+                    intersect: false
+
+                  },
+
+                  plugins: {
+
+                    legend: {
+
+                      position: "bottom"
+
+                    },
+
+                    tooltip: {
+
+                      callbacks: {
+
+                        label:
+                          context =>
+                            `${context.dataset.label}: ${Number(context.raw).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`
+
+                      }
+
+                    }
+
+                  },
+
+                  scales: {
+
+                    x: {
+
+                      beginAtZero: true,
+
+                      max: 100,
+
+                      ticks: {
+
+                        precision: 1,
+
+                        stepSize: 10,
+
+                        callback: valor => `${valor}%`
+
+                      },
+
+                      title: {
+
+                        display: true,
+
+                        text: "Percentual de publicações"
+
+                      }
+
+                    },
+
+                    y: {
+
+                      stacked: false,
+
+                      ticks: {
+
+                        autoSkip: false
+
+                      }
+
+                    }
+
+                  }
+
+                }
+
+              }
+            );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       GRÁFICOS DE CURTIDAS / COMENTÁRIOS POR SUBCATEGORIA
+       ========================================================= */
+
+    function criarGraficoMetricaSubcategoria(
+      campo,
+      canvasId,
+      chartId,
+      estadoKey,
+      eixoY
+    ) {
+
       const canvas =
         document.getElementById(
-          "subcategoryBar"
+          canvasId
         );
 
       if (!canvas) {
         return;
       }
 
-      destruirChart(
-        "subcategoryBar"
-      );
+      destruirChart(chartId);
 
 
       const selecionados =
-        [...STATE.candidatosSelecionados.subcategorias];
+        [...STATE.candidatosSelecionados[estadoKey]];
 
 
       if (!selecionados.length) {
@@ -3241,7 +3755,7 @@
       restaurarCanvas(canvas);
 
 
-      const subcategorias =
+      const categorias =
         [
           ...new Set(
             STATE.dados
@@ -3254,10 +3768,17 @@
               )
               .filter(Boolean)
           )
-        ];
+        ]
+        .sort(
+          (a, b) =>
+            a.localeCompare(
+              b,
+              "pt-BR"
+            )
+        );
 
 
-      if (!subcategorias.length) {
+      if (!categorias.length) {
 
         mostrarEstadoVazio(
           canvas,
@@ -3269,65 +3790,150 @@
       }
 
 
-      const datasets =
-        selecionados.map(
-          candidato => {
-
-            const valores =
-              subcategorias.map(
-                subcategoria =>
-                  STATE.dados.filter(
-                    item =>
-
-                      normalizarCandidato(
-                        item.candidato
-                      ) === candidato &&
-
-                      normalizarTexto(
-                        item.subcategoria
-                      ) ===
-                      normalizarTexto(
-                        subcategoria
-                      )
-                  ).length
-              );
+      const paletaCategorias = [
+        "#8b5cf6",
+        "#2f80ed",
+        "#16a085",
+        "#f39c12",
+        "#e74c3c",
+        "#00a8a8",
+        "#d35400",
+        "#6c5ce7",
+        "#27ae60",
+        "#c0392b",
+        "#2980b9",
+        "#8e44ad"
+      ];
 
 
-            return {
+      const mapaCoresCategorias = {};
 
-              label:
-                candidato,
+      categorias.forEach(
+        (categoria, indice) => {
 
-              data:
-                valores,
+          mapaCoresCategorias[
+            normalizarTexto(categoria)
+          ] =
+            paletaCategorias[
+              indice %
+              paletaCategorias.length
+            ];
 
-              backgroundColor:
-                getCandidateColor(
-                  candidato,
-                  "strong"
-                ),
-
-              borderRadius: 5,
-
-              borderWidth: 0
-
-            };
-
-          }
-        );
+        }
+      );
 
 
-      STATE.charts.subcategoryBar =
+      const datasets = [];
+
+
+      selecionados.forEach(
+        candidato => {
+
+          const dadosCandidato =
+            STATE.dados.filter(
+              item =>
+                normalizarCandidato(
+                  item.candidato
+                ) === candidato &&
+                String(
+                  item.subcategoria ||
+                  ""
+                ).trim() !== "" &&
+                parseData(
+                  item.data
+                )
+            );
+
+
+          const pontos =
+            dadosCandidato.map(
+              item => {
+
+                const subcategoria =
+                  String(
+                    item.subcategoria ||
+                    ""
+                  ).trim();
+
+                return {
+
+                  x:
+                    parseData(
+                      item.data
+                    ),
+
+                  y:
+                    parseNumero(
+                      item[campo]
+                    ),
+
+                  candidato:
+                    candidato,
+
+                  categoria:
+                    subcategoria,
+
+                  dataOriginal:
+                    item.data
+
+                };
+
+              }
+            );
+
+
+          datasets.push({
+
+            label:
+              candidato,
+
+            data:
+              pontos,
+
+            pointRadius:
+              5,
+
+            pointHoverRadius:
+              8,
+
+            pointBackgroundColor:
+              pontos.map(
+                ponto =>
+                  mapaCoresCategorias[
+                    normalizarTexto(
+                      ponto.categoria
+                    )
+                  ]
+              ),
+
+            pointBorderColor:
+              pontos.map(
+                ponto =>
+                  mapaCoresCategorias[
+                    normalizarTexto(
+                      ponto.categoria
+                    )
+                  ]
+              ),
+
+            pointBorderWidth:
+              1
+
+          });
+
+        }
+      );
+
+
+      STATE.charts[chartId] =
         new Chart(
           canvas,
           {
 
-            type: "bar",
+            type:
+              "scatter",
 
             data: {
-
-              labels:
-                subcategorias,
 
               datasets
 
@@ -3335,32 +3941,99 @@
 
             options: {
 
-              responsive: true,
+              responsive:
+                true,
 
               maintainAspectRatio:
                 false,
 
               interaction: {
 
-                mode: "index",
+                mode:
+                  "nearest",
 
-                intersect: false
+                intersect:
+                  true
 
               },
 
               plugins: {
 
                 legend: {
-                  position: "bottom"
+
+                  position:
+                    "bottom",
+
+                  labels: {
+
+                    generateLabels:
+                      chart => {
+
+                        return chart.data.datasets.map(
+                          (dataset, indice) => ({
+
+                            text:
+                              dataset.label,
+
+                            fillStyle:
+                              getCandidateColor(
+                                dataset.label,
+                                "strong"
+                              ),
+
+                            strokeStyle:
+                              getCandidateColor(
+                                dataset.label,
+                                "strong"
+                              ),
+
+                            lineWidth:
+                              1,
+
+                            hidden:
+                              !chart.isDatasetVisible(
+                                indice
+                              ),
+
+                            datasetIndex:
+                              indice
+
+                          })
+                        );
+
+                      }
+
+                  }
+
                 },
 
                 tooltip: {
 
                   callbacks: {
 
+                    title:
+                      () =>
+                        "Publicação",
+
                     label:
-                      context =>
-                        `${context.dataset.label}: ${context.raw} publicação(ões)`
+                      context => {
+
+                        const ponto =
+                          context.raw;
+
+                        return [
+
+                          `Candidato: ${ponto.candidato}`,
+
+                          `Subcategoria: ${ponto.categoria}`,
+
+                          `Data: ${formatarData(ponto.dataOriginal)}`,
+
+                          `${eixoY}: ${Number(ponto.y).toLocaleString("pt-BR")}`
+
+                        ];
+
+                      }
 
                   }
 
@@ -3371,26 +4044,66 @@
               scales: {
 
                 x: {
-                  stacked: false
-                },
 
-                y: {
+                  type:
+                    "time",
 
-                  beginAtZero: true,
+                  time: {
 
-                  ticks: {
+                    unit:
+                      "day",
 
-                    precision: 0,
+                    tooltipFormat:
+                      "dd/MM/yyyy",
 
-                    stepSize: 1
+                    displayFormats: {
+
+                      day:
+                        "dd/MM"
+
+                    }
 
                   },
 
                   title: {
 
-                    display: true,
+                    display:
+                      true,
 
-                    text: "Publicações"
+                    text:
+                      "Data"
+
+                  }
+
+                },
+
+                y: {
+
+                  beginAtZero:
+                    true,
+
+                  ticks: {
+
+                    precision:
+                      0,
+
+                    callback:
+                      valor =>
+                        Number(
+                          valor
+                        ).toLocaleString(
+                          "pt-BR"
+                        )
+
+                  },
+
+                  title: {
+
+                    display:
+                      true,
+
+                    text:
+                      eixoY
 
                   }
 
@@ -3403,6 +4116,14 @@
           }
         );
 
+    }
+
+    function criarGraficoCurtidasSubcategorias() {
+      criarGraficoMetricaSubcategoria("likes", "likesSubcategoryBar", "likesSubcategoryBar", "curtidasSubcategorias", "Curtidas");
+    }
+
+    function criarGraficoComentariosSubcategorias() {
+      criarGraficoMetricaSubcategoria("comentarios", "commentsSubcategoryBar", "commentsSubcategoryBar", "comentariosSubcategorias", "Comentários");
     }
 
 
@@ -3477,23 +4198,32 @@
         selecionados.map(
           candidato => {
 
+            const dadosCandidato =
+              STATE.dados.filter(
+                item =>
+                  normalizarCandidato(
+                    item.candidato
+                  ) === candidato
+              );
+
+            const totalPublicacoesCandidato =
+              dadosCandidato.length;
+
             const valores =
               formatos.map(
                 formato =>
-                  STATE.dados.filter(
-                    item =>
-
-                      normalizarCandidato(
-                        item.candidato
-                      ) === candidato &&
-
-                      normalizarTexto(
-                        item.formato
-                      ) ===
-                      normalizarTexto(
-                        formato
-                      )
-                  ).length
+                  calcularPercentual(
+                    dadosCandidato.filter(
+                      item =>
+                        normalizarTexto(
+                          item.formato
+                        ) ===
+                        normalizarTexto(
+                          formato
+                        )
+                    ).length,
+                    totalPublicacoesCandidato
+                  )
               );
 
 
@@ -3568,7 +4298,7 @@
 
                     label:
                       context =>
-                        `${context.dataset.label}: ${context.raw} publicação(ões)`
+                        `${context.dataset.label}: ${Number(context.raw).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`
 
                   }
 
@@ -3586,11 +4316,15 @@
 
                   beginAtZero: true,
 
+                  max: 100,
+
                   ticks: {
 
-                    precision: 0,
+                    precision: 1,
 
-                    stepSize: 1
+                    stepSize: 10,
+
+                    callback: valor => `${valor}%`
 
                   },
 
@@ -3598,7 +4332,7 @@
 
                     display: true,
 
-                    text: "Publicações"
+                    text: "Percentual de publicações"
 
                   }
 
@@ -4036,6 +4770,34 @@
       criarFiltroCandidatos({
 
         containerId:
+          "likesSubcategoryCandidateFilterButtons",
+
+        estado:
+          STATE.candidatosSelecionados.curtidasSubcategorias,
+
+        onChange:
+          criarGraficoCurtidasSubcategorias
+
+      });
+
+
+      criarFiltroCandidatos({
+
+        containerId:
+          "commentsSubcategoryCandidateFilterButtons",
+
+        estado:
+          STATE.candidatosSelecionados.comentariosSubcategorias,
+
+        onChange:
+          criarGraficoComentariosSubcategorias
+
+      });
+
+
+      criarFiltroCandidatos({
+
+        containerId:
           "formatCandidateFilterButtons",
 
         estado:
@@ -4200,6 +4962,8 @@
       criarDonuts();
 
       criarGraficoSubcategorias();
+      criarGraficoCurtidasSubcategorias();
+      criarGraficoComentariosSubcategorias();
 
       criarGraficoFormatos();
 
@@ -4712,4 +5476,3 @@
 
 </body>
 </html>
-
