@@ -499,6 +499,141 @@
       font-weight: 700;
     }
 
+    .research-intro-card {
+      margin-bottom: 18px;
+    }
+
+    /* =====================================================
+       LISTAS DE ENGAJAMENTO
+       ===================================================== */
+
+    .engagement-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .engagement-card {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .engagement-card h3 {
+      margin: 0 0 4px;
+      font-size: .9rem;
+      font-weight: 800;
+    }
+
+    .engagement-card .chart-note {
+      margin-bottom: 12px;
+    }
+
+    .engagement-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .engagement-item {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      gap: 10px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--surface-soft);
+    }
+
+    .engagement-rank {
+      width: 25px;
+      height: 25px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 7px;
+      background: #eaf1f6;
+      color: var(--primary);
+      font-size: .7rem;
+      font-weight: 800;
+    }
+
+    .engagement-main {
+      min-width: 0;
+    }
+
+    .engagement-candidate {
+      margin: 0;
+      color: #293842;
+      font-size: .78rem;
+      font-weight: 800;
+    }
+
+    .engagement-meta {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: .67rem;
+      line-height: 1.45;
+    }
+
+    .engagement-subcategory {
+      margin: 2px 0 0;
+      color: var(--primary);
+      font-size: .66rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .engagement-link {
+      display: inline-block;
+      margin-top: 5px;
+      color: var(--primary);
+      font-size: .67rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .engagement-link:hover {
+      text-decoration: underline;
+    }
+
+    .engagement-value {
+      white-space: nowrap;
+      color: var(--primary);
+      font-size: .75rem;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .engagement-value span {
+      display: block;
+      color: var(--muted);
+      font-size: .6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    @media (max-width: 600px) {
+      .engagement-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .engagement-item {
+        grid-template-columns: 28px 1fr;
+      }
+
+      .engagement-value {
+        grid-column: 2;
+        text-align: left;
+      }
+    }
+
     .data-placeholder {
       margin-top: 18px;
       padding: 13px;
@@ -1313,7 +1448,8 @@
         aria-expanded="false"
       >
         <span class="section-title">
-          <i class="fas fa-microscope"></i>
+          <span class="result-number">·</span>
+<i class="fas fa-microscope"></i>
           Sobre a Pesquisa
         </span>
 
@@ -1328,7 +1464,7 @@
         id="metodologia"
       >
 
-      <div class="method-card">
+      <div class="method-card research-intro-card">
             <h3>A Pesquisa</h3>
 
             <p>
@@ -1358,6 +1494,8 @@
 
             <p>
               30% das postagens mais curtidas dos candidatos à Presidência da República no Brasil, publicadas em seus perfis oficiais no Instagram, foram categorizadas por meio do modelo de linguagem GPT-5.6 Luna (LLM) e posteriormente submetidas à validação por pesquisadores humanos. Essa etapa permitirá avaliar, ao longo do desenvolvimento da pesquisa, a acurácia das classificações realizadas pelo modelo em comparação com a codificação humana.
+              </p>
+              <p>É importante frisar que, antes da realização da validação humana, o candidato Romeu Zema removeu as postagens de seu perfil oficial. Dessa forma, seu conteúdo não foi considerado em nossa observação.
             </p>
           </div>
 
@@ -1440,7 +1578,7 @@
       >
         <span class="section-title">
           <span class="result-number">01</span>
-          Programáticos e Personalistas
+Programáticos e Personalistas
         </span>
 
         <i class="fas fa-chevron-down section-icon"></i>
@@ -1510,7 +1648,7 @@
       >
         <span class="section-title">
           <span class="result-number">02</span>
-          Categorias por candidato
+Categorias por candidato
         </span>
 
         <i class="fas fa-chevron-down section-icon"></i>
@@ -1546,7 +1684,7 @@
       >
         <span class="section-title">
           <span class="result-number">03</span>
-          Subcategorias por candidato
+Subcategorias por candidato
         </span>
 
         <i class="fas fa-chevron-down section-icon"></i>
@@ -1644,7 +1782,7 @@
       >
         <span class="section-title">
           <span class="result-number">04</span>
-          Curtidas por categoria
+Curtidas por categoria
         </span>
 
         <i class="fas fa-chevron-down section-icon"></i>
@@ -1692,7 +1830,7 @@
       >
         <span class="section-title">
           <span class="result-number">05</span>
-          Comentários por categoria
+Comentários por categoria
         </span>
 
         <i class="fas fa-chevron-down section-icon"></i>
@@ -1731,7 +1869,8 @@
 
     <section class="project-section">
       <div class="section-head" data-target="resultado9" tabindex="0" role="button" aria-expanded="false">
-        <span class="section-title"><span class="result-number">06</span> Curtidas por subcategoria</span>
+        <span class="section-title"><span class="result-number">06</span>
+Curtidas por subcategoria</span>
         <i class="fas fa-chevron-down section-icon"></i>
       </div>
       <div class="section-content" id="resultado9">
@@ -1754,7 +1893,8 @@
 
     <section class="project-section">
       <div class="section-head" data-target="resultado10" tabindex="0" role="button" aria-expanded="false">
-        <span class="section-title"><span class="result-number">07</span> Comentários por subcategoria</span>
+        <span class="section-title"><span class="result-number">07</span>
+Comentários por subcategoria</span>
         <i class="fas fa-chevron-down section-icon"></i>
       </div>
       <div class="section-content" id="resultado10">
@@ -1767,6 +1907,73 @@
           </div>
           <div class="chart-wrap"><canvas id="commentsSubcategoryBar"></canvas></div>
         </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================
+         ENGAJAMENTO
+         =================================================== -->
+
+    <section class="project-section">
+
+      <div
+        class="section-head"
+        data-target="engajamento"
+        tabindex="0"
+        role="button"
+        aria-expanded="false"
+      >
+        <span class="section-title">
+          <span class="result-number">08</span>
+<i class="fas fa-chart-line"></i>
+          Postagens mais curtidas e comentadas
+        </span>
+
+        <i class="fas fa-chevron-down section-icon"></i>
+      </div>
+
+      <div
+        class="section-content"
+        id="engajamento"
+      >
+
+        <div class="engagement-grid">
+
+          <div class="engagement-card">
+            <h3>
+              <i class="fas fa-heart"></i>
+              Mais curtidas
+            </h3>
+
+            <p class="chart-note">
+              As 10 postagens com maior número de curtidas na base.
+            </p>
+
+            <ol
+              class="engagement-list"
+              id="topLikesList"
+            ></ol>
+          </div>
+
+          <div class="engagement-card">
+            <h3>
+              <i class="fas fa-comments"></i>
+              Mais comentadas
+            </h3>
+
+            <p class="chart-note">
+              As 10 postagens com maior número de comentários na base.
+            </p>
+
+            <ol
+              class="engagement-list"
+              id="topCommentsList"
+            ></ol>
+          </div>
+
+        </div>
+
       </div>
     </section>
 
@@ -1785,8 +1992,8 @@
         aria-expanded="false"
       >
         <span class="section-title">
-          <span class="result-number">08</span>
-          Formatos das postagens
+          <span class="result-number">09</span>
+Formatos das postagens
         </span>
 
         <i class="fas fa-chevron-down section-icon"></i>
@@ -1834,6 +2041,42 @@
       </div>
     </section>
 
+
+
+    <!-- ===================================================
+         CONSIDERAÇÕES FINAIS
+         =================================================== -->
+
+    <section class="project-section">
+
+      <div
+        class="section-head"
+        data-target="consideracoesFinais"
+        tabindex="0"
+        role="button"
+        aria-expanded="false"
+      >
+        <span class="section-title">
+          <span class="result-number">10</span>
+<i class="fas fa-flag-checkered"></i>
+          Considerações Finais
+        </span>
+
+        <i class="fas fa-chevron-down section-icon"></i>
+      </div>
+
+      <div
+        class="section-content"
+        id="consideracoesFinais"
+      >
+
+        <p style="margin:0; color:var(--muted); font-size:.8rem;">
+          Este relatório reúne os dados e classificações do período analisado para oferecer uma leitura sistemática das estratégias de comunicação adotadas pelas candidaturas no Instagram. A organização dos resultados permite observar tanto a presença de conteúdos programáticos e personalistas quanto os formatos e níveis de engajamento associados às publicações, contribuindo para o acompanhamento do desenvolvimento da pesquisa.
+        </p>
+
+      </div>
+    </section>
+
   </main>
 
 
@@ -1845,7 +2088,7 @@
 
     · Política nas Redes ·
 
-    Grupo de trabalho formado por Vitor Reis, Malu Alden, Malu Paschoal, Natália Lucciola, Natalia Paiva, Shamira Rossi, Eduardo Barbabela, Eduarda e Polly
+    Grupo de trabalho formado por Vitor Reis, Malu Alden, Malu Paschoal, Natália Lucciola, Natalia Paiva, Shamira Rossi, Eduardo Barbabela, Eduarda e Pollyanna Brêtas
 
   </footer>
 
@@ -4128,6 +4371,151 @@
 
 
     /* =========================================================
+       LISTAS DE ENGAJAMENTO
+       ========================================================= */
+
+    function renderizarListasEngajamento() {
+
+      const configuracoes = [
+        {
+          elementoId: "topLikesList",
+          campo: "likes",
+          rotulo: "curtidas"
+        },
+        {
+          elementoId: "topCommentsList",
+          campo: "comentarios",
+          rotulo: "comentários"
+        }
+      ];
+
+      configuracoes.forEach(configuracao => {
+
+        const lista =
+          document.getElementById(
+            configuracao.elementoId
+          );
+
+        if (!lista) {
+          return;
+        }
+
+        lista.innerHTML = "";
+
+        const dadosOrdenados =
+          [...STATE.dados]
+            .filter(item =>
+              parseNumero(item[configuracao.campo]) > 0
+            )
+            .sort((a, b) => {
+              const diferenca =
+                parseNumero(b[configuracao.campo]) -
+                parseNumero(a[configuracao.campo]);
+
+              if (diferenca !== 0) {
+                return diferenca;
+              }
+
+              return (
+                (parseData(b.data)?.getTime() || 0) -
+                (parseData(a.data)?.getTime() || 0)
+              );
+            })
+            .slice(0, 10);
+
+        if (!dadosOrdenados.length) {
+          const vazio =
+            document.createElement("li");
+
+          vazio.className = "chart-empty";
+          vazio.textContent =
+            `Não há dados de ${configuracao.rotulo} disponíveis.`;
+
+          lista.appendChild(vazio);
+          return;
+        }
+
+        dadosOrdenados.forEach((item, indice) => {
+
+          const li =
+            document.createElement("li");
+
+          li.className = "engagement-item";
+
+          const rank =
+            document.createElement("span");
+
+          rank.className = "engagement-rank";
+          rank.textContent = indice + 1;
+
+          const main =
+            document.createElement("div");
+
+          main.className = "engagement-main";
+
+          const candidato =
+            document.createElement("p");
+
+          candidato.className = "engagement-candidate";
+          candidato.textContent =
+            normalizarCandidato(item.candidato);
+
+          const meta =
+            document.createElement("p");
+
+          meta.className = "engagement-meta";
+          meta.textContent =
+            `${item.categoria || "Sem categoria"} · ${formatarData(item.data)}`;
+
+          const subcategoria =
+            document.createElement("p");
+
+          subcategoria.className = "engagement-subcategory";
+          subcategoria.textContent =
+            item.subcategoria
+              ? `Subcategoria: ${item.subcategoria}`
+              : "Subcategoria: não informada";
+
+          main.appendChild(candidato);
+          main.appendChild(meta);
+          main.appendChild(subcategoria);
+
+          if (item.url) {
+            const link =
+              document.createElement("a");
+
+            link.className = "engagement-link";
+            link.href = item.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = "Ver postagem";
+            link.setAttribute(
+              "aria-label",
+              `Ver postagem de ${normalizarCandidato(item.candidato)}`
+            );
+
+            main.appendChild(link);
+          }
+
+          const valor =
+            document.createElement("div");
+
+          valor.className = "engagement-value";
+          valor.innerHTML =
+            `${parseNumero(item[configuracao.campo]).toLocaleString("pt-BR")}<span>${configuracao.campo === "likes" ? "curtidas" : "comentários"}</span>`;
+
+          li.appendChild(rank);
+          li.appendChild(main);
+          li.appendChild(valor);
+
+          lista.appendChild(li);
+        });
+
+      });
+    }
+
+
+    /* =========================================================
        GRÁFICO DE FORMATOS
        ========================================================= */
 
@@ -4528,6 +4916,11 @@
           subcategoria:
             cabecalho.indexOf(
               "subcategoria"
+            ),
+
+          url:
+            cabecalho.indexOf(
+              "url"
             )
 
         };
@@ -4625,6 +5018,15 @@
                           indices.subcategoria
                         ] || ""
                       ).trim()
+                    : "",
+
+                url:
+                  indices.url !== -1
+                    ? String(
+                        linha[
+                          indices.url
+                        ] || ""
+                      ).trim()
                     : ""
 
               })
@@ -4682,6 +5084,8 @@
         criarDonuts();
 
         criarGraficoSubcategorias();
+
+        renderizarListasEngajamento();
 
         criarGraficoFormatos();
 
@@ -4964,6 +5368,8 @@
       criarGraficoSubcategorias();
       criarGraficoCurtidasSubcategorias();
       criarGraficoComentariosSubcategorias();
+
+      renderizarListasEngajamento();
 
       criarGraficoFormatos();
 
